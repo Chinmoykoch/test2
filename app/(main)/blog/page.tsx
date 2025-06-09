@@ -19,7 +19,6 @@ export const metadata: Metadata = {
     images: ['/images/gallery/DSC04232.JPG'],
   },
 };
-
 // This page now uses the DynamicBlogPage component which fetches blogs from the backend API
 
 export default function Home() {
