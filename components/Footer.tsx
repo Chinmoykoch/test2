@@ -18,13 +18,16 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link
-                href="/admission-process"
-                className="hover:text-blue-500 transition duration-300"
-              >
-                Admission Process
-              </Link>
-            </li>
+  <a
+    href="https://admission-portal-one.vercel.app/"
+    className="hover:text-blue-500 transition duration-300"
+    target="_blank" 
+    rel="noopener noreferrer"
+  >
+    Admission Process
+  </a>
+</li>
+
             <li>
               <Link
                 href="/lifeatinframe"
