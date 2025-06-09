@@ -89,6 +89,14 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'images-prod.dazeddigital.com'
       },
+      {
+        protocol: 'https',
+        hostname: 'backend-rakj.onrender.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com'
+      },
     ],
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: true,
@@ -96,7 +104,6 @@ const nextConfig = {
       "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data:; media-src 'none'; frame-src 'none';",
   },
   reactStrictMode: true,
-  swcMinify: true,
 };
 
 module.exports = nextConfig;

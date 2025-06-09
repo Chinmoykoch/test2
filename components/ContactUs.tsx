@@ -13,6 +13,7 @@ import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import { apiHelpers } from "../utils/api";
 
 // Using the Poppins font
 const poppins = Poppins({
@@ -37,10 +38,12 @@ export function ContactUsForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactFormSchema),
@@ -48,28 +51,40 @@ export function ContactUsForm({
 
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
+    setIsError(false);
+    setIsSuccess(false);
+    setErrorMessage("");
+
     try {
-      const formData = new FormData();
-      formData.append("first_name", data.first_name);
-      formData.append("last_name", data.last_name);
-      formData.append("email", data.email);
-      formData.append("message", data.message);
+      // Prepare data for backend API
+      const contactData = {
+        firstName: data.first_name,
+        lastName: data.last_name,
+        email: data.email,
+        message: data.message,
+        name: `${data.first_name} ${data.last_name}`,
+        subject: "Contact Form Submission",
+      };
 
-      const response = await fetch("https://formspree.io/f/xvgzkown", {
-        method: "POST",
-        body: formData,
-      });
+      // Submit to backend using our API helper
+      const response = await apiHelpers.submitContact(contactData);
 
-      if (response.ok) {
-        setIsSuccess(true);
-        setIsError(false);
-      } else {
-        throw new Error("Failed to submit form");
-      }
+      console.log("Contact form submitted successfully:", response);
+      setIsSuccess(true);
+
+      // Reset form on successful submission
+      reset();
+
     } catch (err) {
-      console.error("Form submission error:", err);
+      console.error("Contact form submission error:", err);
       setIsError(true);
-      setIsSuccess(false);
+
+      // Set specific error message
+      if (err instanceof Error) {
+        setErrorMessage(err.message);
+      } else {
+        setErrorMessage("Failed to submit contact form. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -284,14 +299,18 @@ export function ContactUsForm({
                 {isSubmitting ? "Submitting..." : "Send Message"}
               </Button>
               {isSuccess && (
-                <p className="text-green-500 mt-2 text-center">
-                  Message sent successfully!
-                </p>
+                <div className="bg-green-50 border border-green-200 rounded-md p-3 mt-4">
+                  <p className="text-green-700 text-center font-medium">
+                    ✅ Message sent successfully! We&apos;ll get back to you soon.
+                  </p>
+                </div>
               )}
               {isError && (
-                <p className="text-red-500 mt-2 text-center">
-                  Something went wrong, please try again.
-                </p>
+                <div className="bg-red-50 border border-red-200 rounded-md p-3 mt-4">
+                  <p className="text-red-700 text-center font-medium">
+                    ❌ {errorMessage || "Something went wrong, please try again."}
+                  </p>
+                </div>
               )}
             </form>
           </div>
