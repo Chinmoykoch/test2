@@ -1,4 +1,4 @@
-import AdmissionProcess from "../../../components/AdmissionProcess";
+import AdmissionProcess from "../../components/AdmissionProcess";
 
 const page = () => {
     return (

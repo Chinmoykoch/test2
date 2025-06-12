@@ -194,7 +194,7 @@ export default function Application() {
   const disabled = !isChecked;
 
   return (
-    <div className="mt-20 flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <div className="w-64 bg-black text-white">
         <div className="p-4 font-bold text-lg">Application Steps</div>
