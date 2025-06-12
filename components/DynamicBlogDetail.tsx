@@ -3,11 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { ChevronLeft, Calendar, Clock, Share2, Bookmark, ThumbsUp, MessageSquare, Loader2 } from 'lucide-react';
-import { apiHelpers, type BlogPost } from '../utils/api';
+import { ChevronLeft, Loader2 } from 'lucide-react';
+import { apiHelpers } from '../utils/api';
 import { blogPostsData } from '../utils/constant';
 
 // Category colors mapping
@@ -27,8 +26,32 @@ interface DynamicBlogDetailProps {
   slug: string;
 }
 
+interface BlogPostData {
+  title: string;
+  heroImage?: string;
+  category: string;
+  date?: string;
+  readTime?: string;
+  author?: string | { name: string; image: string };
+  excerpt?: string;
+  sections?: BlogSection[];
+  views?: number;
+  relatedPosts?: unknown[];
+}
+
+interface BlogSection {
+  id: string;
+  title: string;
+  image?: string;
+  content?: string;
+  quote?: string;
+  quoteAuthor?: string;
+  highlights?: string[];
+  highlightTitle?: string;
+}
+
 const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
-  const [post, setPost] = useState<BlogPost | any>(null);
+  const [post, setPost] = useState<BlogPostData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isFromAPI, setIsFromAPI] = useState(false);
@@ -58,7 +81,7 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
             setLoading(false);
             return;
           }
-        } catch (slugError) {
+        } catch {
           console.log('Failed to fetch by slug, trying by ID...');
         }
 
@@ -71,7 +94,7 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
             setLoading(false);
             return;
           }
-        } catch (idError) {
+        } catch {
           console.log('Failed to fetch by ID as well');
         }
 
@@ -119,7 +142,7 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
   }
 
   // Format post data based on source (API or static)
-  const formatPostData = (postData: BlogPost | any) => {
+  const formatPostData = (postData: BlogPostData): BlogPostData => {
     if (isFromAPI) {
       return {
         title: postData.title,
@@ -193,7 +216,7 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
                     Introduction
                   </Link>
                 </li>
-                {formattedPost.sections && formattedPost.sections.map((section: any, index: number) => (
+                {formattedPost.sections && formattedPost.sections.map((section: BlogSection, index: number) => (
                   <li key={section.id}>
                     <Link
                       href={`#${section.id}`}
@@ -232,13 +255,13 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
                   {post.excerpt || `Choosing the right educational path after 12th is a critical decision that can shape your child's future. With an overwhelming number of courses and career options available, it's easy to feel lost. However, if your child is passionate about design, arts, and creativity, then Inframe School offers the perfect blend of education, expertise, and exposure.`}
                 </p>
                 <p className="text-lg text-gray-700 leading-relaxed mb-8">
-                  As your child completes their 12th grade, the question of "what's next?" becomes more important than ever. The right educational path can significantly influence their future. If your child has an interest in design, arts, and creativity, then Inframe School offers a unique opportunity for them to develop both academically and professionally.
+                  As your child completes their 12th grade, the question of &quot;what&apos;s next?&quot; becomes more important than ever. The right educational path can significantly influence their future. If your child has an interest in design, arts, and creativity, then Inframe School offers a unique opportunity for them to develop both academically and professionally.
                 </p>
               </div>
 
               {/* Dynamic Sections from API */}
               {formattedPost.sections && formattedPost.sections.length > 0 ? (
-                formattedPost.sections.map((section: any, index: number) => (
+                formattedPost.sections.map((section: BlogSection, index: number) => (
                   <section key={section.id} id={section.id} className="mb-12 scroll-mt-16">
                     <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
                       {index + 1}. {section.title}
@@ -268,7 +291,7 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
                     {section.quote && (
                       <blockquote className="border-l-4 border-gray-300 pl-6 py-4 my-8 bg-gray-50 rounded-r-lg">
                         <p className="text-xl italic text-gray-800 mb-2">
-                          "{section.quote}"
+                          &ldquo;{section.quote}&rdquo;
                         </p>
                         {section.quoteAuthor && (
                           <footer className="text-gray-600 font-medium">
@@ -305,7 +328,7 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
                     </p>
                     <blockquote className="border-l-4 border-gray-300 pl-6 py-4 my-8 bg-gray-50 rounded-r-lg">
                       <p className="text-xl italic text-gray-800 mb-2">
-                        "Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work."
+                        &ldquo;Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work.&rdquo;
                       </p>
                       <footer className="text-gray-600 font-medium">– Steve Jobs</footer>
                     </blockquote>

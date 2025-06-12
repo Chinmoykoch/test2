@@ -19,10 +19,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./*"],
       "@/utils/*": ["./utils/*"],
       "@/components/*": ["./components/*"],
-      "@/app/*": ["./app/*"]
+      "@/app/*": ["./app/*"],
+      "@/lib/*": ["./lib/*"]
     },
     "target": "ES2017"
   },

@@ -136,7 +136,8 @@ export default function AlumniSuccessStories() {
     })
 
     return () => {
-      Object.values(sectionRefs.current).forEach((ref) => {
+      const currentRefs = sectionRefs.current;
+      Object.values(currentRefs).forEach((ref) => {
         if (ref) observer.unobserve(ref)
       })
     }

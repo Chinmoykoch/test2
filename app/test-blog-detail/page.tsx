@@ -70,7 +70,7 @@ const TestBlogDetailPage: React.FC = () => {
             <div>
               <h3 className="font-semibold text-gray-700">Get Blog by Slug</h3>
               <code className="bg-gray-100 px-2 py-1 rounded text-sm block mt-1">
-                GET https://backend-rakj.onrender.com/api/v1/blog/getblogbyslug/{slug}
+                GET https://backend-rakj.onrender.com/api/v1/blog/getblogbyslug/[slug]
               </code>
             </div>
           </div>

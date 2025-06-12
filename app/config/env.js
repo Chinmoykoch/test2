@@ -9,9 +9,11 @@ if (!DB_URI && NODE_ENV !== 'development') {
   console.warn('Warning: MONGODB_URI or DB_URI not set. Database connection may fail.');
 }
 
-export default {
+const envConfig = {
   DB_URI,
   NODE_ENV,
   BACKEND_URL,
   API_BASE_URL,
 };
+
+export default envConfig;

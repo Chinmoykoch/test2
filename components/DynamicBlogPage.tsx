@@ -148,11 +148,11 @@ const DynamicBlogPage: React.FC = () => {
   const displayBlogs = apiBlogs.length > 0 ? apiBlogs : staticBlogs;
 
   // Convert API blog to display format for consistency
-  const formatBlogForDisplay = (blog: BlogPost | any) => {
-    if (blog._id) {
+  const formatBlogForDisplay = (blog: BlogPost | { _id?: string; slug?: string; title: string; excerpt: string; heroImage?: string; category: string; date?: string; readTime?: string; views?: number; id?: string; image?: string; keywords?: string }) => {
+    if ('_id' in blog && blog._id) {
       // API blog format
       return {
-        id: blog.slug,
+        id: blog.slug || blog._id,
         title: blog.title,
         excerpt: blog.excerpt,
         image: blog.heroImage,
@@ -163,8 +163,17 @@ const DynamicBlogPage: React.FC = () => {
         keywords: `${blog.category}, ${blog.title}`,
       };
     } else {
-      // Static blog format
-      return blog;
+      // Static blog format - ensure it has all required properties
+      return {
+        id: ('id' in blog ? blog.id : '') || ('slug' in blog ? blog.slug : '') || '',
+        title: blog.title,
+        excerpt: blog.excerpt,
+        image: ('image' in blog ? blog.image : '') || ('heroImage' in blog ? blog.heroImage : ''),
+        category: blog.category,
+        date: blog.date,
+        readTime: blog.readTime,
+        keywords: ('keywords' in blog ? blog.keywords : '') || `${blog.category}, ${blog.title}`,
+      };
     }
   };
 
@@ -400,7 +409,7 @@ const DynamicBlogPage: React.FC = () => {
             {filteredBlogs.map((blog) => {
               const formattedBlog = formatBlogForDisplay(blog);
               return (
-                <div key={formattedBlog.id || blog._id} id={formattedBlog.id} className="scroll-mt-16">
+                <div key={formattedBlog.id || ('_id' in blog ? blog._id : '')} id={formattedBlog.id} className="scroll-mt-16">
                   <Link href={`/blog/${formattedBlog.id}`} className="group">
                     <Card className="overflow-hidden border-2 hover:border-yellow-400 transition-all duration-300 hover:shadow-xl h-full flex flex-col">
                       <div className="relative h-56 overflow-hidden">
@@ -415,7 +424,7 @@ const DynamicBlogPage: React.FC = () => {
                             {formattedBlog.category}
                           </Badge>
                         </div>
-                        {blog.views && (
+                        {'views' in blog && blog.views && (
                           <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded text-xs">
                             {blog.views} views
                           </div>
