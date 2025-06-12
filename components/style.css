@@ -1,7 +1,8 @@
 #wrapper {
-    height: 100vh;
+    min-height: 100vh;
     overflow-x: hidden;
     perspective: 10px;
+    position: relative;
   }
   
   .background {
@@ -18,7 +19,7 @@
     height: 100%;
     width: 100%;
     object-fit: cover;
-    z-index: -1;
+    z-index: -10;
   }
   
   /* h1 {
@@ -51,10 +52,12 @@
   .bg {
     position: relative;
     width: 100%;
-    background-attachment: fixed;
+    background-attachment: scroll;
     background-size: cover;
     background-position: center;
     height: 300px;
+    z-index: 1;
+    pointer-events: none;
   }
   
   .bg1 {

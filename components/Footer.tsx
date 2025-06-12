@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-b from-black to-gray-900 text-white font-sans py-16">
+    <footer className="bg-gradient-to-b from-black to-gray-900 text-white font-sans py-16 relative z-50">
       <div className="container mx-auto px-6 lg:px-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
         {/* Quick Links Section */}
         <div>

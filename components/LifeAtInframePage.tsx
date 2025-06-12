@@ -82,11 +82,11 @@ export const LifeAtCampus = () => {
   ];
 
   return (
-    <div>
-      <div className={`min-h-screen ${poppins.className}`}>
+    <div className="relative">
+      <div className={`min-h-screen ${poppins.className} relative`}>
         {/* Background Pattern */}
         <div
-          className="fixed inset-0 h-full w-full opacity-10 bg-white bg-[linear-gradient(to_right,#000000_1px,transparent_1px),linear-gradient(to_bottom,#000000_1px,transparent_1px)] bg-[size:150px_150px] z-0"
+          className="absolute inset-0 h-full w-full opacity-10 bg-white bg-[linear-gradient(to_right,#000000_1px,transparent_1px),linear-gradient(to_bottom,#000000_1px,transparent_1px)] bg-[size:150px_150px] -z-10 pointer-events-none"
           aria-hidden="true"
         />
 
@@ -296,7 +296,7 @@ export const LifeAtCampus = () => {
         </Suspense>
 
         {/* CTA Section */}
-        <section className="w-full py-24 my-10 bg-black text-white">
+        <section className="w-full py-24 my-10 bg-black text-white relative z-10">
           <div className="max-w-7xl mx-auto px-4 text-center">
             <h2 className="text-4xl font-bold mb-6">Begin Your Journey</h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto">
@@ -305,9 +305,9 @@ export const LifeAtCampus = () => {
             </p>
             <div className="flex gap-6 justify-center">
 
-            <Button 
+            <Button
                 onClick={handleApplyClick}
-                className="bg-yellow-400 text-black px-24 py-8 font-bold text-lg hover:bg-yellow-500 relative z-50"
+                className="bg-yellow-400 text-black px-24 py-8 font-bold text-lg hover:bg-yellow-500"
               >
                 Apply Now
             </Button>

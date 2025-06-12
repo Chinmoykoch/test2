@@ -21,7 +21,7 @@ export default function MainLayout({
   return (
     <>
       <Navbar />
-      <main className={`${poppins.className}`}>{children}</main>
+      <main className={`${poppins.className} relative z-10`}>{children}</main>
       <Footer />
     </>
   );
