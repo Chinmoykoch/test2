@@ -57,6 +57,69 @@ export interface BlogsResponse {
   data: BlogPost[];
 }
 
+export interface StudentClub {
+  _id: string;
+  name: string;
+  category: string;
+  description: string;
+  image: string;
+  order: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface StudentClubsResponse {
+  success: boolean;
+  data: StudentClub[];
+}
+
+export interface CampusEvent {
+  _id: string;
+  title: string;
+  description: string;
+  category: 'arts-culture' | 'sports-recreation' | 'organizations';
+  image: string;
+  order: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CampusEventsResponse {
+  success: boolean;
+  data: CampusEvent[];
+}
+
+export interface Membership {
+  _id: string;
+  src: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface MembershipResponse {
+  success: boolean;
+  data: Membership[];
+}
+
+export interface Advisor {
+  _id: string;
+  name: string;
+  role: string;
+  description: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface AdvisorsResponse {
+  success: boolean;
+  data: Advisor[];
+}
+
 // Get the backend URL from environment variables
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || BACKEND_URL;
@@ -150,6 +213,18 @@ export const API_ENDPOINTS = {
   GET_BLOG_BY_ID: '/api/v1/blog/getblogbyid',
   GET_BLOG_BY_SLUG: '/api/v1/blog/getblogbyslug',
   GET_BLOGS_BY_CATEGORY: '/api/v1/blog/getblogsbycategory',
+
+  // Student Clubs
+  GET_STUDENT_CLUBS: '/api/v1/studentclub/getstudentclubs',
+
+  // Campus Events
+  GET_CAMPUS_EVENTS: '/api/v1/campusevent/getcampusevents',
+
+  // Membership
+  GET_MEMBERSHIP: '/api/v1/membership/getMembership',
+
+  // Advisors
+  GET_ADVISORS: '/api/v1/advisor/getadvisors',
 
   // General
   HEALTH_CHECK: '/api/v1/health',
@@ -317,6 +392,70 @@ export const apiHelpers = {
       }
     } catch (error) {
       console.error('Failed to fetch blog by ID:', error);
+      throw error;
+    }
+  },
+
+  // Get student clubs
+  getStudentClubs: async (): Promise<StudentClub[]> => {
+    try {
+      const response = await apiClient.get<StudentClubsResponse>(API_ENDPOINTS.GET_STUDENT_CLUBS);
+      if (response.data && response.data.success && Array.isArray(response.data.data)) {
+        return response.data.data;
+      } else {
+        console.warn('Unexpected student clubs response structure:', response.data);
+        return [];
+      }
+    } catch (error) {
+      console.error('Failed to fetch student clubs:', error);
+      throw error;
+    }
+  },
+
+  // Get campus events
+  getCampusEvents: async (): Promise<CampusEvent[]> => {
+    try {
+      const response = await apiClient.get<CampusEventsResponse>(API_ENDPOINTS.GET_CAMPUS_EVENTS);
+      if (response.data && response.data.success && Array.isArray(response.data.data)) {
+        return response.data.data;
+      } else {
+        console.warn('Unexpected campus events response structure:', response.data);
+        return [];
+      }
+    } catch (error) {
+      console.error('Failed to fetch campus events:', error);
+      throw error;
+    }
+  },
+
+  // Get memberships
+  getMemberships: async (): Promise<Membership[]> => {
+    try {
+      const response = await apiClient.get<MembershipResponse>(API_ENDPOINTS.GET_MEMBERSHIP);
+      if (response.data && response.data.success && Array.isArray(response.data.data)) {
+        return response.data.data;
+      } else {
+        console.warn('Unexpected membership response structure:', response.data);
+        return [];
+      }
+    } catch (error) {
+      console.error('Failed to fetch memberships:', error);
+      throw error;
+    }
+  },
+
+  // Get advisors
+  getAdvisors: async (): Promise<Advisor[]> => {
+    try {
+      const response = await apiClient.get<AdvisorsResponse>(API_ENDPOINTS.GET_ADVISORS);
+      if (response.data && response.data.success && Array.isArray(response.data.data)) {
+        return response.data.data;
+      } else {
+        console.warn('Unexpected advisors response structure:', response.data);
+        return [];
+      }
+    } catch (error) {
+      console.error('Failed to fetch advisors:', error);
       throw error;
     }
   },

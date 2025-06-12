@@ -1,0 +1,24 @@
+From a399b537b1fedc06975b4e8011e30a6e7ed94883 Mon Sep 17 00:00:00 2001
+From: bedanta <r4inr3aper@gmail.com>
+Date: Mon, 9 Jun 2025 21:52:20 +0530
+Subject: [PATCH 2/2] update
+
+---
+ app/(main)/blog/page.tsx | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/app/(main)/blog/page.tsx b/app/(main)/blog/page.tsx
+index 7685cae..3dcde7b 100644
+--- a/app/(main)/blog/page.tsx
++++ b/app/(main)/blog/page.tsx
+@@ -19,7 +19,6 @@ export const metadata: Metadata = {
+     images: ['/images/gallery/DSC04232.JPG'],
+   },
+ };
+-
+ // This page now uses the DynamicBlogPage component which fetches blogs from the backend API
+ 
+ export default function Home() {
+-- 
+2.42.0.windows.2
+
