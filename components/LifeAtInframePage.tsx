@@ -3,11 +3,12 @@ import Image from "next/image";
 import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { ChevronRight, ArrowRight } from "lucide-react";
-import { Suspense, lazy, useState } from "react";
+import { Suspense, lazy, useState, useEffect } from "react";
 import { Poppins } from "next/font/google";
 import "../components/style.css";
 import { experienceCamputLife2 } from "../utils/constant";
 import ApplyNowForm from "./ApplyNowForm";
+import { apiHelpers, CampusEvent } from "@/utils/api";
 
 // Lazy load components
 const CampusLife = lazy(() => import("../components/CampusLife"));
@@ -32,54 +33,72 @@ const LoadingSpinner = () => (
 
 export const LifeAtCampus = () => {
     const [isFormOpen, setIsFormOpen] = useState(false);
-      const handleApplyClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    const [events, setEvents] = useState<CampusEvent[]>([]);
+    const [eventsLoading, setEventsLoading] = useState(true);
+    const [eventsError, setEventsError] = useState<string | null>(null);
+
+    const handleApplyClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
         e.preventDefault();
         setIsFormOpen(true);
-      };
-  const services = [
-    {
-      title: "Academic Support",
-      description:
-        "Access tutoring services, writing centers, and academic advisors who are committed to helping you achieve your educational goals.",
-      color: "bg-red-500",
-      icon: "circle",
-    },
-    {
-      title: "Career Development",
-      description:
-        "Prepare for your future career with our comprehensive career services including resume workshops and job fairs.",
-      color: "bg-blue-600",
-      icon: "square",
-    },
-    {
-      title: "Student Wellness",
-      description:
-        "Take care of your physical and mental well-being with our comprehensive wellness programs and health services.",
-      color: "bg-green-600",
-      icon: "triangle",
-    },
-  ];
+    };
 
-  const events = [
-    {
-      title: "Arts & Culture",
-      description:
-        "Express yourself through our vibrant arts and culture scene. Participate in theatrical productions and music concerts.",
-      image: "/fine art/SKF09513.JPG",
-    },
-    {
-      title: "Sports & Recreation",
-      description:
-        "Stay active and competitive with our comprehensive sports programs for all skill levels.",
-      image: "/IMG_8698.jpg",
-    },
-    {
-      title: "Student Organizations",
-      description:
-        "Find your community in our diverse student organizations. From academic clubs to special interest groups.",
-      image: "/images/gallery/1717492692489 - Copy (2).jpg",
-    },
-  ];
+    useEffect(() => {
+        const fetchCampusEvents = async () => {
+            try {
+                setEventsLoading(true);
+                setEventsError(null);
+                const eventsData = await apiHelpers.getCampusEvents();
+                // Sort events by order field
+                const sortedEvents = eventsData.sort((a, b) => a.order - b.order);
+                setEvents(sortedEvents);
+            } catch (err) {
+                console.error('Failed to fetch campus events:', err);
+                setEventsError('Failed to load campus events. Please try again later.');
+            } finally {
+                setEventsLoading(false);
+            }
+        };
+
+        fetchCampusEvents();
+    }, []);
+
+    const services = [
+        {
+            title: "Academic Support",
+            description:
+                "Access tutoring services, writing centers, and academic advisors who are committed to helping you achieve your educational goals.",
+            color: "bg-red-500",
+            icon: "circle",
+        },
+        {
+            title: "Career Development",
+            description:
+                "Prepare for your future career with our comprehensive career services including resume workshops and job fairs.",
+            color: "bg-blue-600",
+            icon: "square",
+        },
+        {
+            title: "Student Wellness",
+            description:
+                "Take care of your physical and mental well-being with our comprehensive wellness programs and health services.",
+            color: "bg-green-600",
+            icon: "triangle",
+        },
+    ];
+
+    // Helper function to get display title for categories
+    const getCategoryDisplayTitle = (category: string): string => {
+        switch (category) {
+            case 'arts-culture':
+                return 'Arts & Culture';
+            case 'sports-recreation':
+                return 'Sports & Recreation';
+            case 'organizations':
+                return 'Student Organizations';
+            default:
+                return category;
+        }
+    };
 
   return (
     <div>
@@ -258,33 +277,58 @@ export const LifeAtCampus = () => {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              {events.map((event, index) => (
-                <Card
-                  key={index}
-                  className="hover:shadow-xl transition-shadow duration-300"
-                >
-                  <div className="relative h-56 w-full">
-                    <Image
-                      src={event.image}
-                      alt={event.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      quality={85}
-                      loading="lazy"
-                    />
+            {/* Loading State */}
+            {eventsLoading && (
+              <div className="flex justify-center items-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500"></div>
+              </div>
+            )}
+
+            {/* Error State */}
+            {eventsError && (
+              <div className="text-center py-12">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+                  <p className="text-red-600">{eventsError}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Events Grid */}
+            {!eventsLoading && !eventsError && (
+              <div className="grid md:grid-cols-3 gap-8">
+                {events.length > 0 ? (
+                  events.map((event) => (
+                    <Card
+                      key={event._id}
+                      className="hover:shadow-xl transition-shadow duration-300"
+                    >
+                      <div className="relative h-56 w-full">
+                        <Image
+                          src={event.image}
+                          alt={event.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                          quality={85}
+                          loading="lazy"
+                        />
+                      </div>
+                      <CardContent className="p-8">
+                        <h3 className="text-2xl font-bold mb-4">{getCategoryDisplayTitle(event.category)}</h3>
+                        <p className="text-gray-600 mb-6">{event.description}</p>
+                        <Button variant="outline" className="w-full">
+                          Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))
+                ) : (
+                  <div className="col-span-3 text-center py-12">
+                    <p className="text-gray-600">No campus events available at the moment.</p>
                   </div>
-                  <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold mb-4">{event.title}</h3>
-                    <p className="text-gray-600 mb-6">{event.description}</p>
-                    <Button variant="outline" className="w-full">
-                      Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                )}
+              </div>
+            )}
           </div>
         </section>
 

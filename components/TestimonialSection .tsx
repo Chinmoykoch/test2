@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -9,9 +9,10 @@ import {
 import { Card } from "../components/ui/card";
 import Image from "next/image";
 import { testimonials } from "../utils/constant";
+import { apiHelpers, type Testimonial } from "../utils/api";
 import { Poppins } from "next/font/google";
 import Autoplay from "embla-carousel-autoplay";
-import { Star } from "lucide-react";
+import { Star, Loader2 } from "lucide-react";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -19,6 +20,60 @@ const poppins = Poppins({
 });
 
 export default function TestimonialCarousel() {
+  const [apiTestimonials, setApiTestimonials] = useState<Testimonial[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch testimonials from API
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await apiHelpers.getTestimonials();
+        setApiTestimonials(data);
+      } catch (err) {
+        console.error('Failed to fetch testimonials:', err);
+        setError('Failed to load testimonials');
+        // Fallback to static testimonials if API fails
+        setApiTestimonials([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
+
+  // Use API testimonials if available, otherwise fallback to static ones
+  // Convert static testimonials to match API format for consistency
+  const staticTestimonialsConverted = testimonials.map(t => ({
+    ...t,
+    _id: t.id.toString(),
+  }));
+
+  const displayTestimonials = apiTestimonials.length > 0 ? apiTestimonials : staticTestimonialsConverted;
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="w-full max-w-7xl mx-auto py-20 px-4 lg:px-8">
+        <div className="mb-16 max-w-2xl">
+          <h2 className={`text-4xl lg:text-5xl font-bold mb-4 ${poppins.className}`}>
+            Student Success Stories
+          </h2>
+          <p className="text-gray-600 text-lg">
+            Discover how our platform has transformed the learning journey of our students
+          </p>
+        </div>
+        <div className="flex justify-center items-center py-20">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+          <span className="ml-2 text-gray-600">Loading testimonials...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full max-w-7xl mx-auto py-20 px-4 lg:px-8">
       {/* Header Section */}
@@ -32,6 +87,13 @@ export default function TestimonialCarousel() {
           Discover how our platform has transformed the learning journey of our
           students
         </p>
+        {error && (
+          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+            <p className="text-yellow-700 text-sm">
+              ⚠️ {error}. Showing cached testimonials.
+            </p>
+          </div>
+        )}
       </div>
 
       <Carousel
@@ -44,9 +106,9 @@ export default function TestimonialCarousel() {
         ]}
       >
         <CarouselContent className="-ml-4">
-          {testimonials.map((testimonial) => (
+          {displayTestimonials.map((testimonial) => (
             <CarouselItem
-              key={testimonial.id}
+              key={testimonial._id}
               className="pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/3 xl:basis-1/4"
             >
               <Card className="border-none">
@@ -109,7 +171,7 @@ export default function TestimonialCarousel() {
 
         {/* Progress indicator */}
         <div className="mt-8 flex justify-center gap-2">
-          {[...Array(Math.ceil(testimonials.length / 4))].map((_, i) => (
+          {[...Array(Math.ceil(displayTestimonials.length / 4))].map((_, i) => (
             <div
               key={i}
               className="w-16 h-1 rounded-full bg-gray-200 overflow-hidden"
