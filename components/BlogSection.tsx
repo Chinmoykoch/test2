@@ -7,7 +7,7 @@ import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { ChevronRight, Loader2, Calendar, Clock } from 'lucide-react';
-import { apiHelpers, type BlogPost } from '../utils/api';
+import { apiHelpers, type BlogPost, type BlogAuthor } from '../utils/api';
 
 // Category colors mapping
 const categoryColors: Record<string, string> = {
@@ -23,8 +23,23 @@ const categoryColors: Record<string, string> = {
   ws2: "bg-gray-500 text-white",
 };
 
+interface StaticBlog {
+  id: string;
+  slug?: string;
+  _id?: string;
+  title: string;
+  excerpt: string;
+  image: string;
+  category: string;
+  date: string;
+  readTime: string;
+  author: BlogAuthor;
+  tags: string[];
+  keywords: string;
+}
+
 interface BlogSectionProps {
-  staticBlogs?: any[]; // Fallback static blogs
+  staticBlogs?: StaticBlog[]; // Fallback static blogs
   showTitle?: boolean;
   maxPosts?: number;
 }
@@ -121,15 +136,15 @@ const BlogSection: React.FC<BlogSectionProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {displayBlogs.map((blog) => {
           // Format blog data based on source (API or static)
-          const formattedBlog = apiBlogs.length > 0 ? formatBlogForDisplay(blog as BlogPost) : blog;
-          
+          const formattedBlog = apiBlogs.length > 0 ? formatBlogForDisplay(blog as BlogPost) : blog as BlogPost;
+
           return (
-            <div key={formattedBlog.id} className="scroll-mt-16">
-              <Link href={`/blog/${formattedBlog.id}`} className="group">
+            <div key={('slug' in formattedBlog ? formattedBlog.slug : '') || ('_id' in formattedBlog ? formattedBlog._id : '') || ('id' in formattedBlog ? formattedBlog.id : '')} className="scroll-mt-16">
+              <Link href={`/blog/${('slug' in formattedBlog ? formattedBlog.slug : '') || ('_id' in formattedBlog ? formattedBlog._id : '') || ('id' in formattedBlog ? formattedBlog.id : '')}`} className="group">
                 <Card className="overflow-hidden border-2 hover:border-yellow-400 transition-all duration-300 hover:shadow-xl h-full flex flex-col">
                   <div className="relative h-56 overflow-hidden">
                     <Image
-                      src={formattedBlog.image || "/placeholder.svg"}
+                      src={('image' in formattedBlog ? formattedBlog.image : formattedBlog.heroImage) || "/placeholder.svg"}
                       alt={formattedBlog.title}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"

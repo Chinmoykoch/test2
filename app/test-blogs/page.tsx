@@ -1,13 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import { apiHelpers, type BlogPost } from '../../utils/api';
 
 const TestBlogsPage: React.FC = () => {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [rawResponse, setRawResponse] = useState<any>(null);
+  const [rawResponse, setRawResponse] = useState<unknown>(null);
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -99,9 +101,11 @@ const TestBlogsPage: React.FC = () => {
                   </div>
                   {blog.heroImage && (
                     <div className="mt-2">
-                      <img 
-                        src={blog.heroImage} 
+                      <Image
+                        src={blog.heroImage}
                         alt={blog.title}
+                        width={400}
+                        height={128}
                         className="w-full h-32 object-cover rounded"
                       />
                     </div>
@@ -133,24 +137,24 @@ const TestBlogsPage: React.FC = () => {
 
         {/* Navigation */}
         <div className="mt-8 flex gap-4">
-          <a 
-            href="/blog" 
+          <Link
+            href="/blog"
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
           >
             View Blog Page
-          </a>
-          <a 
-            href="/test-backend" 
+          </Link>
+          <Link
+            href="/test-backend"
             className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
           >
             Test Backend APIs
-          </a>
-          <a 
-            href="/" 
+          </Link>
+          <Link
+            href="/"
             className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors"
           >
             Back to Home
-          </a>
+          </Link>
         </div>
       </div>
     </div>

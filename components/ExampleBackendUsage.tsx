@@ -5,7 +5,7 @@ import { apiClient, apiHelpers, API_ENDPOINTS } from '@/utils/api';
 
 const ExampleBackendUsage = () => {
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<unknown>(null);
   const [error, setError] = useState<string | null>(null);
 
   const testHealthCheck = async () => {
@@ -206,7 +206,7 @@ const ExampleBackendUsage = () => {
         </div>
       )}
 
-      {result && (
+      {result !== null && (
         <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-md">
           <h3 className="text-green-800 font-medium mb-2">Success Response:</h3>
           <pre className="text-green-700 text-sm overflow-auto bg-white p-2 rounded border">
