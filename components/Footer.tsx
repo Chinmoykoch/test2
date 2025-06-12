@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-b from-black to-gray-900 text-white font-sans py-16">
+    <footer className="bg-gradient-to-b from-black to-gray-900 text-white font-sans py-16 relative z-50">
       <div className="container mx-auto px-6 lg:px-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
         {/* Quick Links Section */}
         <div>
@@ -312,15 +312,97 @@ const Footer = () => {
       <div className="mt-16 border-t border-gray-700 pt-8">
         <div className="container mx-auto px-6 lg:px-16 text-center text-sm">
           <p>
-            <span className="font-semibold">Free Courses:</span> Copywriting ·
-            Digital Marketing · Graphic Design · Interior Design · Digital
-            Software · Facebook Ads · Google Ads · SEO · Digital Painting ·
-            Illustrations · Sewing Machine Technique · Furniture Making ·
-            Sketching · Drawing · Video Editing · Fashion Styling · Fashion
-            Communication · English Communication · Animation · VFX · Jewellery
-            Design · CAD Design · Painting · Business Management · Draping ·
-            Pattern Making · Carpentry · Entrepreneurship Skills · Advertising ·
-            Marketing
+            <span className="font-semibold">Free Courses:</span>{" "}
+            <Link href="/digital-marketing" className="hover:text-blue-400 transition duration-300">
+              Copywriting
+            </Link> ·{" "}
+            <Link href="/digital-marketing" className="hover:text-blue-400 transition duration-300">
+              Digital Marketing
+            </Link> ·{" "}
+            <Link href="/graphic-design" className="hover:text-blue-400 transition duration-300">
+              Graphic Design
+            </Link> ·{" "}
+            <Link href="/interior-design" className="hover:text-blue-400 transition duration-300">
+              Interior Design
+            </Link> ·{" "}
+            <Link href="/digital-marketing" className="hover:text-blue-400 transition duration-300">
+              Digital Software
+            </Link> ·{" "}
+            <Link href="/digital-marketing" className="hover:text-blue-400 transition duration-300">
+              Facebook Ads
+            </Link> ·{" "}
+            <Link href="/digital-marketing" className="hover:text-blue-400 transition duration-300">
+              Google Ads
+            </Link> ·{" "}
+            <Link href="/digital-marketing" className="hover:text-blue-400 transition duration-300">
+              SEO
+            </Link> ·{" "}
+            <Link href="/fine-arts" className="hover:text-blue-400 transition duration-300">
+              Digital Painting
+            </Link> ·{" "}
+            <Link href="/fine-arts" className="hover:text-blue-400 transition duration-300">
+              Illustrations
+            </Link> ·{" "}
+            <Link href="/fashion-design" className="hover:text-blue-400 transition duration-300">
+              Sewing Machine Technique
+            </Link> ·{" "}
+            <Link href="/interior-design" className="hover:text-blue-400 transition duration-300">
+              Furniture Making
+            </Link> ·{" "}
+            <Link href="/fine-arts" className="hover:text-blue-400 transition duration-300">
+              Sketching
+            </Link> ·{" "}
+            <Link href="/fine-arts" className="hover:text-blue-400 transition duration-300">
+              Drawing
+            </Link> ·{" "}
+            <Link href="/media-entertainment" className="hover:text-blue-400 transition duration-300">
+              Video Editing
+            </Link> ·{" "}
+            <Link href="/fashion-design" className="hover:text-blue-400 transition duration-300">
+              Fashion Styling
+            </Link> ·{" "}
+            <Link href="/fashion-design" className="hover:text-blue-400 transition duration-300">
+              Fashion Communication
+            </Link> ·{" "}
+            <Link href="/courses" className="hover:text-blue-400 transition duration-300">
+              English Communication
+            </Link> ·{" "}
+            <Link href="/animation-vfx" className="hover:text-blue-400 transition duration-300">
+              Animation
+            </Link> ·{" "}
+            <Link href="/animation-vfx" className="hover:text-blue-400 transition duration-300">
+              VFX
+            </Link> ·{" "}
+            <Link href="/jewellery-design" className="hover:text-blue-400 transition duration-300">
+              Jewellery Design
+            </Link> ·{" "}
+            <Link href="/interior-design" className="hover:text-blue-400 transition duration-300">
+              CAD Design
+            </Link> ·{" "}
+            <Link href="/fine-arts" className="hover:text-blue-400 transition duration-300">
+              Painting
+            </Link> ·{" "}
+            <Link href="/advertising-marketing" className="hover:text-blue-400 transition duration-300">
+              Business Management
+            </Link> ·{" "}
+            <Link href="/fashion-design" className="hover:text-blue-400 transition duration-300">
+              Draping
+            </Link> ·{" "}
+            <Link href="/fashion-design" className="hover:text-blue-400 transition duration-300">
+              Pattern Making
+            </Link> ·{" "}
+            <Link href="/interior-design" className="hover:text-blue-400 transition duration-300">
+              Carpentry
+            </Link> ·{" "}
+            <Link href="/entrepreneurship-skill" className="hover:text-blue-400 transition duration-300">
+              Entrepreneurship Skills
+            </Link> ·{" "}
+            <Link href="/advertising-marketing" className="hover:text-blue-400 transition duration-300">
+              Advertising
+            </Link> ·{" "}
+            <Link href="/advertising-marketing" className="hover:text-blue-400 transition duration-300">
+              Marketing
+            </Link>
           </p>
         </div>
       </div>

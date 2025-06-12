@@ -292,33 +292,37 @@ const AboutPage = () => {
       <CampusLife  experienceCamputLife={experienceCamputLife}/>
       <section className="bg-white text-black py-16">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-36 items-center">
-            {/* Left side: Heading and Image */}
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 xl:gap-20 items-center">
+            {/* Left side: Images */}
             <div data-aos="fade-right">
-              <div className="flex gap-10">
-                <Image
-                  src={"/images/gallery/1719575193328.jpg"}
-                  alt={"Cultural Event"}
-                  height={480}
-                  width={364}
-                  className="rounded-lg shadow-lg"
-                />
-                <Image
-                  src={"/images/gallery/1719748180116.jpg"}
-                  alt={"Cultural Event"}
-                  height={480}
-                  width={364}
-                  className="rounded-lg  shadow-lg"
-                />
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8">
+                <div className="flex-1">
+                  <Image
+                    src={"/images/gallery/1719575193328.jpg"}
+                    alt={"Cultural Event"}
+                    height={480}
+                    width={364}
+                    className="rounded-lg shadow-lg w-full h-auto object-cover"
+                  />
+                </div>
+                <div className="flex-1">
+                  <Image
+                    src={"/images/gallery/1719748180116.jpg"}
+                    alt={"Cultural Event"}
+                    height={480}
+                    width={364}
+                    className="rounded-lg shadow-lg w-full h-auto object-cover"
+                  />
+                </div>
               </div>
             </div>
 
             {/* Right side: Text */}
-            <div data-aos="fade-left">
-              <h2 className={`text-4xl font-bold mb-6 ${poppins.className}`}>
+            <div data-aos="fade-left" className="mt-8 lg:mt-0">
+              <h2 className={`text-3xl md:text-4xl font-bold mb-6 ${poppins.className}`}>
                 CORE VALUES
               </h2>
-              <p className="text-lg font-sans leading-relaxed">
+              <p className="text-base md:text-lg font-sans leading-relaxed">
                 Inframe school of art, design and business inculcates design
                 thinking in students which enables them to think from a
                 different perspective and understand the needs and wants of the
