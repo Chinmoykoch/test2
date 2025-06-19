@@ -22,6 +22,7 @@ const category = {
         "BSC in Interior Design",
         "One Year Diploma in Interior Design",
         "Three Year Diploma in Interior Design",
+        "6 months Diploma in Interior Design"
       ],
       image:
         "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -34,6 +35,7 @@ const category = {
         "BSC in Fashion Design",
         "One Year Diploma in Fashion Design",
         "Three Year Diploma in Fashion Design",
+        "6 months Diploma in Fashion Design"
       ],
       image: "/fashion-1.JPG",
     },
@@ -45,6 +47,7 @@ const category = {
         "BSC in Graphic Design",
         "One Year Diploma in Graphic Design",
         "Three Year Diploma in Graphic Design",
+        "6 months Diploma in Graphic Design"
       ],
       image:
         "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -54,6 +57,7 @@ const category = {
       programs: [
         "BDes In UI & UX Design",
         "One Year Diploma in UI & UX Design",
+        "6 months Diploma in UIUX-Design"
       ],
       image:
         "https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -67,6 +71,7 @@ const category = {
         "One Year Diploma in Animation and VFX",
         "Two Year Diploma in Animation and VFX",
         "Three Year Diploma in Animation and VFX",
+        "6 months Diploma in Animation-VFX"
       ],
       image:
         "https://images.unsplash.com/photo-1628494391268-c9935bc384d5?q=80&w=2030&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -79,6 +84,7 @@ const category = {
         "One Year Diploma in CAD Jewellery",
         "Six Month Certificate Course in Jewellery Design",
         "Six Month Certificate Course in CAD Jewellery",
+        "6 months Diploma in Fine Arts"
       ],
       image:
         "https://images.unsplash.com/photo-1606293926249-ed22e446d476?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -95,6 +101,7 @@ const category = {
         "B.VOC in Fine Arts",
         "One Year Diploma in Painting",
         "Three Year Diploma in Fine Arts",
+        "6 months Diploma in Fine Arts"
       ],
       image:
         "https://plus.unsplash.com/premium_photo-1673514503009-912ffc6ff956?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -124,6 +131,7 @@ const category = {
       programs: [
         "BVOC in Media and Entertainment",
         "One Year Diploma in Media and Entertainment",
+        "6 months Diploma in Media-Entertainment"
       ],
       image:
         "https://plus.unsplash.com/premium_photo-1710961232986-36cead00da3c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fG1lZGlhJTIwYW5kJTIwZW50ZXJ0YWlubWVudHxlbnwwfHwwfHx8MA%3D%3D",
@@ -136,37 +144,11 @@ const category = {
     },
   ],
 };
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
 });
-
-// interface DegreeMap {
-//   [key: string]: string;
-// }
-
-// const getDegreeType = (text: string): string => {
-//   const degreeMap: DegreeMap = {
-//     "B. Des": "bdes",
-//     "B.VOC": "bvoc",
-//     "B.SC": "bsc",
-//     "1 Year Diploma": "diploma1",
-//     "3 Year Diploma": "diploma3",
-//     "2 Year Diploma": "diploma2",
-//     "6 Month Certificate": "certificate6",
-//   };
-
-
-
-  // Find which degree type this course belongs to
-//   for (const [key, value] of Object.entries(degreeMap)) {
-//     if (text.includes(key)) {
-//       return value;
-//     }
-//   }
-
-//   return "bdes"; // Default fallback
-// };
 
 interface Course {
   title: string;
@@ -203,22 +185,15 @@ const CourseSection: React.FC<CourseSectionProps> = ({ courses }) => (
           </h3>
           <ul className="space-y-2">
             {course.programs.map((program, idx) => (
-            
-              
               <li
                 key={idx}
                 className="text-sm text-gray-600 hover:text-yellow-600 transition-colors flex items-start"
               >
                 <Link
-                  className="hover:text-blue-500 hover:underline"
-                  href={`/${course.title
-                    .replace(/\s+/g, "-")
-                    .toLowerCase()}/${program.replace(/\s+/g, "-")
-                    .toLowerCase()}`}
+                  className="hover:text-blue-500 hover:underline flex items-center"
+                  href={`/${course.title.replace(/\s+/g, "-").toLowerCase()}/${program.replace(/\s+/g, "-").toLowerCase()}`}
                 >
-                  <span className="text-yellow-400 mr-2 text-lg leading-none">
-                    •
-                  </span>
+                  <span className="text-yellow-400 mr-2 text-lg leading-none">•</span>
                   {program}
                 </Link>
               </li>

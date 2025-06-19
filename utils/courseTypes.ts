@@ -450,6 +450,66 @@ export const courseTypes: CourseCategory = {
         },
       },
     },
+
+    { redirectUrl: "/interior-design/6-months-diploma-in-interior-design",
+      value: "6-months-diploma-in-interior-design",
+      label: "6 Months Diploma",
+      title: "6 Months Diploma in Interior Design",
+      duration: "6 Months Intensive",
+      description:
+        "Quick-start your interior design journey with our intensive 6-month program. Learn essential skills for immediate industry entry.",
+      content:
+        "The 6 Months Diploma in Interior Design is a fast-track program designed for students who want to quickly gain fundamental interior design skills. This intensive course covers essential topics including space planning, color theory, furniture arrangement, lighting basics, and design principles. Students learn through hands-on workshops, practical assignments, and industry-standard software training. The curriculum focuses on residential interior design fundamentals, preparing students for entry-level positions as design assistants, freelance decorators, or to start their own small design projects.",
+      software: [
+        { name: "AutoCAD", src: "/software logos/pngegg (17).png" },
+        { name: "SketchUp", src: "/software logos/pngegg (18).png" },
+        { name: "Photoshop", src: "/software logos/pngegg (24).png" },
+      ],
+      videos: [
+        {
+          url: "https://youtube.com/embed/8Zz5zcOPHDw?si=Tjq18SsXDOYT-bGL",
+        },
+        {
+          url: "https://youtube.com/embed/Vl9aTeiM6RM?si=LFYlYsi_N60oYj9a",
+        },
+        {
+          url: "https://youtube.com/embed/AyRoxi85cHw?si=aWO6rYOrAJUNsx7s",
+        },
+      ],
+      whatYouWillLearn: [],
+      curriculum: {
+        "Month 1-2": {
+          image: "https://images.unsplash.com/photo-1617103996702-96ff29b1c467",
+          imageAlt: "Interior design fundamentals and basics",
+          content: [
+            "Introduction to Interior Design",
+            "Design Principles and Elements",
+            "Color Theory and Psychology",
+            "Space Planning Fundamentals",
+          ],
+        },
+        "Month 3-4": {
+          image: "https://images.unsplash.com/photo-1617103996702-96ff29b1c467",
+          imageAlt: "Furniture and lighting design",
+          content: [
+            "Furniture Selection and Arrangement",
+            "Lighting Design Basics",
+            "Material and Texture Studies",
+            "Digital Drafting Fundamentals",
+          ],
+        },
+        "Month 5-6": {
+          image: "https://images.unsplash.com/photo-1617103996702-96ff29b1c467",
+          imageAlt: "Final project and portfolio development",
+          content: [
+            "Residential Design Project",
+            "Portfolio Development",
+            "Client Communication Skills",
+            "Industry Best Practices",
+          ],
+        },
+      },
+    },
   ],
 
   "fashion-design": [
@@ -834,6 +894,67 @@ export const courseTypes: CourseCategory = {
         },
       },
     },
+
+    {
+      redirectUrl: "/fashion-design/6-months-diploma-in-fashion-design",
+      value: "6-months-diploma-in-fashion-design",
+      label: "6 Months Diploma",
+      title: "6 Months Diploma in Fashion Design",
+      duration: "6 Months Intensive",
+      description:
+        "Launch your fashion career with our intensive 6-month program. Master essential fashion design skills for immediate industry entry.",
+      content:
+        "The 6 Months Diploma in Fashion Design is a comprehensive fast-track program designed for aspiring fashion designers who want to quickly gain essential industry skills. This intensive course covers fundamental fashion design principles, pattern making, garment construction, fashion illustration, and textile knowledge. Students learn through hands-on workshops, practical sewing sessions, and industry-standard software training. The curriculum focuses on contemporary fashion trends, sustainable practices, and business aspects of fashion design, preparing students for entry-level positions in the fashion industry.",
+      software: [
+        { name: "Adobe Illustrator", src: "/software logos/pngegg (25).png" },
+        { name: "Photoshop", src: "/software logos/pngegg (24).png" },
+        { name: "Corel Draw", src: "/software logos/pngegg (26).png" },
+      ],
+      videos: [
+        {
+          url: "https://youtube.com/embed/8Zz5zcOPHDw?si=Tjq18SsXDOYT-bGL",
+        },
+        {
+          url: "https://youtube.com/embed/Vl9aTeiM6RM?si=LFYlYsi_N60oYj9a",
+        },
+        {
+          url: "https://youtube.com/embed/AyRoxi85cHw?si=aWO6rYOrAJUNsx7s",
+        },
+      ],
+      whatYouWillLearn: [],
+      curriculum: {
+        "Month 1-2": {
+          image: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e",
+          imageAlt: "Fashion design fundamentals and basics",
+          content: [
+            "Introduction to Fashion Design",
+            "Fashion Illustration Basics",
+            "Color Theory and Textile Science",
+            "Basic Pattern Making",
+          ],
+        },
+        "Month 3-4": {
+          image: "https://images.unsplash.com/photo-1537832816519-689ad163238b",
+          imageAlt: "Garment construction and sewing",
+          content: [
+            "Garment Construction Techniques",
+            "Sewing Fundamentals",
+            "Fashion Trends and Forecasting",
+            "Digital Fashion Design Tools",
+          ],
+        },
+        "Month 5-6": {
+          image: "https://images.unsplash.com/photo-1528459801416-a9241982fc8d",
+          imageAlt: "Final collection and portfolio",
+          content: [
+            "Fashion Collection Development",
+            "Portfolio Creation",
+            "Fashion Business Basics",
+            "Industry Best Practices",
+          ],
+        },
+      },
+    },
   ],
 
 "graphic-design": [
@@ -1104,79 +1225,161 @@ export const courseTypes: CourseCategory = {
         ]
       }
     }
-  }
-  
-  ,
-  { redirectUrl: "/graphic-design/three-year-diploma-in-graphic-design",
-    "content": "The Three Year Diploma in Graphic Design offers comprehensive training in visual communication and design technology. Students develop expertise in design software, typography, branding, and multimedia design. The program includes extensive practical projects, portfolio development, and industry internships.",
-    "value": "three-year-diploma-in-graphic-design",
-    "label": "3 Year Diploma in Graphic Design",
-    "title": "3 Year Diploma in Graphic Design",
-    "duration": "3 Years Full-Time",
-    "software": [
-      { "name": "Adobe ", "src": "/software logos/pngegg (27).png" },
-      { "name": "Corel Draw", "src": "/software logos/pngegg (26).png" },
-      { "name": "Photoshop", "src": "/software logos/pngegg (24).png" },
-      { "name": "Maya", "src": "/software logos/pngegg (28).png" },
-      { "name": "After Effect", "src": "/software logos/pngegg (29).png" },
-      { "name": "Adobe Illustrator", "src": "/software logos/pngegg (25).png" },
-      { "name": "Blender", "src": "/software logos/pngegg (30).png" },
-      
+  },
+
+  {
+    redirectUrl: "/graphic-design/three-year-diploma-in-graphic-design",
+    value: "three-year-diploma-in-graphic-design",
+    label: "3 Year Diploma",
+    title: "3 Year Diploma in Graphic Design",
+    duration: "3 Years Full-Time",
+    description:
+      "Gain comprehensive knowledge and hands-on experience in all aspects of graphic design. Perfect for creative minds seeking in-depth understanding.",
+    content:
+      "The 3 Year Diploma in Graphic Design is a comprehensive program offering a strong foundation in design principles, typography, branding, digital illustration, and motion graphics. The curriculum includes industry-standard software training, real-world projects, internships, and collaborative assignments. Students also learn business aspects of graphic design, such as project management and client handling, preparing them for careers as graphic designers, advertising designers, digital media specialists, and visual communicators.",
+    software: [
+      { name: "Adobe Illustrator", src: "/software logos/pngegg (25).png" },
+      { name: "Photoshop", src: "/software logos/pngegg (24).png" },
+      { name: "Corel Draw", src: "/software logos/pngegg (26).png" },
+      { name: "Maya", src: "/software logos/pngegg (28).png" },
+      { name: "After Effect", src: "/software logos/pngegg (29).png" },
     ],
-    "videos": [],
-    "whatYouWillLearn": [],
-    "description": "Comprehensive training in all aspects of graphic design.",
-    "curriculum": {
+    videos: [
+      {
+        url: "https://youtube.com/embed/8Zz5zcOPHDw?si=Tjq18SsXDOYT-bGL",
+      },
+      {
+        url: "https://youtube.com/embed/Vl9aTeiM6RM?si=LFYlYsi_N60oYj9a",
+      },
+      {
+        url: "https://youtube.com/embed/AyRoxi85cHw?si=aWO6rYOrAJUNsx7s",
+      },
+    ],
+    whatYouWillLearn: [],
+    curriculum: {
       "1st Year": {
         "image": "https://images.unsplash.com/photo-1617103996702-96ff29b1c467",
-        "imageAlt": "Fundamentals of graphic design and media",
+        "imageAlt": "Graphic design basics and pattern making",
         "Semester 1": [
           "Introduction to Graphic Design",
-          "Digital Tools and Software",
-          "Typography and Layout",
-          "Design Thinking"
+          "Basic Pattern Making",
+          "Fashion Illustration Basics",
+          "Garment Construction Techniques",
+          "Textile Science",
+          "Fashion Communication",
         ],
         "Semester 2": [
-          "Photo Manipulation and Editing",
-          "Branding and Identity Design",
-          "Basic Motion Graphics",
-          "Project Management"
-        ]
+          "Fashion Trends and Forecasting",
+          "Color Theory in Fashion",
+          "Basic Draping Techniques",
+          "Sewing Fundamentals",
+          "Digital Fashion Design Tools",
+          "Fashion Industry Overview",
+        ],
       },
       "2nd Year": {
-        "image": "https://images.unsplash.com/photo-1617103996702-96ff29b1c467",
-        "imageAlt": "Branding and multimedia design",
+        "image": "https://images.unsplash.com/photo-1565037639-7f1c95e31261",
+        "imageAlt": "Advanced fashion design and garment construction",
         "Semester 3": [
-          "Branding and Marketing Design",
-          "UI/UX Design Fundamentals",
-          "Advanced Typography",
-          "Social Media Design"
+          "Advanced Pattern Making",
+          "Fashion Draping and Construction",
+          "Fashion History",
+          "Portfolio Development",
+          "Fashion Merchandising",
+          "Sustainable Fashion Practices",
         ],
         "Semester 4": [
-          "Interactive Media",
-          "Packaging and Print Design",
-          "Multimedia Design",
-          "Digital Advertising"
-        ]
+          "Digital Fashion Design II",
+          "Fashion Marketing",
+          "Fashion Photography Basics",
+          "Textile Technology",
+          "Branding and Business in Fashion",
+          "Internship Preparation",
+        ],
       },
       "3rd Year": {
-        "image": "https://images.unsplash.com/photo-1617103996702-96ff29b1c467",
-        "imageAlt": "Industry-based projects and design portfolio",
+        "image": "https://images.unsplash.com/photo-1533745062109-15f3c78b65b5",
+        "imageAlt": "Final fashion design project and portfolio",
         "Semester 5": [
-          "Advanced Motion Graphics",
-          "Freelancing in Design",
+          "Final Fashion Design Project",
+          "Advanced Fashion Illustration",
+          "Fashion Show Production",
+          "Trends and Innovations in Fashion",
+          "Advanced Draping and Couture Techniques",
           "Internship",
-          "Design Portfolio Development"
         ],
         "Semester 6": [
-          "Capstone Project",
-          "Job Market Preparation",
-          "Professional Design Practices",
-          "Industry Collaboration Projects"
-        ]
-      }
-    }
-  }
+          "Professional Development in Fashion",
+          "Business of Fashion",
+          "Fashion Design Portfolio Finalization",
+          "Sustainable Fashion Design",
+          "Fashion Collection Presentation",
+          "Industry Internship",
+        ],
+      },
+    },
+  },
+
+  {
+    redirectUrl: "/graphic-design/6-months-diploma-in-graphic-design",
+    value: "6-months-diploma-in-graphic-design",
+    label: "6 Months Diploma",
+    title: "6 Months Diploma in Graphic Design",
+    duration: "6 Months Intensive",
+    description:
+      "Accelerate your graphic design career with our intensive 6-month program. Master essential design skills for immediate industry entry.",
+    content:
+      "The 6 Months Diploma in Graphic Design is a fast-track program designed for students who want to quickly gain fundamental graphic design skills. This intensive course covers essential design principles, typography, digital illustration, branding, and software proficiency. Students learn through hands-on projects, practical workshops, and industry-standard software training. The curriculum focuses on contemporary design trends, digital media applications, and business aspects of graphic design, preparing students for entry-level positions in the creative industry.",
+    software: [
+      { name: "Adobe Illustrator", src: "/software logos/pngegg (25).png" },
+      { name: "Photoshop", src: "/software logos/pngegg (24).png" },
+      { name: "Corel Draw", src: "/software logos/pngegg (26).png" },
+    ],
+    videos: [
+      {
+        url: "https://youtube.com/embed/8Zz5zcOPHDw?si=Tjq18SsXDOYT-bGL",
+      },
+      {
+        url: "https://youtube.com/embed/Vl9aTeiM6RM?si=LFYlYsi_N60oYj9a",
+      },
+      {
+        url: "https://youtube.com/embed/AyRoxi85cHw?si=aWO6rYOrAJUNsx7s",
+      },
+    ],
+    whatYouWillLearn: [],
+    curriculum: {
+      "Month 1-2": {
+        image: "https://images.unsplash.com/photo-1626785774625-0b1c2c4efd7c",
+        imageAlt: "Graphic design fundamentals and basics",
+        content: [
+          "Introduction to Graphic Design",
+          "Design Principles and Elements",
+          "Typography Fundamentals",
+          "Digital Illustration Basics",
+        ],
+      },
+      "Month 3-4": {
+        image: "https://images.unsplash.com/photo-1561070791-2526d30994b5",
+        imageAlt: "Branding and layout design",
+        content: [
+          "Logo Design and Branding",
+          "Layout and Composition",
+          "Color Theory and Psychology",
+          "Software Mastery (Illustrator, Photoshop)",
+        ],
+      },
+      "Month 5-6": {
+        image: "https://images.unsplash.com/photo-1572044162444-ad60f128bdea",
+        imageAlt: "Final projects and portfolio",
+        content: [
+          "Portfolio Development",
+          "Print and Digital Design",
+          "Client Communication Skills",
+          "Industry Best Practices",
+        ],
+      },
+    },
+  },
 ],
 
 
@@ -1308,10 +1511,69 @@ export const courseTypes: CourseCategory = {
         ]
       }
     }
-  }
-]
+  },
 
-,
+  {
+    redirectUrl: "/uiux-design/6-months-diploma-in-uiux-design",
+    value: "6-months-diploma-in-uiux-design",
+    label: "6 Months Diploma",
+    title: "6 Months Diploma in UI/UX Design",
+    duration: "6 Months Intensive",
+    description:
+      "Fast-track your digital design career with our intensive 6-month UI/UX program. Master essential skills for immediate industry entry.",
+    content:
+      "The 6 Months Diploma in UI/UX Design is a comprehensive fast-track program designed for students who want to quickly gain essential digital design skills. This intensive course covers fundamental UI/UX principles, user research, wireframing, prototyping, and industry-standard design tools. Students learn through hands-on projects, practical workshops, and real-world design challenges. The curriculum focuses on contemporary digital design trends, user-centered design methodologies, and business aspects of UI/UX design, preparing students for entry-level positions in the digital product industry.",
+    software: [
+      { name: "Figma", src: "/software logos/pngegg (31).png" },
+      { name: "Adobe XD", src: "/software logos/pngegg (32).png" },
+      { name: "Photoshop", src: "/software logos/pngegg (24).png" },
+    ],
+    videos: [
+      {
+        url: "https://youtube.com/embed/8Zz5zcOPHDw?si=Tjq18SsXDOYT-bGL",
+      },
+      {
+        url: "https://youtube.com/embed/Vl9aTeiM6RM?si=LFYlYsi_N60oYj9a",
+      },
+      {
+        url: "https://youtube.com/embed/AyRoxi85cHw?si=aWO6rYOrAJUNsx7s",
+      },
+    ],
+    whatYouWillLearn: [],
+    curriculum: {
+      "Month 1-2": {
+        image: "https://images.unsplash.com/photo-1626785774625-0b1c2c4efd7c",
+        imageAlt: "UI/UX design fundamentals and basics",
+        content: [
+          "Introduction to UI/UX Design",
+          "User Research Fundamentals",
+          "Design Thinking Process",
+          "Wireframing Basics",
+        ],
+      },
+      "Month 3-4": {
+        image: "https://images.unsplash.com/photo-1561070791-2526d30994b5",
+        imageAlt: "Prototyping and interaction design",
+        content: [
+          "Prototyping and Wireframing",
+          "Interaction Design Principles",
+          "UI Design Software Mastery",
+          "Usability Testing Basics",
+        ],
+      },
+      "Month 5-6": {
+        image: "https://images.unsplash.com/photo-1572044162444-ad60f128bdea",
+        imageAlt: "Final projects and portfolio",
+        content: [
+          "Portfolio Development",
+          "Mobile and Web Design",
+          "Client Communication Skills",
+          "Industry Best Practices",
+        ],
+      },
+    },
+  },
+],
 
 "animation-vfx": [
   { redirectUrl:"/animation-vfx/bdes-in-animation-and-vfx",
@@ -1583,7 +1845,69 @@ export const courseTypes: CourseCategory = {
         ]
       }
     }
-  }
+  },
+
+  {
+    redirectUrl: "/animation-vfx/6-months-diploma-in-animation-vfx",
+    value: "6-months-diploma-in-animation-vfx",
+    label: "6 Months Diploma",
+    title: "6 Months Diploma in Animation & VFX",
+    duration: "6 Months Intensive",
+    description:
+      "Launch your animation and VFX career with our intensive 6-month program. Master essential skills for immediate industry entry.",
+    content:
+      "The 6 Months Diploma in Animation & VFX is a comprehensive fast-track program designed for students who want to quickly gain essential animation and visual effects skills. This intensive course covers fundamental animation principles, 3D modeling, VFX software, and digital storytelling. Students learn through hands-on projects, practical workshops, and industry-standard software training. The curriculum focuses on contemporary animation trends, VFX techniques, and business aspects of the animation industry, preparing students for entry-level positions in animation studios, gaming companies, and media production houses.",
+    software: [
+      { name: "Maya", src: "/software logos/pngegg (28).png" },
+      { name: "3DS Max", src: "/software logos/pngegg (19).png" },
+      { name: "Blender", src: "/software logos/pngegg (30).png" },
+      { name: "After Effect", src: "/software logos/pngegg (29).png" },
+    ],
+    videos: [
+      {
+        url: "https://youtube.com/embed/8Zz5zcOPHDw?si=Tjq18SsXDOYT-bGL",
+      },
+      {
+        url: "https://youtube.com/embed/Vl9aTeiM6RM?si=LFYlYsi_N60oYj9a",
+      },
+      {
+        url: "https://youtube.com/embed/AyRoxi85cHw?si=aWO6rYOrAJUNsx7s",
+      },
+    ],
+    whatYouWillLearn: [],
+    curriculum: {
+      "Month 1-2": {
+        image: "https://images.unsplash.com/photo-1606112216719-3c2c2cce4507",
+        imageAlt: "Animation and VFX fundamentals and basics",
+        content: [
+          "Introduction to Animation Principles",
+          "Basic 3D Modeling",
+          "Digital Art Fundamentals",
+          "Storytelling for Animation",
+        ],
+      },
+      "Month 3-4": {
+        image: "https://images.unsplash.com/photo-1596524602085-b91b935d9b93",
+        imageAlt: "Character design and animation",
+        content: [
+          "Character Design and Development",
+          "3D Animation Techniques",
+          "Visual Effects Basics",
+          "Motion Graphics",
+        ],
+      },
+      "Month 5-6": {
+        image: "https://images.unsplash.com/photo-1571223090770-5f07958ac064",
+        imageAlt: "Final projects and portfolio",
+        content: [
+          "Portfolio Development",
+          "Animation Project Creation",
+          "Industry Best Practices",
+          "Client Communication Skills",
+        ],
+      },
+    },
+  },
 ],
 
 
@@ -2250,7 +2574,68 @@ export const courseTypes: CourseCategory = {
         ]
       }
     }
-  }
+  },
+
+  {
+    redirectUrl: "/media-entertainment/6-months-diploma-in-media-entertainment",
+    value: "6-months-diploma-in-media-entertainment",
+    label: "6 Months Diploma",
+    title: "6 Months Diploma in Media & Entertainment",
+    duration: "6 Months Intensive",
+    description:
+      "Launch your media career with our intensive 6-month program. Master essential skills for immediate industry entry in media and entertainment.",
+    content:
+      "The 6 Months Diploma in Media & Entertainment is a comprehensive fast-track program designed for students who want to quickly gain essential media production and entertainment industry skills. This intensive course covers fundamental media principles, content creation, digital production tools, and entertainment industry practices. Students learn through hands-on projects, practical workshops, and industry-standard software training. The curriculum focuses on contemporary media trends, digital content creation, and business aspects of the entertainment industry, preparing students for entry-level positions in media companies, production houses, or digital content creation.",
+    software: [
+      { name: "Photoshop", src: "/software logos/pngegg (24).png" },
+      { name: "After Effect", src: "/software logos/pngegg (29).png" },
+      { name: "Adobe Illustrator", src: "/software logos/pngegg (25).png" },
+    ],
+    videos: [
+      {
+        url: "https://youtube.com/embed/8Zz5zcOPHDw?si=Tjq18SsXDOYT-bGL",
+      },
+      {
+        url: "https://youtube.com/embed/Vl9aTeiM6RM?si=LFYlYsi_N60oYj9a",
+      },
+      {
+        url: "https://youtube.com/embed/AyRoxi85cHw?si=aWO6rYOrAJUNsx7s",
+      },
+    ],
+    whatYouWillLearn: [],
+    curriculum: {
+      "Month 1-2": {
+        image: "https://images.unsplash.com/photo-1492724441997-5dc865305da7",
+        imageAlt: "Media and entertainment fundamentals and basics",
+        content: [
+          "Introduction to Media & Entertainment",
+          "Content Creation Basics",
+          "Digital Media Tools",
+          "Media Industry Overview",
+        ],
+      },
+      "Month 3-4": {
+        image: "https://images.unsplash.com/photo-1524253482453-3fed8d2fe12b",
+        imageAlt: "Content production and editing",
+        content: [
+          "Video Production Techniques",
+          "Digital Content Editing",
+          "Social Media Content",
+          "Entertainment Marketing",
+        ],
+      },
+      "Month 5-6": {
+        image: "https://images.unsplash.com/photo-1492724441997-5dc865305da7",
+        imageAlt: "Final projects and portfolio",
+        content: [
+          "Portfolio Development",
+          "Media Project Creation",
+          "Industry Best Practices",
+          "Career Preparation",
+        ],
+      },
+    },
+  },
 ],
 
 
@@ -2641,7 +3026,68 @@ export const courseTypes: CourseCategory = {
         ]
       }
     }
-  }
+  },
+
+  {
+    redirectUrl: "/fine-arts/6-months-diploma-in-fine-arts",
+    value: "6-months-diploma-in-fine-arts",
+    label: "6 Months Diploma",
+    title: "6 Months Diploma in Fine Arts",
+    duration: "6 Months Intensive",
+    description:
+      "Express your creativity through our intensive 6-month fine arts program. Master essential artistic skills for immediate creative expression.",
+    content:
+      "The 6 Months Diploma in Fine Arts is a comprehensive fast-track program designed for students who want to quickly gain essential artistic skills and creative expression techniques. This intensive course covers fundamental art principles, drawing techniques, painting methods, sculpture basics, and digital art tools. Students learn through hands-on studio work, practical workshops, and creative projects. The curriculum focuses on contemporary art practices, traditional techniques, and business aspects of fine arts, preparing students for entry-level positions in galleries, art studios, or to pursue freelance artistic careers.",
+    software: [
+      { name: "Photoshop", src: "/software logos/pngegg (24).png" },
+      { name: "Adobe Illustrator", src: "/software logos/pngegg (25).png" },
+      { name: "Corel Draw", src: "/software logos/pngegg (26).png" },
+    ],
+    videos: [
+      {
+        url: "https://youtube.com/embed/8Zz5zcOPHDw?si=Tjq18SsXDOYT-bGL",
+      },
+      {
+        url: "https://youtube.com/embed/Vl9aTeiM6RM?si=LFYlYsi_N60oYj9a",
+      },
+      {
+        url: "https://youtube.com/embed/AyRoxi85cHw?si=aWO6rYOrAJUNsx7s",
+      },
+    ],
+    whatYouWillLearn: [],
+    curriculum: {
+      "Month 1-2": {
+        image: "https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8",
+        imageAlt: "Fine arts fundamentals and basics",
+        content: [
+          "Introduction to Fine Arts",
+          "Drawing Fundamentals",
+          "Color Theory and Composition",
+          "Art History Basics",
+        ],
+      },
+      "Month 3-4": {
+        image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0",
+        imageAlt: "Painting and sculpture techniques",
+        content: [
+          "Painting Techniques",
+          "Sculpture and 3D Art",
+          "Digital Art Tools",
+          "Mixed Media Art",
+        ],
+      },
+      "Month 5-6": {
+        image: "https://images.unsplash.com/photo-1544531586-fde5298cdd40",
+        imageAlt: "Final projects and portfolio",
+        content: [
+          "Portfolio Development",
+          "Art Project Creation",
+          "Art Business Basics",
+          "Exhibition Preparation",
+        ],
+      },
+    },
+  },
 ],
 
   "advertising-marketing": [

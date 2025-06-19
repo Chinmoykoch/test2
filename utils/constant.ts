@@ -323,6 +323,7 @@ export const categories = [
           { text: "B.SC in Interior Design", href: "#" },
           { text: "One Year Diploma in Interior Design", href: "#" },
           { text: "Three Year Diploma in Interior Design", href: "#" },
+          { text: "6 months Diploma in Interior Design", href: "#" },
         ],
         category: "Design",
         image:
@@ -336,6 +337,7 @@ export const categories = [
           { text: "B.SC in Fashion Design", href: "#" },
           { text: "One Year Diploma in Fashion Design", href: "#" },
           { text: "Three Year Diploma in Fashion Design", href: "#" },
+          { text: "6 months Diploma in Fashion Design", href: "#" },
         ],
         category: "Design",
         image:
@@ -349,6 +351,7 @@ export const categories = [
           { text: "B.SC in Graphic Design", href: "#" },
           { text: "One Year Diploma in Graphic Design", href: "#" },
           { text: "Three Year Diploma in Graphic Design", href: "#" },
+          { text: "6 months Diploma in Graphic Design", href: "#" },
         ],
         category: "Design",
         image:
@@ -359,6 +362,7 @@ export const categories = [
         links: [
           { text: "B.Des In UI UX Design", href: "#" },
           { text: "One Year Diploma in UI UX Design", href: "#" },
+          { text: "6 months Diploma in UIUX-Design", href: "#" },
         ],
         category: "Design",
         image:
@@ -373,6 +377,7 @@ export const categories = [
           { text: "One Year Diploma in Animation and VFX", href: "#" },
           { text: "Two Year Diploma in Animation and VFX", href: "#" },
           { text: "Three Year Diploma in Animation and VFX", href: "#" },
+          { text: "6 months Diploma in Animation-VFX", href: "#" },
         ],
         category: "Design",
         image:
@@ -386,6 +391,7 @@ export const categories = [
           { text: "One Year Diploma in CAD Jewellery", href: "#" },
           { text: "Six Month Certificate Course in Jewellery Design", href: "#" },
           { text: "Six Month Certificate Course in CAD Jewellery", href: "#" },
+          { text: "6 months Diploma in Fine Arts", href: "#" },
         ],
         category: "Design",
         image:
@@ -425,6 +431,7 @@ export const categories = [
         links: [
           { text: "B.VOC in Media and Entertainment", href: "#" },
           { text: "One Year Diploma in Media and Entertainment", href: "#" },
+          { text: "6 months Diploma in Media-Entertainment", href: "#" },
         ],
         category: "Business",
         image:
@@ -455,6 +462,7 @@ export const categories = [
           { text: "B.SC in Fine Arts", href: "#" },
           { text: "One Year Diploma in Fine Arts", href: "#" },
           { text: "Three Year Diploma in Fine Arts", href: "#" },
+          { text: "6 months Diploma in Fine Arts", href: "#" },
         ],
         category: "Art",
         image:

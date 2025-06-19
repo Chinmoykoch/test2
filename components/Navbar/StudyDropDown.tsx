@@ -122,11 +122,8 @@ const StudyDropDown = () => {
                               {item.links.map((link, idx) => (
                                 <p key={idx} className="mb-1">
                                   <Link
-                                    className="hover:text-blue-500 hover:underline"
-                                    href={`${mainLink}/${link.text
-                                      .replace(/\s+/g, "-")
-                                      .replace(/\./g, "")
-                                      .toLowerCase()}`}
+                                    className="hover:text-blue-500 hover:underline flex items-center"
+                                    href={`${mainLink}/${link.text.replace(/\s+/g, "-").replace(/\./g, "").toLowerCase()}`}
                                     onClick={handleLinkClick}
                                   >
                                     {link.text}
