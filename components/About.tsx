@@ -104,9 +104,9 @@ const AboutPage = () => {
                 Inframe school of art, design & business is established by the
                 Inframe Educational Society under Rajasthan Societies Act 1958.
                 Inframe school of art, design and business will be one of a kind
-                design institute in Jodhpur which will commence it’s curriculum
+                design institute in Jodhpur which will commence it's curriculum
                 with the aim to expand the design and business field in Jodhpur
-                and it’s surrounding regions by being the first design and
+                and it's surrounding regions by being the first design and
                 business school of Jodhpur to offer degree, diploma and
                 professional courses in various fields of interior design,
                 graphic design, fine arts and digital marketing .
@@ -288,6 +288,168 @@ const AboutPage = () => {
         </div>
       </section>
 
+      {/* Affiliation and Tie Ups Section */}
+      <section className="bg-white text-black py-16">
+        <div className="container mx-auto px-4">
+          <h2 className={`text-4xl font-bold mb-12 text-center ${poppins.className}`}>
+            AFFILIATION AND TIE UPS
+          </h2>
+          
+          {/* CPISD Affiliation Description */}
+          <div className="mb-12 p-8 bg-gray-50 rounded-lg">
+            <p className="text-lg font-sans leading-relaxed text-justify">
+              Inframe School of Art, Design & Business is a proud affiliated Skill Development Training Centre under the Career Point Institute of Skill Development (CPISD). We are officially recognized and authorized to deliver skill-based training programs aligned with the Skilling India Mission, an initiative aimed at empowering individuals with industry-relevant skills.
+            </p>
+            <p className="text-lg font-sans leading-relaxed text-justify mt-4">
+              Our institution has been assigned the ASC Code: <span className="font-semibold text-yellow-600">TC388922</span>, and we operate under the jurisdiction of Jodhpur, Rajasthan. This affiliation ensures that our training methodologies, curriculum, and certifications adhere to national standards set by the National Skill Development Corporation (NSDC).
+            </p>
+            <p className="text-lg font-sans leading-relaxed text-justify mt-4">
+              With the support of CPISD—registered under the Companies Act 2013 and a trusted training partner of NSDC—we continue to drive our mission of transforming education through skill enhancement and career-focused learning.
+            </p>
+            <p className="text-lg font-sans leading-relaxed text-justify mt-4">
+              For more details, visit <a href="https://www.cpisd.in" target="_blank" rel="noopener noreferrer" className="text-yellow-600 hover:text-yellow-700 underline font-semibold">www.cpisd.in</a> or contact us at <a href="mailto:skillzone@cpil.in" className="text-yellow-600 hover:text-yellow-700 underline font-semibold">skillzone@cpil.in</a>.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* College Affiliation */}
+            <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-200">
+              <div className="text-center mb-4">
+                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">College Affiliation</h3>
+                <p className="text-sm text-gray-600 mb-4">Official College Recognition</p>
+              </div>
+              <a 
+                href="/affiliations/WhatsApp Image 2025-06-15 at 11.49.29 AM.jpeg" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block w-full bg-yellow-400 text-black text-center py-3 px-4 rounded-lg hover:bg-yellow-500 transition-colors duration-300 font-semibold"
+              >
+                View Affiliation
+              </a>
+            </div>
+
+            {/* Society Certificate Registration */}
+            <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-200">
+              <div className="text-center mb-4">
+                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Society Certificate Registration</h3>
+                <p className="text-sm text-gray-600 mb-4">Registered under Rajasthan Societies Act 1958</p>
+              </div>
+              <a 
+                href="/affiliations/society certificate registration.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block w-full bg-yellow-400 text-black text-center py-3 px-4 rounded-lg hover:bg-yellow-500 transition-colors duration-300 font-semibold"
+              >
+                View Certificate
+              </a>
+            </div>
+
+            {/* UGC Inspection */}
+            <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-200">
+              <div className="text-center mb-4">
+                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">UGC Inspection</h3>
+                <p className="text-sm text-gray-600 mb-4">University Grants Commission Approved</p>
+              </div>
+              <a 
+                href="/affiliations/12b ugc inspection.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block w-full bg-yellow-400 text-black text-center py-3 px-4 rounded-lg hover:bg-yellow-500 transition-colors duration-300 font-semibold"
+              >
+                View Certificate
+              </a>
+            </div>
+
+            {/* AIU Membership */}
+            <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-200">
+              <div className="text-center mb-4">
+                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">AIU Membership</h3>
+                <p className="text-sm text-gray-600 mb-4">Association of Indian Universities</p>
+              </div>
+              <a 
+                href="/affiliations/aiu membership.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block w-full bg-yellow-400 text-black text-center py-3 px-4 rounded-lg hover:bg-yellow-500 transition-colors duration-300 font-semibold"
+              >
+                View Certificate
+              </a>
+            </div>
+
+            {/* C Skill Program */}
+            <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-200">
+              <div className="text-center mb-4">
+                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">C Skill Program</h3>
+                <p className="text-sm text-gray-600 mb-4">Skill Development Initiative</p>
+              </div>
+              <a 
+                href="/affiliations/INFRAME COLLEGE OF ART, DESIGN & BUSINESS C SKILL.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block w-full bg-yellow-400 text-black text-center py-3 px-4 rounded-lg hover:bg-yellow-500 transition-colors duration-300 font-semibold"
+              >
+                View Certificate
+              </a>
+            </div>
+
+            {/* BVOC Program */}
+            <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-200">
+              <div className="text-center mb-4">
+                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">BVOC Program</h3>
+                <p className="text-sm text-gray-600 mb-4">Bachelor of Vocation</p>
+              </div>
+              <a 
+                href="/affiliations/INFRAME COLLEGE OF ART, DESIGN & BUSINESS C BVOC.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block w-full bg-yellow-400 text-black text-center py-3 px-4 rounded-lg hover:bg-yellow-500 transition-colors duration-300 font-semibold"
+              >
+                View Certificate
+              </a>
+            </div>
+          </div>
+
+          {/* Additional Information */}
+          <div className="mt-12 text-center">
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+              Inframe School of Art, Design & Business is proud to be affiliated with prestigious institutions 
+              and recognized by various educational bodies, ensuring quality education and industry-relevant 
+              curriculum for our students.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Campus Life Grid */}
       <CampusLife  experienceCamputLife={experienceCamputLife}/>
       <section className="bg-white text-black py-16">
@@ -331,8 +493,8 @@ const AboutPage = () => {
                 practical learning and innovation. The school organises various
                 workshops and internship opportunities for the students with the
                 help of industry experts and glorified designers. With the main
-                aim of “developing sustainable design for the people of
-                tomorrow” our institute leads the students in the direction to
+                aim of "developing sustainable design for the people of
+                tomorrow" our institute leads the students in the direction to
                 the future of design and business. ICADB helps the students in
                 learning design and business with the help of various practical
                 projects so that students can actually understand how are such
@@ -354,7 +516,7 @@ const AboutPage = () => {
           <p
             className={`text-center text-lg text-gray-600 mb-8 ${poppins.className}`}
           >
-            Inframe’s strong industry partnerships provide students with
+            Inframe's strong industry partnerships provide students with
             unparalleled career opportunities and real-world experience to excel
             in design and business.
           </p>

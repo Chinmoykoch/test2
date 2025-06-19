@@ -1919,6 +1919,381 @@ export const blogPostsData = {
 }
 
 
+// Free Courses Data Structure
+export const freeCourses = [
+  {
+    id: "copywriting",
+    title: "Copywriting",
+    intent: "Master the art of persuasive writing and create compelling content that converts",
+    duration: "6 Weeks",
+    whyToLearn: "Essential skill for digital marketing, content creation, and business communication",
+    placement: "Content Writer, Copywriter, Marketing Assistant",
+    fees: "Free",
+    mode: "Online",
+    category: "Business",
+    image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "digital-marketing",
+    title: "Digital Marketing",
+    intent: "Learn comprehensive digital marketing strategies to grow businesses online",
+    duration: "8 Weeks",
+    whyToLearn: "High-demand skill in today's digital economy with excellent career prospects",
+    placement: "Digital Marketing Executive, Social Media Manager, SEO Specialist",
+    fees: "Free",
+    mode: "Online",
+    category: "Business",
+    image: "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "graphic-design",
+    title: "Graphic Design",
+    intent: "Create visually stunning designs and develop your creative portfolio",
+    duration: "10 Weeks",
+    whyToLearn: "Creative field with diverse opportunities in branding, advertising, and digital media",
+    placement: "Graphic Designer, Visual Designer, Brand Designer",
+    fees: "Free",
+    mode: "Online",
+    category: "Design",
+    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "interior-design",
+    title: "Interior Design",
+    intent: "Transform spaces and learn the fundamentals of interior design",
+    duration: "12 Weeks",
+    whyToLearn: "Growing industry with opportunities in residential and commercial design",
+    placement: "Interior Design Assistant, Space Planner, Design Consultant",
+    fees: "Free",
+    mode: "Online",
+    category: "Design",
+    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "digital-software",
+    title: "Digital Software",
+    intent: "Master essential digital tools and software for creative professionals",
+    duration: "8 Weeks",
+    whyToLearn: "Technical skills required across all creative and business fields",
+    placement: "Software Specialist, Digital Assistant, Technical Support",
+    fees: "Free",
+    mode: "Online",
+    category: "Technology",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "facebook-ads",
+    title: "Facebook Ads",
+    intent: "Learn to create and manage effective Facebook advertising campaigns",
+    duration: "4 Weeks",
+    whyToLearn: "Essential for digital marketing and business growth on social media",
+    placement: "Social Media Advertiser, Facebook Ads Specialist, Digital Marketing Assistant",
+    fees: "Free",
+    mode: "Online",
+    category: "Business",
+    image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "google-ads",
+    title: "Google Ads",
+    intent: "Master Google Ads platform for effective online advertising",
+    duration: "4 Weeks",
+    whyToLearn: "High-demand skill for digital marketing and online business growth",
+    placement: "Google Ads Specialist, PPC Manager, Digital Marketing Executive",
+    fees: "Free",
+    mode: "Online",
+    category: "Business",
+    image: "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "seo",
+    title: "SEO",
+    intent: "Learn search engine optimization to improve website visibility",
+    duration: "6 Weeks",
+    whyToLearn: "Critical skill for online business success and digital marketing",
+    placement: "SEO Specialist, Content Optimizer, Digital Marketing Assistant",
+    fees: "Free",
+    mode: "Online",
+    category: "Business",
+    image: "https://images.unsplash.com/photo-1562577309-4932fdd64cd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "digital-painting",
+    title: "Digital Painting",
+    intent: "Create stunning digital artwork using modern painting techniques",
+    duration: "10 Weeks",
+    whyToLearn: "Growing field in entertainment, gaming, and digital art industries",
+    placement: "Digital Artist, Concept Artist, Illustrator",
+    fees: "Free",
+    mode: "Online",
+    category: "Art",
+    image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "illustrations",
+    title: "Illustrations",
+    intent: "Develop illustration skills for books, magazines, and digital media",
+    duration: "8 Weeks",
+    whyToLearn: "Versatile skill applicable in publishing, advertising, and digital content",
+    placement: "Illustrator, Children's Book Artist, Editorial Illustrator",
+    fees: "Free",
+    mode: "Online",
+    category: "Art",
+    image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "sewing-machine-technique",
+    title: "Sewing Machine Technique",
+    intent: "Master sewing machine operations and garment construction basics",
+    duration: "6 Weeks",
+    whyToLearn: "Foundation skill for fashion design and textile industry",
+    placement: "Sewing Operator, Garment Technician, Fashion Assistant",
+    fees: "Free",
+    mode: "Online",
+    category: "Fashion",
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "furniture-making",
+    title: "Furniture Making",
+    intent: "Learn woodworking and furniture design fundamentals",
+    duration: "12 Weeks",
+    whyToLearn: "Practical skill for interior design and craftsmanship careers",
+    placement: "Furniture Maker, Woodworker, Design Assistant",
+    fees: "Free",
+    mode: "Online",
+    category: "Design",
+    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "sketching",
+    title: "Sketching",
+    intent: "Develop fundamental sketching and drawing skills",
+    duration: "6 Weeks",
+    whyToLearn: "Essential foundation for all visual arts and design fields",
+    placement: "Sketch Artist, Design Assistant, Art Teacher",
+    fees: "Free",
+    mode: "Online",
+    category: "Art",
+    image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "drawing",
+    title: "Drawing",
+    intent: "Master advanced drawing techniques and artistic expression",
+    duration: "8 Weeks",
+    whyToLearn: "Core skill for artists, designers, and creative professionals",
+    placement: "Artist, Illustrator, Art Instructor",
+    fees: "Free",
+    mode: "Online",
+    category: "Art",
+    image: "https://images.unsplash.com/photo-1571721795195-a2ca2d3370a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "video-editing",
+    title: "Video Editing",
+    intent: "Learn professional video editing techniques and software",
+    duration: "8 Weeks",
+    whyToLearn: "High-demand skill in content creation and digital media industry",
+    placement: "Video Editor, Content Creator, Media Assistant",
+    fees: "Free",
+    mode: "Online",
+    category: "Technology",
+    image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "fashion-styling",
+    title: "Fashion Styling",
+    intent: "Learn the art of fashion styling and personal image consulting",
+    duration: "6 Weeks",
+    whyToLearn: "Growing field in fashion industry and personal branding",
+    placement: "Fashion Stylist, Personal Shopper, Image Consultant",
+    fees: "Free",
+    mode: "Online",
+    category: "Fashion",
+    image: "https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "fashion-communication",
+    title: "Fashion Communication",
+    intent: "Master fashion marketing, PR, and brand communication strategies",
+    duration: "8 Weeks",
+    whyToLearn: "Essential for fashion industry marketing and brand management",
+    placement: "Fashion PR Executive, Brand Manager, Fashion Journalist",
+    fees: "Free",
+    mode: "Online",
+    category: "Fashion",
+    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "english-communication",
+    title: "English Communication",
+    intent: "Improve English speaking, writing, and communication skills",
+    duration: "8 Weeks",
+    whyToLearn: "Essential skill for career advancement and global opportunities",
+    placement: "Communication Specialist, Customer Service, Content Writer",
+    fees: "Free",
+    mode: "Online",
+    category: "Business",
+    image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "animation",
+    title: "Animation",
+    intent: "Learn 2D and 3D animation techniques and storytelling",
+    duration: "12 Weeks",
+    whyToLearn: "Booming industry with opportunities in entertainment and advertising",
+    placement: "Animator, Motion Graphics Designer, VFX Artist",
+    fees: "Free",
+    mode: "Online",
+    category: "Technology",
+    image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "vfx",
+    title: "VFX",
+    intent: "Master visual effects and post-production techniques",
+    duration: "12 Weeks",
+    whyToLearn: "High-demand field in film, television, and digital media",
+    placement: "VFX Artist, Compositor, Post-Production Specialist",
+    fees: "Free",
+    mode: "Online",
+    category: "Technology",
+    image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "jewellery-design",
+    title: "Jewellery Design",
+    intent: "Learn jewelry design principles and creation techniques",
+    duration: "10 Weeks",
+    whyToLearn: "Specialized field with opportunities in luxury and fashion industries",
+    placement: "Jewelry Designer, Design Assistant, Artisan",
+    fees: "Free",
+    mode: "Online",
+    category: "Design",
+    image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "cad-design",
+    title: "CAD Design",
+    intent: "Master Computer-Aided Design software and technical drawing",
+    duration: "10 Weeks",
+    whyToLearn: "Essential skill for engineering, architecture, and product design",
+    placement: "CAD Operator, Design Technician, Draftsperson",
+    fees: "Free",
+    mode: "Online",
+    category: "Technology",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "painting",
+    title: "Painting",
+    intent: "Explore traditional and contemporary painting techniques",
+    duration: "10 Weeks",
+    whyToLearn: "Timeless art form with therapeutic and professional benefits",
+    placement: "Artist, Art Teacher, Gallery Assistant",
+    fees: "Free",
+    mode: "Online",
+    category: "Art",
+    image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "business-management",
+    title: "Business Management",
+    intent: "Learn fundamental business management and leadership skills",
+    duration: "10 Weeks",
+    whyToLearn: "Essential for career advancement and entrepreneurship",
+    placement: "Management Trainee, Business Analyst, Team Leader",
+    fees: "Free",
+    mode: "Online",
+    category: "Business",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "draping",
+    title: "Draping",
+    intent: "Master the art of draping fabric for fashion design",
+    duration: "8 Weeks",
+    whyToLearn: "Advanced technique essential for fashion designers",
+    placement: "Fashion Designer, Pattern Maker, Draping Specialist",
+    fees: "Free",
+    mode: "Online",
+    category: "Fashion",
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "pattern-making",
+    title: "Pattern Making",
+    intent: "Learn technical pattern making for garment construction",
+    duration: "10 Weeks",
+    whyToLearn: "Technical skill essential for fashion and textile industry",
+    placement: "Pattern Maker, Technical Designer, Production Assistant",
+    fees: "Free",
+    mode: "Online",
+    category: "Fashion",
+    image: "https://images.unsplash.com/photo-1567631643547-67a2dd59f266?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "carpentry",
+    title: "Carpentry",
+    intent: "Learn woodworking and carpentry skills for construction and furniture",
+    duration: "12 Weeks",
+    whyToLearn: "Practical skill with steady demand in construction industry",
+    placement: "Carpenter, Furniture Maker, Construction Worker",
+    fees: "Free",
+    mode: "Online",
+    category: "Craft",
+    image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "entrepreneurship-skills",
+    title: "Entrepreneurship Skills",
+    intent: "Develop skills to start and manage your own business",
+    duration: "8 Weeks",
+    whyToLearn: "Essential for starting your own venture and business innovation",
+    placement: "Entrepreneur, Business Owner, Startup Founder",
+    fees: "Free",
+    mode: "Online",
+    category: "Business",
+    image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "advertising",
+    title: "Advertising",
+    intent: "Learn creative advertising strategies and campaign development",
+    duration: "8 Weeks",
+    whyToLearn: "Creative field with opportunities in agencies and marketing departments",
+    placement: "Advertising Executive, Creative Assistant, Account Manager",
+    fees: "Free",
+    mode: "Online",
+    category: "Business",
+    image: "https://images.unsplash.com/photo-1553484771-371a605b060b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    id: "marketing",
+    title: "Marketing",
+    intent: "Master traditional and digital marketing strategies",
+    duration: "10 Weeks",
+    whyToLearn: "Fundamental business skill applicable across all industries",
+    placement: "Marketing Executive, Brand Manager, Sales Representative",
+    fees: "Free",
+    mode: "Online",
+    category: "Business",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  }
+];
+
+// Free Course Categories for filtering
+export const freeCourseCategories = [
+  "All",
+  "Business",
+  "Design",
+  "Art",
+  "Fashion",
+  "Technology",
+  "Craft"
+];
+
 export const blogPosts = [
   {
     id: "top-5-reasons-to-choose-inframe-school",

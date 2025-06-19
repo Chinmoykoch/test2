@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { BookOpen, ArrowRight } from "lucide-react";
 import { Poppins } from "next/font/google"; // Importing Google Fonts via next/font
 import { Button } from "@/components/ui/button";
@@ -27,10 +28,12 @@ const FreeResourcesCTABanner = () => {
 
         {/* Button Section */}
         <div className="flex-shrink-0">
-          <Button className="flex items-center justify-center gap-2 bg-white text-gray-900 font-semibold text-sm lg:text-base px-6 py-3 rounded-lg hover:bg-gray-100 transition duration-300 w-full lg:w-auto">
-            <span>Explore Free Courses</span>
-            <ArrowRight size={20} />
-          </Button>
+          <Link href="/free-courses">
+            <Button className="flex items-center justify-center gap-2 bg-white text-gray-900 font-semibold text-sm lg:text-base px-6 py-3 rounded-lg hover:bg-gray-100 transition duration-300 w-full lg:w-auto">
+              <span>Explore Free Courses</span>
+              <ArrowRight size={20} />
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
