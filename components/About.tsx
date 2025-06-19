@@ -104,9 +104,9 @@ const AboutPage = () => {
                 Inframe school of art, design & business is established by the
                 Inframe Educational Society under Rajasthan Societies Act 1958.
                 Inframe school of art, design and business will be one of a kind
-                design institute in Jodhpur which will commence it's curriculum
+                design institute in Jodhpur which will commence it&apos;s curriculum
                 with the aim to expand the design and business field in Jodhpur
-                and it's surrounding regions by being the first design and
+                and it&apos;s surrounding regions by being the first design and
                 business school of Jodhpur to offer degree, diploma and
                 professional courses in various fields of interior design,
                 graphic design, fine arts and digital marketing .
@@ -304,7 +304,7 @@ const AboutPage = () => {
               Our institution has been assigned the ASC Code: <span className="font-semibold text-yellow-600">TC388922</span>, and we operate under the jurisdiction of Jodhpur, Rajasthan. This affiliation ensures that our training methodologies, curriculum, and certifications adhere to national standards set by the National Skill Development Corporation (NSDC).
             </p>
             <p className="text-lg font-sans leading-relaxed text-justify mt-4">
-              With the support of CPISD—registered under the Companies Act 2013 and a trusted training partner of NSDC—we continue to drive our mission of transforming education through skill enhancement and career-focused learning.
+              With the support of CPISD&mdash;registered under the Companies Act 2013 and a trusted training partner of NSDC&mdash;we continue to drive our mission of transforming education through skill enhancement and career-focused learning.
             </p>
             <p className="text-lg font-sans leading-relaxed text-justify mt-4">
               For more details, visit <a href="https://www.cpisd.in" target="_blank" rel="noopener noreferrer" className="text-yellow-600 hover:text-yellow-700 underline font-semibold">www.cpisd.in</a> or contact us at <a href="mailto:skillzone@cpil.in" className="text-yellow-600 hover:text-yellow-700 underline font-semibold">skillzone@cpil.in</a>.
@@ -493,8 +493,8 @@ const AboutPage = () => {
                 practical learning and innovation. The school organises various
                 workshops and internship opportunities for the students with the
                 help of industry experts and glorified designers. With the main
-                aim of "developing sustainable design for the people of
-                tomorrow" our institute leads the students in the direction to
+                aim of &ldquo;developing sustainable design for the people of
+                tomorrow&rdquo; our institute leads the students in the direction to
                 the future of design and business. ICADB helps the students in
                 learning design and business with the help of various practical
                 projects so that students can actually understand how are such
@@ -516,7 +516,7 @@ const AboutPage = () => {
           <p
             className={`text-center text-lg text-gray-600 mb-8 ${poppins.className}`}
           >
-            Inframe's strong industry partnerships provide students with
+            Inframe&apos;s strong industry partnerships provide students with
             unparalleled career opportunities and real-world experience to excel
             in design and business.
           </p>

@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, Users, Award, Monitor, ArrowRight, Star } from "lucide-react";
+import { Clock, Award, Monitor, ArrowRight, Star } from "lucide-react";
 import { Poppins } from "next/font/google";
 
 const poppins = Poppins({

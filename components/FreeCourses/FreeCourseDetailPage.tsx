@@ -2,20 +2,15 @@
 
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Poppins } from "next/font/google";
 import { 
   Clock, 
-  Monitor, 
   Award, 
   Users, 
   CheckCircle, 
-  ArrowLeft, 
-  BookOpen,
   Target,
   Briefcase,
   Star,
-  Calendar,
   Globe
 } from "lucide-react";
 
@@ -113,10 +108,9 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
 
             {/* Learning Outcomes */}
             <div className="bg-white rounded-xl p-8 mb-8 border border-gray-200 shadow-sm">
-              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-gray-900">
-                <BookOpen className="text-blue-600" size={24} />
-                What You'll Learn
-              </h2>
+              <h3 className={`text-2xl font-bold mb-6 text-gray-900 ${poppins.className}`}>
+                What You&apos;ll Learn
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {learningOutcomes.map((outcome, index) => (
                   <div key={index} className="flex items-start gap-3">
