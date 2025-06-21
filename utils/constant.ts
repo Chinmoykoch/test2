@@ -389,8 +389,8 @@ export const categories = [
           { text: "B.VOC in Jewellery Design", href: "#" },
           { text: "One Year Diploma in Jewellery Design", href: "#" },
           { text: "One Year Diploma in CAD Jewellery", href: "#" },
-          { text: "Six Month Certificate Course in Jewellery Design", href: "#" },
-          { text: "Six Month Certificate Course in CAD Jewellery", href: "#" },
+          { text: "6 Month Certificate Course in Jewellery Design", href: "#" },
+          { text: "6 Month Certificate Course in CAD Jewellery", href: "#" },
           { text: "6 months Diploma in Fine Arts", href: "#" },
         ],
         category: "Design",
@@ -408,7 +408,7 @@ export const categories = [
           { text: "B.VOC in Digital Marketing", href: "#" },
           { text: "One Year Diploma in Digital Marketing", href: "#" },
           {
-            text: "Six Month Certificate Course in Digital Marketing",
+            text: "6 Month Certificate Course in Digital Marketing",
             href: "#",
           },
         ],
@@ -1252,6 +1252,7 @@ export const levels = [
   "3 Year Diploma",
   "1 Year Diploma",
   "6 Month Certification Course",
+  "6 Month Diploma"
 ];
 
 export const program = [
@@ -1281,6 +1282,7 @@ export const programLevels: ProgramLevels = {
     "B.Sc": "B.Sc in Interior Design",
     "3 Year Diploma": "3 Year Diploma in Interior Design",
     "1 Year Diploma": "1 Year Diploma in Interior Design",
+    "6 Months Diploma": "6 Months Diploma in Interior Design",
   },
   "Fashion Design": {
     "B.Des": "B.Des in Fashion Design",
@@ -1288,6 +1290,7 @@ export const programLevels: ProgramLevels = {
     "B.Sc": "B.Sc in Fashion Design",
     "3 Year Diploma": "3 Year Diploma in Fashion Design",
     "1 Year Diploma": "1 Year Diploma in Fashion Design",
+    "6 Months Diploma": "6 Months Diploma in Fashion Design",
   },
   "Graphic Design": {
     "B.Des": "B.Des in Graphic Design",
@@ -1295,10 +1298,12 @@ export const programLevels: ProgramLevels = {
     "B.Sc": "B.Sc in Graphic Design",
     "3 Year Diploma": "3 Year Diploma in Graphic Design",
     "1 Year Diploma": "1 Year Diploma in Graphic Design",
+    "6 Months Diploma": "6 Months Diploma in Graphic Design",
   },
   "UI & UX Design": {
     "B.Des": "B.Des in UI & UX Design",
     "1 Year Diploma": "1 Year Diploma in UI & UX Design",
+    "6 Months Diploma": "6 Months Diploma in UI & UX Design",
   },
   "Animation and VFX": {
     "B.Des": "B.Des in Animation and VFX",
@@ -1307,6 +1312,7 @@ export const programLevels: ProgramLevels = {
     "3 Year Diploma": "3 Year Diploma in Animation and VFX",
     "2 Year Diploma": "2 Year Diploma in Animation and VFX",
     "1 Year Diploma": "1 Year Diploma in Animation and VFX",
+    "6 Months Diploma": "6 Months Diploma in Animation and VFX",
   },
   "Jewellery Design": {
     "B.Voc": "B.Voc in Jewellery Design",
@@ -1336,6 +1342,7 @@ export const programLevels: ProgramLevels = {
   "Media and Entertainment": {
     "B.Voc": "B.Voc in Media and Entertainment",
     "1 Year Diploma": "1 Year Diploma in Media and Entertainment",
+    "6 Months Diploma": "6 Months Diploma in Media and Entertainment",
   },
   "Advertising and Marketing": {
     BBA: "BBA in Advertising and Marketing",
@@ -1357,6 +1364,7 @@ export const allLevels = [
   "3 Year Diploma",
   "1 Year Diploma",
   "6 Month Certificate",
+  "6 Months Diploma"
 ];
 
 export const courses = [
@@ -1395,6 +1403,12 @@ export const courses = [
         image:
           "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       },
+      {
+        name: "6 Months Diploma in Interior Design",
+        duration: "6 Months",
+        type: "Full Time",
+        image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace",
+      },
     ],
   },
   {
@@ -1432,6 +1446,12 @@ export const courses = [
         type: "Full Time",
         image: "https://images.unsplash.com/photo-1506634064465-7dab4de896ed",
       },
+      {
+        name: "6 Months Diploma in Fashion Design",
+        duration: "6 Months",
+        type: "Full Time",
+        image: "https://images.unsplash.com/photo-1516762689617-e1cffcef479d",
+      },
     ],
   },
   {
@@ -1468,6 +1488,12 @@ export const courses = [
         type: "Full Time",
         image: "https://images.unsplash.com/photo-1626785774573-4b799315345d",
       },
+      {
+        name: "6 Months Diploma in Graphic Design",
+        duration: "6 Months",
+        type: "Full Time",
+        image: "https://images.unsplash.com/photo-1572044162444-ad60f128bdea",
+      },
     ],
   },
   {
@@ -1483,6 +1509,12 @@ export const courses = [
       {
         name: "1 Year Diploma in UI & UX Design",
         duration: "1 Year",
+        type: "Full Time",
+        image: "https://images.unsplash.com/photo-1613909207039-6b173b755cc1",
+      },
+      {
+        name: "6 Months Diploma in UI & UX Design",
+        duration: "6 Months",
         type: "Full Time",
         image: "https://images.unsplash.com/photo-1613909207039-6b173b755cc1",
       },
@@ -1527,6 +1559,12 @@ export const courses = [
         duration: "3 Years",
         type: "Full Time",
         image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace",
+      },
+      {
+        name: "6 Months Diploma in Animation and VFX",
+        duration: "6 Months",
+        type: "Full Time",
+        image: "https://images.unsplash.com/photo-1617396900799-f4ec2b43c7ae",
       },
     ],
   },
@@ -1612,6 +1650,12 @@ export const courses = [
         type: "Full Time",
         image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f",
       },
+      {
+        name: "6 Months Diploma in Painting",
+        duration: "6 Months",
+        type: "Full Time",
+        image: "https://images.unsplash.com/photo-1580136579312-94651dfd596d",
+      },
     ],
   },
   {
@@ -1669,6 +1713,12 @@ export const courses = [
       {
         name: "1 Year Diploma in Media and Entertainment",
         duration: "1 Year",
+        type: "Full Time",
+        image: "https://images.unsplash.com/photo-1485846234645-a62644f84728",
+      },
+      {
+        name: "6 Months Diploma in Media and Entertainment",
+        duration: "6 Months",
         type: "Full Time",
         image: "https://images.unsplash.com/photo-1485846234645-a62644f84728",
       },

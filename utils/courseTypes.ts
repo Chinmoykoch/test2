@@ -2079,7 +2079,7 @@ export const courseTypes: CourseCategory = {
     }
   },
   { redirectUrl:"/digital-marketing/six-month-certificate-course-in-digital-marketing",
-    "content": "The Six Month Certificate course in Digital Marketing offers focused training in key digital marketing skills. Students learn the fundamentals of online marketing, including social media, SEO, and basic analytics. Perfect for quick skill development and career transition.",
+    "content": "The 6 Month Certificate course in Digital Marketing offers focused training in key digital marketing skills. Students learn the fundamentals of online marketing, including social media, SEO, and basic analytics. Perfect for quick skill development and career transition.",
     "value": "six-month-certificate-course-in-digital-marketing",
     "label": "6 Month Certificate in Digital Marketing",
     "title": "6 Month Certificate in Digital Marketing",

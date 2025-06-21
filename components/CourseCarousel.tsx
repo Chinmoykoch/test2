@@ -82,9 +82,9 @@ const category = {
         "BVOC in Jewellery Design",
         "One Year Diploma in Jewellery Design",
         "One Year Diploma in CAD Jewellery",
-        "Six Month Certificate Course in Jewellery Design",
-        "Six Month Certificate Course in CAD Jewellery",
-        "6 months Diploma in Fine Arts"
+        "6 Month Certificate Course in Jewellery Design",
+        "6 Month Certificate Course in CAD Jewellery",
+        
       ],
       image:
         "https://images.unsplash.com/photo-1606293926249-ed22e446d476?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -113,7 +113,7 @@ const category = {
       programs: [
         "BVOC in Digital Marketing",
         "One Year Diploma in Digital Marketing",
-        "Six Month Certificate Course in Digital Marketing",
+        "6 Month Certificate Course in Digital Marketing",
       ],
       image: "/fetchpik.com-HAfwcPu9n1.jpg",
     },
