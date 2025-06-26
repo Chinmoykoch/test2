@@ -39,15 +39,15 @@ export default function BlogPost() {
           }
         })
       },
-      { rootMargin: "-100px 0px -80% 0px" },
+      { threshold: 0.3 }
     )
 
-    Object.values(sectionRefs.current).forEach((ref) => {
+    const currentRefs = sectionRefs.current;
+    Object.values(currentRefs).forEach((ref) => {
       if (ref) observer.observe(ref)
     })
 
     return () => {
-      const currentRefs = sectionRefs.current;
       Object.values(currentRefs).forEach((ref) => {
         if (ref) observer.unobserve(ref)
       })

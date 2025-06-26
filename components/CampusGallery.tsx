@@ -74,7 +74,7 @@ const ModernGallery = () => {
       }));
     }
     return fallbackImages;
-  }, [galleryImages]);
+  }, [galleryImages, fallbackImages]);
 
   const navigateGallery = (direction: number) => {
     if (selectedIndex !== null) {

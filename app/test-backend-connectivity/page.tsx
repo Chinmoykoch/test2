@@ -1,38 +1,43 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { apiHelpers, API_BASE_URL } from '../../utils/api';
 
 interface TestResult {
   endpoint: string;
   status: 'loading' | 'success' | 'error';
   message: string;
-  data?: any;
+  data?: unknown;
+}
+
+interface EndpointTest {
+  name: string;
+  test: () => Promise<unknown>;
 }
 
 const TestBackendConnectivity = () => {
   const [results, setResults] = useState<TestResult[]>([]);
   const [isTesting, setIsTesting] = useState(false);
 
-  const endpoints = [
-    { name: 'Enquiries', endpoint: '/api/v1/enquiries', test: () => apiHelpers.getEnquiries() },
-    { name: 'Blogs', endpoint: '/api/v1/blog/getblogs', test: () => apiHelpers.getBlogs() },
-    { name: 'Testimonials', endpoint: '/api/v1/testimonials/gettestimonials', test: () => apiHelpers.getTestimonials() },
-    { name: 'Advisors', endpoint: '/api/v1/advisor/getadvisors', test: () => apiHelpers.getAdvisors() },
-    { name: 'About Us Hero Images', endpoint: '/api/v1/about-us/hero-images/getheroimages', test: () => apiHelpers.getHeroImages() },
-    { name: 'About Us Statistics', endpoint: '/api/v1/about-us/statistics/getstatistics', test: () => apiHelpers.getStatistics() },
-    { name: 'About Us Core Values', endpoint: '/api/v1/about-us/core-values/getcorevalues', test: () => apiHelpers.getCoreValues() },
-    { name: 'About Us Campus Images', endpoint: '/api/v1/about-us/campus-images/getcampusimages', test: () => apiHelpers.getCampusImages() },
-    { name: 'Student Clubs', endpoint: '/api/v1/studentclub/getstudentclubs', test: () => apiHelpers.getStudentClubs() },
-    { name: 'Campus Events', endpoint: '/api/v1/campusevent/getcampusevents', test: () => apiHelpers.getCampusEvents() },
-    { name: 'Membership', endpoint: '/api/v1/membership/getMembership', test: () => apiHelpers.getMemberships() },
+  const endpoints: EndpointTest[] = [
+    { name: 'Enquiries', test: () => apiHelpers.getEnquiries() },
+    { name: 'Blogs', test: () => apiHelpers.getBlogs() },
+    { name: 'Testimonials', test: () => apiHelpers.getTestimonials() },
+    { name: 'Advisors', test: () => apiHelpers.getAdvisors() },
+    { name: 'About Us Hero Images', test: () => apiHelpers.getHeroImages() },
+    { name: 'About Us Statistics', test: () => apiHelpers.getStatistics() },
+    { name: 'About Us Core Values', test: () => apiHelpers.getCoreValues() },
+    { name: 'About Us Campus Images', test: () => apiHelpers.getCampusImages() },
+    { name: 'Student Clubs', test: () => apiHelpers.getStudentClubs() },
+    { name: 'Campus Events', test: () => apiHelpers.getCampusEvents() },
+    { name: 'Membership', test: () => apiHelpers.getMemberships() },
   ];
 
-  const testAllEndpoints = async () => {
+  const testAllEndpoints = useCallback(async () => {
     setIsTesting(true);
     setResults([]);
 
-    for (const { name, endpoint, test } of endpoints) {
+    for (const { name, test } of endpoints) {
       // Add loading state
       setResults(prev => [...prev, { endpoint: name, status: 'loading', message: 'Testing...' }]);
 
@@ -43,17 +48,23 @@ const TestBackendConnectivity = () => {
             ? { endpoint: name, status: 'success', message: 'Success!', data }
             : r
         ));
-      } catch (error: any) {
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error 
+          ? error.message 
+          : 'Unknown error';
+        const responseStatus = (error as { response?: { status?: number; statusText?: string } })?.response?.status;
+        const responseStatusText = (error as { response?: { status?: number; statusText?: string } })?.response?.statusText;
+        
         setResults(prev => prev.map(r => 
           r.endpoint === name 
             ? { 
                 endpoint: name, 
                 status: 'error', 
-                message: error.response?.status === 404 
+                message: responseStatus === 404 
                   ? 'Endpoint not found (404)' 
-                  : error.response?.status 
-                    ? `HTTP ${error.response.status}: ${error.response.statusText}`
-                    : error.message || 'Unknown error'
+                  : responseStatus 
+                    ? `HTTP ${responseStatus}: ${responseStatusText || 'Unknown'}`
+                    : errorMessage
               }
             : r
         ));
@@ -61,11 +72,11 @@ const TestBackendConnectivity = () => {
     }
 
     setIsTesting(false);
-  };
+  }, [endpoints]);
 
   useEffect(() => {
     testAllEndpoints();
-  }, []);
+  }, [testAllEndpoints]);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -117,7 +128,13 @@ const TestBackendConnectivity = () => {
                   <details className="mt-2">
                     <summary className="text-sm text-blue-600 cursor-pointer">View Response</summary>
                     <pre className="mt-2 text-xs bg-gray-100 p-2 rounded overflow-auto max-h-40">
-                      {JSON.stringify(result.data, null, 2)}
+                      {(() => {
+                        try {
+                          return JSON.stringify(result.data as Record<string, unknown>, null, 2);
+                        } catch {
+                          return 'Unable to stringify data';
+                        }
+                      })()}
                     </pre>
                   </details>
                 )}
