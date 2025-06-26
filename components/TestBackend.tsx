@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { apiHelpers, API_ENDPOINTS } from '../utils/api';
+import { apiHelpers } from '../utils/api';
 
 const TestBackend = () => {
   const [testResults, setTestResults] = useState<string[]>([]);
@@ -49,12 +49,20 @@ const TestBackend = () => {
           course: 'Test Course 2'
         });
         addResult(`Helper Response: ${JSON.stringify(helperResponse)}`);
-      } catch (error: any) {
-        addResult(`Helper Error: ${error.message}`);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          addResult(`Helper Error: ${error.message}`);
+        } else {
+          addResult('Helper Error: Unknown error');
+        }
       }
 
-    } catch (error: any) {
-      addResult(`Error: ${error.message}`);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        addResult(`Error: ${error.message}`);
+      } else {
+        addResult('Error: Unknown error');
+      }
     } finally {
       setLoading(false);
     }

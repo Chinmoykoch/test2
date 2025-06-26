@@ -1,196 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Tab } from "@headlessui/react";
+import { Search, Calendar, Clock, ArrowRight } from "lucide-react";
+import { Button } from "./ui/button";
 import { Poppins } from "next/font/google";
-import { Calendar, Clock, ArrowRight, Search } from "lucide-react";
-import { Button, Tab } from "@headlessui/react";
-import { motion } from "framer-motion";
 import ApplyNowForm from "./ApplyNowForm";
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-// Event & News Types
-interface EventItem {
-  id: number;
-  title: string;
-  category: "art" | "design" | "business" | "general";
-  description: string;
-  date: string;
-  time: string;
-  location: string;
-  image: string;
-  featured?: boolean;
-}
-
-interface NewsItem {
-  id: number;
-  title: string;
-  category: "art" | "design" | "business" | "general";
-  summary: string;
-  date: string;
-  author: string;
-  image: string;
-  featured?: boolean;
-}
-
 const NewsAndEventsPage = () => {
-  // Sample data - in a real application, this would come from an API
-  const events: EventItem[] = [
-    {
-      id: 1,
-      title: "Annual Design Exhibition 2025",
-      category: "design",
-      description:
-        "Showcasing the innovative works of our final year design students, exploring sustainable solutions for everyday challenges.",
-      date: "May 15, 2025",
-      time: "10:00 AM - 6:00 PM",
-      location: "Campus Gallery Hall",
-      image:
-        "https://images.unsplash.com/photo-1581078426770-6d336e5de7bf?q=80&w=2070&auto=format&fit=crop",
-      featured: true,
-    },
-    {
-      id: 2,
-      title: "Business Innovation Summit",
-      category: "business",
-      description:
-        "Connect with industry leaders and explore emerging trends in entrepreneurship and business development.",
-      date: "June 3, 2025",
-      time: "9:00 AM - 5:00 PM",
-      location: "Conference Center",
-      image:
-        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop",
-    },
-    {
-      id: 3,
-      title: "Contemporary Art Workshop Series",
-      category: "art",
-      description:
-        "A hands-on workshop series led by renowned contemporary artists exploring new mediums and techniques.",
-      date: "May 22-24, 2025",
-      time: "1:00 PM - 4:00 PM",
-      location: "Studio B, Art Building",
-      image:
-        "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=2080&auto=format&fit=crop",
-    },
-    {
-      id: 4,
-      title: "UX Research Masterclass",
-      category: "design",
-      description:
-        "Learn advanced user research methodologies from industry experts to enhance your design process.",
-      date: "June 10, 2025",
-      time: "10:00 AM - 3:00 PM",
-      location: "Design Lab",
-      image:
-        "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop",
-    },
-    {
-      id: 5,
-      title: "Investment Strategies Seminar",
-      category: "business",
-      description:
-        "Expert financial advisors share insights on investment opportunities in the creative industries.",
-      date: "June 15, 2025",
-      time: "2:00 PM - 5:00 PM",
-      location: "Business School Auditorium",
-      image:
-        "https://images.unsplash.com/photo-1591115765373-5207764f72e7?q=80&w=2070&auto=format&fit=crop",
-    },
-    {
-      id: 6,
-      title: "Alumni Meet & Greet",
-      category: "general",
-      description:
-        "Connect with successful alumni from various fields and expand your professional network.",
-      date: "July 5, 2025",
-      time: "5:00 PM - 8:00 PM",
-      location: "Campus Central Square",
-      image:
-        "https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=2070&auto=format&fit=crop",
-    },
-  ];
-
-  const news: NewsItem[] = [
-    {
-      id: 1,
-      title: "School of Design Wins National Creative Excellence Award",
-      category: "design",
-      summary:
-        "Our design department has been recognized for outstanding contributions to sustainable design practices and innovation in education.",
-      date: "April 20, 2025",
-      author: "Communications Team",
-      image:
-        "https://images.unsplash.com/photo-1561489401-fc2876ced162?q=80&w=2070&auto=format&fit=crop",
-      featured: true,
-    },
-    {
-      id: 2,
-      title: "New Business Analytics Program Launching Fall 2025",
-      category: "business",
-      summary:
-        "Responding to industry demands, our business school introduces a specialized program in creative industry analytics.",
-      date: "April 15, 2025",
-      author: "Academic Affairs",
-      image:
-        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop",
-    },
-    {
-      id: 3,
-      title: "Student Art Installation Featured in City Museum",
-      category: "art",
-      summary:
-        "Three senior art students' collaborative work has been selected for permanent display at the National Contemporary Art Museum.",
-      date: "April 12, 2025",
-      author: "Arts Department",
-      image:
-        "https://images.unsplash.com/photo-1594749794743-c23c6dadde5a?q=80&w=2070&auto=format&fit=crop",
-    },
-    {
-      id: 4,
-      title: "Faculty Research on Sustainable Design Practices Published",
-      category: "design",
-      summary:
-        "Professor Michaels' groundbreaking research on eco-friendly materials has been published in the International Design Journal.",
-      date: "April 8, 2025",
-      author: "Research Office",
-      image:
-        "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?q=80&w=2070&auto=format&fit=crop",
-    },
-    {
-      id: 5,
-      title: "Entrepreneurship Fund Grants $1M to Student Startups",
-      category: "business",
-      summary:
-        "Ten innovative student business ventures receive funding to develop their concepts into market-ready products and services.",
-      date: "April 5, 2025",
-      author: "Business Development Center",
-      image:
-        "https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=2070&auto=format&fit=crop",
-    },
-    {
-      id: 6,
-      title: "Campus Expansion Project Breaks Ground",
-      category: "general",
-      summary:
-        "Construction begins on the new Creative Technologies Center that will house state-of-the-art facilities for all departments.",
-      date: "April 1, 2025",
-      author: "Facilities Management",
-      image:
-        "https://images.unsplash.com/photo-1503387837-b154d5074bd2?q=80&w=2071&auto=format&fit=crop",
-    },
-  ];
-
   // State management
-  const [, setActiveTab] = useState(0);
-  const [filteredEvents, setFilteredEvents] = useState(events);
-  const [filteredNews, setFilteredNews] = useState(news);
-  // const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
 
   // Categories for filtering
@@ -202,48 +27,112 @@ const NewsAndEventsPage = () => {
   //   { id: "general", name: "General" }
   // ];
 
-  // Filter logic
-  useEffect(() => {
-    const filterItems = () => {
-      // Filter events
-      const eventResults = events.filter((event) => {
-        // const matchesCategory = selectedCategory === "all" || event.category === selectedCategory;
-        const matchesSearch =
-          event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          event.description.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesSearch;
-      });
-      setFilteredEvents(eventResults);
-
-      // Filter news
-      const newsResults = news.filter((item) => {
-        // const matchesCategory = selectedCategory === "all" || item.category === selectedCategory;
-        const matchesSearch =
-          item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.summary.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesSearch;
-      });
-      setFilteredNews(newsResults);
-    };
-
-    filterItems();
-  }, [searchTerm]);
-
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
+  // Sample data - wrapped in useMemo to prevent unnecessary re-renders
+  const events = useMemo(() => [
+    {
+      id: 1,
+      title: "Annual Design Exhibition",
+      category: "design" as const,
+      description: "Showcase of student and faculty work featuring innovative design solutions across various disciplines.",
+      date: "2024-03-15",
+      time: "6:00 PM",
+      location: "Main Gallery",
+      image: "/images/gallery/1721738128651.jpg",
+      featured: true,
     },
-  };
+    {
+      id: 2,
+      title: "Business Innovation Workshop",
+      category: "business" as const,
+      description: "Interactive workshop on entrepreneurship and business model innovation for creative professionals.",
+      date: "2024-03-20",
+      time: "2:00 PM",
+      location: "Conference Hall",
+      image: "/images/gallery/1721737896096.jpg",
+    },
+    {
+      id: 3,
+      title: "Art History Lecture Series",
+      category: "art" as const,
+      description: "Exploring contemporary art movements and their influence on modern creative practices.",
+      date: "2024-03-25",
+      time: "4:00 PM",
+      location: "Lecture Theater",
+      image: "/images/gallery/1721738128651.jpg",
+    },
+    {
+      id: 4,
+      title: "Student Portfolio Review",
+      category: "general" as const,
+      description: "Industry professionals provide feedback on student portfolios and career guidance.",
+      date: "2024-03-30",
+      time: "10:00 AM",
+      location: "Studio A",
+      image: "/images/gallery/1721737896096.jpg",
+    },
+  ], []);
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-  };
+  const news = useMemo(() => [
+    {
+      id: 1,
+      title: "New Digital Arts Program Launches",
+      category: "art" as const,
+      summary: "Inframe School introduces cutting-edge digital arts curriculum integrating traditional techniques with modern technology.",
+      date: "2024-03-10",
+      author: "Dr. Sarah Johnson",
+      image: "/images/gallery/1721738128651.jpg",
+      featured: true,
+    },
+    {
+      id: 2,
+      title: "Student Wins National Design Award",
+      category: "design" as const,
+      summary: "Third-year student recognized for innovative sustainable design project at national competition.",
+      date: "2024-03-08",
+      author: "Prof. Michael Chen",
+      image: "/images/gallery/1721737896096.jpg",
+    },
+    {
+      id: 3,
+      title: "Partnership with Tech Startup",
+      category: "business" as const,
+      summary: "Strategic collaboration announced with leading tech startup to provide real-world project opportunities.",
+      date: "2024-03-05",
+      author: "Dean Williams",
+      image: "/images/gallery/1721738128651.jpg",
+    },
+    {
+      id: 4,
+      title: "Campus Sustainability Initiative",
+      category: "general" as const,
+      summary: "New green campus initiatives include solar panels, recycling programs, and sustainable building practices.",
+      date: "2024-03-01",
+      author: "Environmental Committee",
+      image: "/images/gallery/1721737896096.jpg",
+    },
+  ], []);
+
+  // Filter logic using useMemo instead of useEffect
+  const filteredEvents = useMemo(() => {
+    return events.filter((event) => {
+      // const matchesCategory = selectedCategory === "all" || event.category === selectedCategory;
+      const matchesSearch =
+        event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.description.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesSearch;
+    });
+  }, [searchTerm, events]);
+
+  const filteredNews = useMemo(() => {
+    return news.filter((item) => {
+      // const matchesCategory = selectedCategory === "all" || item.category === selectedCategory;
+      const matchesSearch =
+        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.summary.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesSearch;
+    });
+  }, [searchTerm, news]);
+
   const [isFormOpen, setIsFormOpen] = useState(false);
   const handleApplyClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
@@ -255,10 +144,12 @@ const NewsAndEventsPage = () => {
       <div className="relative py-28 overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0">
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1503387837-b154d5074bd2?q=80&w=2071&auto=format&fit=crop"
             alt="Design School Background"
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            priority
           />
           {/* Dark overlay for text readability */}
           <div className="absolute inset-0 bg-black opacity-60"></div>
@@ -347,11 +238,11 @@ const NewsAndEventsPage = () => {
         creativity and innovation, hosting a diverse array of events throughout
         the year. From cutting-edge exhibitions showcasing student and faculty
         work to industry-led workshops connecting our community with leading
-        professionals, there`s always something inspiring happening on campus.
+        professionals, there&apos;s always something inspiring happening on campus.
         Our lecture series brings renowned artists, designers, and business
         leaders to share their insights and experiences, while our annual
         festivals celebrate the intersection of creativity and entrepreneurship.
-        Whether you`re interested in our upcoming gallery openings, professional
+        Whether you&apos;re interested in our upcoming gallery openings, professional
         development seminars, or collaborative projects with community partners,
         this page will keep you informed about all the exciting opportunities to
         engage with our dynamic community. Check back regularly for updates on
@@ -359,20 +250,21 @@ const NewsAndEventsPage = () => {
         and student showcases.
       </div>
       <div className="relative w-full mt-5 h-[300px] overflow-hidden">
-  <img
-    src="/images/gallery/1721738128651.jpg"
-    alt="Design School Background"
-    className="w-full h-full object-cover"
-  />
-  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
-    <h1 className="text-white text-3xl sm:text-4xl font-bold">Explore the Events</h1>
-  </div>
-</div>
-
+        <Image
+          src="/images/gallery/1721738128651.jpg"
+          alt="Design School Background"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+          <h1 className="text-white text-3xl sm:text-4xl font-bold">Explore the Events</h1>
+        </div>
+      </div>
 
       {/* Tabs Section */}
       <div className="container mx-auto px-4 py-12">
-        <Tab.Group onChange={setActiveTab} defaultIndex={0}>
+        <Tab.Group>
           <Tab.List className="flex space-x-4 border-b border-gray-200 mb-8">
             <Tab
               className={({ selected }) =>
@@ -423,157 +315,11 @@ const NewsAndEventsPage = () => {
           <Tab.Panels>
             {/* All Tab - Combined Events and News */}
             <Tab.Panel>
-              <motion.div
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-              >
-                {/* All Events */}
-                {filteredEvents.map((event) => (
-                  <motion.div
-                    key={`event-${event.id}`}
-                    variants={itemVariants}
-                    className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
-                  >
-                    <div className="relative h-48">
-                      <Image
-                        src={event.image}
-                        alt={event.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                      <div className="absolute top-4 left-4 flex space-x-2">
-                        <span className="bg-yellow-400 text-black text-xs font-medium px-2 py-1 rounded">
-                          EVENT
-                        </span>
-                        <span
-                          className={`text-xs font-medium px-2 py-1 rounded capitalize ${
-                            event.category === "art"
-                              ? "bg-pink-100 text-pink-800"
-                              : event.category === "design"
-                                ? "bg-blue-100 text-blue-800"
-                                : event.category === "business"
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-gray-100 text-gray-800"
-                          }`}
-                        >
-                          {event.category}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-6">
-                      <div className="flex flex-wrap gap-y-1 gap-x-4 text-gray-500 text-sm mb-3">
-                        <div className="flex items-center">
-                          <Calendar className="h-4 w-4 mr-1" />
-                          <span>{event.date}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <Clock className="h-4 w-4 mr-1" />
-                          <span>{event.time}</span>
-                        </div>
-                      </div>
-                      <h3 className="text-lg font-semibold mb-2 line-clamp-2">
-                        {event.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                        {event.description}
-                      </p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-gray-500">
-                          {event.location}
-                        </span>
-                        <Link
-                          href={""}
-                          className="inline-flex items-center text-sm font-medium text-black bg-transparent hover:bg-yellow-400 border border-yellow-400 py-2 px-4 rounded-md transition-all duration-300 group"
-                        >
-                          View Details
-                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </Link>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-
-                {/* All News */}
-                {filteredNews.map((item) => (
-                  <motion.div
-                    key={`news-${item.id}`}
-                    variants={itemVariants}
-                    className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
-                  >
-                    <div className="relative h-48">
-                      <Image
-                        src={item.image}
-                        alt={item.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                      <div className="absolute top-4 left-4 flex space-x-2">
-                        <span className="bg-black text-yellow-400 text-xs font-medium px-2 py-1 rounded">
-                          NEWS
-                        </span>
-                        <span
-                          className={`text-xs font-medium px-2 py-1 rounded capitalize ${
-                            item.category === "art"
-                              ? "bg-pink-100 text-pink-800"
-                              : item.category === "design"
-                                ? "bg-blue-100 text-blue-800"
-                                : item.category === "business"
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-gray-100 text-gray-800"
-                          }`}
-                        >
-                          {item.category}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-6">
-                      <div className="flex items-center justify-between text-sm mb-3">
-                        <div className="flex items-center text-gray-500">
-                          <Calendar className="h-4 w-4 mr-1" />
-                          <span>{item.date}</span>
-                        </div>
-                        <span className="text-xs text-gray-500">
-                          By {item.author}
-                        </span>
-                      </div>
-                      <h3 className="text-lg font-semibold mb-2 line-clamp-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                        {item.summary}
-                      </p>
-                      <Link
-                        href={""}
-                        className="inline-flex items-center text-sm font-medium text-black bg-transparent hover:bg-yellow-400 border border-yellow-400 py-2 px-4 rounded-md transition-all duration-300 group"
-                      >
-                        Read More
-                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                      </Link>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </Tab.Panel>
-
-            {/* Upcoming Tab - Events only */}
-            <Tab.Panel>
-              <motion.div
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-              >
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {filteredEvents.length > 0 ? (
                   filteredEvents.map((event) => (
-                    <motion.div
+                    <div
                       key={event.id}
-                      variants={itemVariants}
                       className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
                     >
                       <div className="relative h-48">
@@ -634,7 +380,7 @@ const NewsAndEventsPage = () => {
                           </Link>
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   ))
                 ) : (
                   <div className="col-span-3 py-16 text-center">
@@ -643,22 +389,11 @@ const NewsAndEventsPage = () => {
                     </p>
                   </div>
                 )}
-              </motion.div>
-            </Tab.Panel>
 
-            {/* Recent Tab - News only */}
-            <Tab.Panel>
-              <motion.div
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-              >
                 {filteredNews.length > 0 ? (
                   filteredNews.map((item) => (
-                    <motion.div
+                    <div
                       key={item.id}
-                      variants={itemVariants}
                       className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
                     >
                       <div className="relative h-48">
@@ -713,7 +448,7 @@ const NewsAndEventsPage = () => {
                           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </Link>
                       </div>
-                    </motion.div>
+                    </div>
                   ))
                 ) : (
                   <div className="col-span-3 py-16 text-center">
@@ -722,24 +457,169 @@ const NewsAndEventsPage = () => {
                     </p>
                   </div>
                 )}
-              </motion.div>
+              </div>
+            </Tab.Panel>
+
+            {/* Upcoming Tab - Events only */}
+            <Tab.Panel>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredEvents.length > 0 ? (
+                  filteredEvents.map((event) => (
+                    <div
+                      key={event.id}
+                      className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
+                    >
+                      <div className="relative h-48">
+                        <Image
+                          src={event.image}
+                          alt={event.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div className="absolute top-4 left-4 flex space-x-2">
+                          <span className="bg-yellow-400 text-black text-xs font-medium px-2 py-1 rounded">
+                            EVENT
+                          </span>
+                          <span
+                            className={`text-xs font-medium px-2 py-1 rounded capitalize ${
+                              event.category === "art"
+                                ? "bg-pink-100 text-pink-800"
+                                : event.category === "design"
+                                  ? "bg-blue-100 text-blue-800"
+                                  : event.category === "business"
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-gray-100 text-gray-800"
+                            }`}
+                          >
+                            {event.category}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-6">
+                        <div className="flex flex-wrap gap-y-1 gap-x-4 text-gray-500 text-sm mb-3">
+                          <div className="flex items-center">
+                            <Calendar className="h-4 w-4 mr-1" />
+                            <span>{event.date}</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Clock className="h-4 w-4 mr-1" />
+                            <span>{event.time}</span>
+                          </div>
+                        </div>
+                        <h3 className="text-lg font-semibold mb-2 line-clamp-2">
+                          {event.title}
+                        </h3>
+                        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                          {event.description}
+                        </p>
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs text-gray-500">
+                            {event.location}
+                          </span>
+                          <Link
+                            href={""}
+                            className="inline-flex items-center text-sm font-medium text-black bg-transparent hover:bg-yellow-400 border border-yellow-400 py-2 px-4 rounded-md transition-all duration-300 group"
+                          >
+                            View Details
+                            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="col-span-3 py-16 text-center">
+                    <p className="text-gray-500">
+                      No events found matching your criteria.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </Tab.Panel>
+
+            {/* Recent Tab - News only */}
+            <Tab.Panel>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredNews.length > 0 ? (
+                  filteredNews.map((item) => (
+                    <div
+                      key={item.id}
+                      className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
+                    >
+                      <div className="relative h-48">
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div className="absolute top-4 left-4 flex space-x-2">
+                          <span className="bg-black text-yellow-400 text-xs font-medium px-2 py-1 rounded">
+                            NEWS
+                          </span>
+                          <span
+                            className={`text-xs font-medium px-2 py-1 rounded capitalize ${
+                              item.category === "art"
+                                ? "bg-pink-100 text-pink-800"
+                                : item.category === "design"
+                                  ? "bg-blue-100 text-blue-800"
+                                  : item.category === "business"
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-gray-100 text-gray-800"
+                            }`}
+                          >
+                            {item.category}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-6">
+                        <div className="flex items-center justify-between text-sm mb-3">
+                          <div className="flex items-center text-gray-500">
+                            <Calendar className="h-4 w-4 mr-1" />
+                            <span>{item.date}</span>
+                          </div>
+                          <span className="text-xs text-gray-500">
+                            By {item.author}
+                          </span>
+                        </div>
+                        <h3 className="text-lg font-semibold mb-2 line-clamp-2">
+                          {item.title}
+                        </h3>
+                        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                          {item.summary}
+                        </p>
+                        <Link
+                          href={""}
+                          className="inline-flex items-center text-sm font-medium text-black bg-transparent hover:bg-yellow-400 border border-yellow-400 py-2 px-4 rounded-md transition-all duration-300 group"
+                        >
+                          Read More
+                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </Link>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="col-span-3 py-16 text-center">
+                    <p className="text-gray-500">
+                      No news found matching your criteria.
+                    </p>
+                  </div>
+                )}
+              </div>
             </Tab.Panel>
 
             {/* Featured Tab - Featured content from both categories */}
             <Tab.Panel>
-              <motion.div
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-              >
-                {/* Featured Events */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {filteredEvents
                   .filter((event) => event.featured)
                   .map((event) => (
-                    <motion.div
+                    <div
                       key={`event-${event.id}`}
-                      variants={itemVariants}
                       className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
                     >
                       <div className="relative h-48">
@@ -778,16 +658,14 @@ const NewsAndEventsPage = () => {
                           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </Link>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
 
-                {/* Featured News */}
                 {filteredNews
                   .filter((item) => item.featured)
                   .map((item) => (
-                    <motion.div
+                    <div
                       key={`news-${item.id}`}
-                      variants={itemVariants}
                       className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
                     >
                       <div className="relative h-48">
@@ -824,9 +702,9 @@ const NewsAndEventsPage = () => {
                           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </Link>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
-              </motion.div>
+              </div>
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
@@ -843,7 +721,7 @@ const NewsAndEventsPage = () => {
               <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto md:mx-0">
                 Take the next step in your creative journey. Our programs offer
                 hands-on experience, industry connections, and the skills you
-                need to thrive in today’s design landscape.
+                need to thrive in today&apos;s design landscape.
               </p>
             </div>
 

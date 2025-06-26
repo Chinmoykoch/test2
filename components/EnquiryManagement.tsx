@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useEnquiries, Enquiry, UpdateEnquiryStatusData } from "@/utils/api";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -10,13 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { FaEdit, FaTrash, FaEye, FaChartBar } from "react-icons/fa";
 import { format } from "date-fns";
+import type { EnquiryStats } from "@/utils/api";
 
 const EnquiryManagement = () => {
   const { enquiries, loading, error, updateEnquiryStatus, deleteEnquiry, getEnquiryStats } = useEnquiries();
   const [selectedEnquiry, setSelectedEnquiry] = useState<Enquiry | null>(null);
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
   const [isStatsDialogOpen, setIsStatsDialogOpen] = useState(false);
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<EnquiryStats | null>(null);
   const [statusData, setStatusData] = useState<UpdateEnquiryStatusData>({
     status: 'new',
     notes: ''
@@ -24,7 +24,7 @@ const EnquiryManagement = () => {
 
   const handleStatusUpdate = async (id: string) => {
     try {
-      await updateEnquiryStatus(id, statusData);
+      await updateEnquiryStatus(id, statusData.status, statusData.notes);
       setIsStatusDialogOpen(false);
       setSelectedEnquiry(null);
       setStatusData({ status: 'new', notes: '' });
@@ -210,7 +210,7 @@ const EnquiryManagement = () => {
               </label>
               <Select
                 value={statusData.status}
-                onValueChange={(value: any) => setStatusData({ ...statusData, status: value })}
+                onValueChange={(value) => setStatusData({ ...statusData, status: value as UpdateEnquiryStatusData['status'] })}
               >
                 <SelectTrigger>
                   <SelectValue />

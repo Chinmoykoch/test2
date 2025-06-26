@@ -214,7 +214,7 @@ const LifeAtInframeManagement = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <select
                     value={sectionForm.sectionType}
-                    onChange={(e) => setSectionForm({...sectionForm, sectionType: e.target.value as any})}
+                    onChange={(e) => setSectionForm({...sectionForm, sectionType: e.target.value as 'hero' | 'welcome' | 'services' | 'clubs' | 'sports' | 'events' | 'gallery' | 'tour'})}
                     className="border rounded p-2"
                   >
                     <option value="hero">Hero</option>

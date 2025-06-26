@@ -1,37 +1,10 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Textarea } from './ui/textarea';
-import { Label } from './ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Badge } from './ui/badge';
-import { 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Save, 
-  X, 
-  Image as ImageIcon,
-  FileText,
-  BarChart3,
-  Heart,
-  Camera
-} from 'lucide-react';
-import { 
-  AboutUsHeroImage, 
-  AboutUsStatistic, 
-  AboutUsCoreValue, 
-  AboutUsCampusImage, 
-  AboutUsContent,
-  apiHelpers,
-  API_ENDPOINTS,
-  apiClient,
-  useAboutUsData
-} from '../utils/api';
+import { useAboutUsData } from '../utils/api';
 
 const AboutUsManagement: React.FC = () => {
   const {
@@ -86,7 +59,7 @@ const AboutUsManagement: React.FC = () => {
             <div className="space-y-3">
               {heroImages.map((image, index) => (
                 <div key={image._id || index} className="flex items-center gap-3 p-3 border rounded">
-                  <img src={image.imageUrl} alt={image.altText} className="w-16 h-16 object-cover rounded" />
+                  <Image src={image.imageUrl} alt={image.altText} width={64} height={64} className="rounded" />
                   <div className="flex-1">
                     <p className="font-medium">{image.altText}</p>
                     <p className="text-sm text-gray-500">Order: {image.order}</p>
@@ -131,7 +104,7 @@ const AboutUsManagement: React.FC = () => {
               {coreValues.map((value, index) => (
                 <div key={value._id || index} className="p-3 border rounded">
                   <div className="flex items-center gap-3">
-                    <img src={value.imageUrl} alt={value.title} className="w-12 h-12 object-cover rounded" />
+                    <Image src={value.imageUrl} alt={value.title} width={48} height={48} className="rounded" />
                     <div className="flex-1">
                       <h3 className="font-medium text-yellow-600">{value.title}</h3>
                       <p className="text-sm text-gray-600">{value.description}</p>
@@ -153,7 +126,7 @@ const AboutUsManagement: React.FC = () => {
             <div className="space-y-3">
               {campusImages.map((image, index) => (
                 <div key={image._id || index} className="flex items-center gap-3 p-3 border rounded">
-                  <img src={image.imageUrl} alt={image.altText} className="w-16 h-16 object-cover rounded" />
+                  <Image src={image.imageUrl} alt={image.altText} width={64} height={64} className="rounded" />
                   <div className="flex-1">
                     <p className="font-medium">{image.altText}</p>
                     <p className="text-sm text-gray-500">Order: {image.order}</p>

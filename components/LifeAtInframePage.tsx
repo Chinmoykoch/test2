@@ -47,8 +47,8 @@ export const LifeAtCampus = () => {
     // Custom hooks for API data
     const { sections: lifeAtInframeSections, loading: sectionsLoading, error: sectionsError } = useLifeAtInframeSections();
     const { services: studentServices, loading: servicesLoading, error: servicesError } = useStudentServices();
-    const { facilities: sportsFacilities, loading: sportsLoading, error: sportsError } = useSportsFacilities();
-    const { galleryImages, loading: galleryLoading, error: galleryError } = useLifeAtInframeGallery();
+    const { loading: sportsLoading, error: sportsError } = useSportsFacilities();
+    const { loading: galleryLoading, error: galleryError } = useLifeAtInframeGallery();
 
     const handleApplyClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
         e.preventDefault();
@@ -282,8 +282,14 @@ export const LifeAtCampus = () => {
                   // Handle both API service and fallback service types
                   const isApiService = '_id' in service;
                   const serviceKey = isApiService ? service._id : index;
-                  const serviceColor = isApiService ? 'bg-blue-600' : (service as any).color;
-                  const serviceIcon = isApiService ? service.icon : (service as any).icon;
+                  const serviceColor = isApiService
+                    ? 'bg-blue-600'
+                    : (typeof service === 'object' && 'color' in service && typeof service.color === 'string'
+                        ? service.color
+                        : 'bg-gray-600');
+                  const serviceIcon = isApiService
+                    ? service.icon
+                    : (typeof service === 'object' && 'icon' in service ? service.icon : undefined);
                   
                   return (
                     <Card

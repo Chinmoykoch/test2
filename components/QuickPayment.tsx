@@ -1,6 +1,7 @@
 'use client';
 import { SetStateAction, useState } from 'react';
 import Script from 'next/script';
+import Image from 'next/image';
 
 function Payment() {
   const [name, setName] = useState('');
@@ -125,10 +126,12 @@ function Payment() {
       <div className="relative min-h-screen p-4 sm:p-6 lg:p-10 bg-gray-100">
         {/* Background Banner */}
         <div className="absolute inset-0 z-0">
-          <img
+          <Image
             src="/images/gallery/1721738128651.jpg"
             alt="Inframe School Campus"
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            priority
           />
           <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         </div>
