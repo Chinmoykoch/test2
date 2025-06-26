@@ -8,7 +8,14 @@ import { Poppins } from "next/font/google";
 import "../components/style.css";
 import { experienceCamputLife2 } from "../utils/constant";
 import ApplyNowForm from "./ApplyNowForm";
-import { apiHelpers, CampusEvent } from "@/utils/api";
+import { 
+  apiHelpers, 
+  CampusEvent, 
+  useLifeAtInframeSections,
+  useStudentServices,
+  useSportsFacilities,
+  useLifeAtInframeGallery
+} from "@/utils/api";
 
 // Lazy load components
 const CampusLife = lazy(() => import("../components/CampusLife"));
@@ -37,6 +44,12 @@ export const LifeAtCampus = () => {
     const [eventsLoading, setEventsLoading] = useState(true);
     const [eventsError, setEventsError] = useState<string | null>(null);
 
+    // Custom hooks for API data
+    const { sections: lifeAtInframeSections, loading: sectionsLoading, error: sectionsError } = useLifeAtInframeSections();
+    const { services: studentServices, loading: servicesLoading, error: servicesError } = useStudentServices();
+    const { facilities: sportsFacilities, loading: sportsLoading, error: sportsError } = useSportsFacilities();
+    const { galleryImages, loading: galleryLoading, error: galleryError } = useLifeAtInframeGallery();
+
     const handleApplyClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
         e.preventDefault();
         setIsFormOpen(true);
@@ -62,7 +75,27 @@ export const LifeAtCampus = () => {
         fetchCampusEvents();
     }, []);
 
-    const services = [
+    // Helper function to get section by type
+    const getSectionByType = (type: string) => {
+        return lifeAtInframeSections.find(section => section.sectionType === type);
+    };
+
+    // Helper function to get display title for categories
+    const getCategoryDisplayTitle = (category: string): string => {
+        switch (category) {
+            case 'arts-culture':
+                return 'Arts & Culture';
+            case 'sports-recreation':
+                return 'Sports & Recreation';
+            case 'organizations':
+                return 'Student Organizations';
+            default:
+                return category;
+        }
+    };
+
+    // Fallback data for sections that don't have API data
+    const fallbackServices = [
         {
             title: "Academic Support",
             description:
@@ -84,21 +117,39 @@ export const LifeAtCampus = () => {
             color: "bg-green-600",
             icon: "triangle",
         },
-    ];
+    ] as const;
 
-    // Helper function to get display title for categories
-    const getCategoryDisplayTitle = (category: string): string => {
-        switch (category) {
-            case 'arts-culture':
-                return 'Arts & Culture';
-            case 'sports-recreation':
-                return 'Sports & Recreation';
-            case 'organizations':
-                return 'Student Organizations';
-            default:
-                return category;
-        }
-    };
+    // Use API data if available, otherwise use fallback
+    const displayServices = studentServices.length > 0 ? studentServices : fallbackServices;
+
+    // Top-level loading and error handling
+    if (sectionsLoading || servicesLoading || sportsLoading || galleryLoading) {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-yellow-400 mx-auto"></div>
+            <p className="mt-4 text-lg text-gray-600">Loading Life at Inframe content...</p>
+          </div>
+        </div>
+      );
+    }
+    if (sectionsError || servicesError || sportsError || galleryError) {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-red-600 text-lg mb-4">
+              {sectionsError || servicesError || sportsError || galleryError}
+            </p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="bg-yellow-400 text-black px-6 py-3 rounded-lg hover:bg-yellow-500 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      );
+    }
 
   return (
     <div className="relative">
@@ -130,12 +181,11 @@ export const LifeAtCampus = () => {
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-1.5 h-12 bg-yellow-500" />
                     <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight">
-                      LIFE @ INFRAME
+                      {getSectionByType('hero')?.title || 'LIFE @ INFRAME'}
                     </h1>
                   </div>
                   <p className="text-xl text-white/80 max-w-2xl">
-                    Discover a vibrant community where learning, innovation, and
-                    personal growth intersect
+                    {getSectionByType('hero')?.description || 'Discover a vibrant community where learning, innovation, and personal growth intersect'}
                   </p>
                 </div>
               </div>
@@ -149,17 +199,25 @@ export const LifeAtCampus = () => {
             <div className="grid md:grid-cols-2 gap-16 items-center">
               <div>
                 <h2 className="text-4xl font-bold mb-6 text-black">
-                  Welcome to Campus Life
+                  {getSectionByType('welcome')?.title || 'Welcome to Campus Life'}
                 </h2>
-                <p className="text-lg text-gray-600 mb-6 text-justify">
-                  {`Our campus is more than just buildings and classrooms – it's a thriving ecosystem 
-                  where ideas flourish, friendships form, and futures take shape.`}
-                </p>
-                <p className="text-lg text-gray-600 mb-6 text-justify">
-                  {`Whether you're pursuing academic excellence, exploring new interests through clubs 
-                  and societies, or developing leadership skills, our campus provides the perfect 
-                  environment for your growth and success.`}
-                </p>
+                <div className="text-lg text-gray-600 mb-6 text-justify">
+                  {getSectionByType('welcome')?.content ? (
+                    <div dangerouslySetInnerHTML={{ __html: getSectionByType('welcome')?.content || '' }} />
+                  ) : (
+                    <>
+                      <p className="mb-6">
+                        {`Our campus is more than just buildings and classrooms – it's a thriving ecosystem 
+                        where ideas flourish, friendships form, and futures take shape.`}
+                      </p>
+                      <p>
+                        {`Whether you're pursuing academic excellence, exploring new interests through clubs 
+                        and societies, or developing leadership skills, our campus provides the perfect 
+                        environment for your growth and success.`}
+                      </p>
+                    </>
+                  )}
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="relative w-full h-64">
@@ -194,63 +252,76 @@ export const LifeAtCampus = () => {
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-6 text-black">
-                Comprehensive Student Services
+                {getSectionByType('services')?.title || 'Comprehensive Student Services'}
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                We provide extensive support services to ensure your academic
-                journey is smooth and successful.
+                {getSectionByType('services')?.description || 'We provide extensive support services to ensure your academic journey is smooth and successful.'}
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              {services.map((service, index) => (
-                <Card
-                  key={index}
-                  className={`${service.color} text-white hover:scale-105 transition-transform duration-300`}
-                >
-                  <CardContent className="p-8">
-                    <div className="h-16 w-16 mb-6">
-                      <svg viewBox="0 0 24 24" className="w-full h-full">
-                        {service.icon === "circle" && (
-                          <circle
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            fill="white"
-                            fillOpacity="0.2"
-                          />
-                        )}
-                        {service.icon === "square" && (
-                          <rect
-                            width="18"
-                            height="18"
-                            x="3"
-                            y="3"
-                            fill="white"
-                            fillOpacity="0.2"
-                          />
-                        )}
-                        {service.icon === "triangle" && (
-                          <polygon
-                            points="12 2 22 22 2 22"
-                            fill="white"
-                            fillOpacity="0.2"
-                          />
-                        )}
-                      </svg>
-                    </div>
-                    <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
-                    <p className="mb-6 text-justify ">{service.description}</p>
-                    <Button
-                      variant="outline"
-                      className="text-white border-white bg-transparent hover:bg-white/20 w-full"
+            {/* Loading State */}
+            {servicesLoading && (
+              <div className="flex justify-center items-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500"></div>
+              </div>
+            )}
+
+            {/* Error State */}
+            {servicesError && (
+              <div className="text-center py-12">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+                  <p className="text-red-600">{servicesError}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Services Grid */}
+            {!servicesLoading && !servicesError && (
+              <div className="grid md:grid-cols-3 gap-8">
+                {displayServices.map((service, index) => {
+                  // Handle both API service and fallback service types
+                  const isApiService = '_id' in service;
+                  const serviceKey = isApiService ? service._id : index;
+                  const serviceColor = isApiService ? 'bg-blue-600' : (service as any).color;
+                  const serviceIcon = isApiService ? service.icon : (service as any).icon;
+                  
+                  return (
+                    <Card
+                      key={serviceKey}
+                      className={`${serviceColor} text-white hover:scale-105 transition-transform duration-300`}
                     >
-                      Learn More <ChevronRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                      <CardContent className="p-8">
+                        <div className="h-16 w-16 mb-6">
+                          {serviceIcon ? (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <span className="text-2xl">{serviceIcon}</span>
+                            </div>
+                          ) : (
+                            <svg viewBox="0 0 24 24" className="w-full h-full">
+                              <circle
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                fill="white"
+                                fillOpacity="0.2"
+                              />
+                            </svg>
+                          )}
+                        </div>
+                        <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
+                        <p className="mb-6 text-justify">{service.description}</p>
+                        <Button
+                          variant="outline"
+                          className="text-white border-white bg-transparent hover:bg-white/20 w-full"
+                        >
+                          Learn More <ChevronRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </section>
         <div className="bg bg1  "></div>

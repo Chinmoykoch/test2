@@ -1,8 +1,8 @@
 "use client";
 import { Poppins } from "next/font/google";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
-import { apiHelpers, Advisor } from "@/utils/api";
+import { useAdvisors } from "@/utils/api";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -10,27 +10,7 @@ const poppins = Poppins({
 });
 
 const AdvisorsPage = () => {
-  const [advisors, setAdvisors] = useState<Advisor[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchAdvisors = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const advisorsData = await apiHelpers.getAdvisors();
-        setAdvisors(advisorsData);
-      } catch (err) {
-        console.error('Failed to fetch advisors:', err);
-        setError('Failed to load advisors. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAdvisors();
-  }, []);
+  const { advisors, loading, error } = useAdvisors();
 
   return (
     <div className={`w-full min-h-screen bg-zinc-100 ${poppins.className}`}>

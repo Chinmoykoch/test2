@@ -3,6 +3,9 @@
 import React from 'react';
 import BackendStatus from '@/components/BackendStatus';
 import ExampleBackendUsage from '@/components/ExampleBackendUsage';
+import TestBackend from '@/components/TestBackend';
+import AboutUsManagement from '@/components/AboutUsManagement';
+import LifeAtInframeManagement from '../../components/LifeAtInframeManagement';
 import { env } from '@/utils/env';
 
 const TestBackendPage = () => {
@@ -21,6 +24,22 @@ const TestBackendPage = () => {
                 Backend Connection Status
               </h2>
               <BackendStatus showDetails={true} />
+            </div>
+            
+            {/* API Testing */}
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                API Testing
+              </h2>
+              <TestBackend />
+            </div>
+
+            {/* About Us Management */}
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                About Us API Integration
+              </h2>
+              <AboutUsManagement />
             </div>
             
             {/* Environment Variables */}
@@ -131,10 +150,10 @@ const TestBackendPage = () => {
               </div>
             </div>
             
-            {/* API Testing */}
+            {/* Example Backend Usage */}
             <div>
               <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                API Testing
+                Example Backend Usage
               </h2>
               <ExampleBackendUsage />
             </div>
@@ -164,6 +183,8 @@ const TestBackendPage = () => {
                 </div>
               </div>
             </div>
+
+            <LifeAtInframeManagement />
           </div>
         </div>
       </div>

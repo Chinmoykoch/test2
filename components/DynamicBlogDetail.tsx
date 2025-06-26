@@ -19,6 +19,8 @@ const categoryColors: Record<string, string> = {
   Placements: "bg-indigo-500 text-white",
   Faculty: "bg-pink-500 text-white",
   "Student Life": "bg-orange-500 text-white",
+  "Video Editing": "bg-cyan-500 text-white",
+  "BBA Course in Advertising and Marketing": "bg-emerald-500 text-white",
   ws2: "bg-gray-500 text-white",
 };
 
@@ -115,29 +117,25 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
   // Loading state
   if (loading) {
     return (
-      <main className="min-h-screen bg-white">
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-          <span className="ml-2 text-gray-600">Loading blog post...</span>
-        </div>
-      </main>
+      <div className="flex items-center justify-center py-20 pt-32">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <span className="ml-2 text-gray-600">Loading blog post...</span>
+      </div>
     );
   }
 
   // Error state
   if (error || !post) {
     return (
-      <main className="min-h-screen bg-white">
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold mb-4">Post Not Found</h1>
-            <p className="mb-6">{error || "The blog post you're looking for doesn't exist."}</p>
-            <Link href="/blog">
-              <Button>Return to Blog</Button>
-            </Link>
-          </div>
+      <div className="min-h-screen flex items-center justify-center pt-32">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold mb-4">Post Not Found</h1>
+          <p className="mb-6">{error || "The blog post you're looking for doesn't exist."}</p>
+          <Link href="/blog">
+            <Button>Return to Blog</Button>
+          </Link>
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -163,9 +161,9 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
   const formattedPost = formatPostData(post);
 
   return (
-    <main className="min-h-screen bg-white">
+    <div className="bg-white">
       {/* Hero Section - Matching reference design */}
-      <section className="relative h-[60vh] min-h-[400px]">
+      <section className="relative h-[40vh] md:h-[65vh] min-h-[250px] md:min-h-[400px] mt-24">
         <Image
           src={formattedPost.heroImage || "/images/gallery/1721737773149.jpg"}
           alt={formattedPost.title}
@@ -174,15 +172,15 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
           priority
         />
         <div className="absolute inset-0 bg-black/50"></div>
-        <div className="absolute bottom-0 left-0 right-0 p-8">
+        <div className="absolute bottom-0 left-0 right-0 px-4 md:px-8 pb-6 md:pb-8">
           <div className="max-w-7xl mx-auto">
-            <Badge className={`${categoryColors[formattedPost.category] || 'bg-blue-500 text-white'} px-3 py-1 text-sm font-semibold mb-4`}>
+            <Badge className={`${categoryColors[formattedPost.category] || 'bg-blue-500 text-white'} px-3 py-1 text-xs md:text-sm font-semibold mb-4`}>
               {formattedPost.category}
             </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 max-w-4xl">
+            <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold leading-tight break-words text-center md:text-left mb-4 max-w-4xl">
               {formattedPost.title}
             </h1>
-            <p className="text-xl text-white/90 mb-6 max-w-3xl">
+            <p className="text-base md:text-xl text-white/90 mb-6 max-w-3xl">
               {post.excerpt || "Explore the perfect blend of education, expertise, and exposure at Inframe School."}
             </p>
           </div>
@@ -190,8 +188,8 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
       </section>
 
       {/* Navigation Bar - Clean and simple */}
-      <div className="bg-white border-b border-gray-200 py-4">
-        <div className="max-w-7xl mx-auto px-4">
+      <div className="bg-white border-b border-gray-200 py-4 px-4 md:px-8">
+        <div className="max-w-7xl mx-auto">
           <Link href="/blog">
             <Button variant="outline" className="flex items-center gap-2 text-gray-600 hover:text-black">
               <ChevronLeft className="h-4 w-4" /> Back to Blog
@@ -200,13 +198,13 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar - Matching reference design */}
-          <aside className="lg:w-80 lg:sticky lg:top-8 lg:self-start">
+          <aside className="w-full lg:w-80 lg:sticky lg:top-8 lg:self-start order-2 lg:order-1">
             {/* Index Card */}
-            <div className="bg-gray-50 rounded-lg p-6 mb-6">
-              <h3 className="text-lg font-bold mb-4 text-gray-800">Index</h3>
+            <div className="bg-gray-50 rounded-lg p-4 md:p-6 mb-6">
+              <h3 className="text-base md:text-lg font-bold mb-4 text-gray-800">Index</h3>
               <ul className="space-y-2">
                 <li>
                   <Link
@@ -230,16 +228,16 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
             </div>
 
             {/* Share Card - Matching reference design */}
-            <div className="bg-gray-50 rounded-lg p-6">
-              <h3 className="text-lg font-bold mb-4 text-gray-800">Share this article</h3>
-              <div className="flex gap-3">
-                <Button className="bg-[#1877F2] hover:bg-[#1877F2]/90 text-white px-4 py-2 text-sm">
+            <div className="bg-gray-50 rounded-lg p-4 md:p-6">
+              <h3 className="text-base md:text-lg font-bold mb-4 text-gray-800">Share this article</h3>
+              <div className="flex flex-wrap gap-3">
+                <Button className="bg-[#1877F2] hover:bg-[#1877F2]/90 text-white px-4 py-2 text-xs md:text-sm">
                   Facebook
                 </Button>
-                <Button className="bg-[#1DA1F2] hover:bg-[#1DA1F2]/90 text-white px-4 py-2 text-sm">
+                <Button className="bg-[#1DA1F2] hover:bg-[#1DA1F2]/90 text-white px-4 py-2 text-xs md:text-sm">
                   Twitter
                 </Button>
-                <Button className="bg-[#0A66C2] hover:bg-[#0A66C2]/90 text-white px-4 py-2 text-sm">
+                <Button className="bg-[#0A66C2] hover:bg-[#0A66C2]/90 text-white px-4 py-2 text-xs md:text-sm">
                   LinkedIn
                 </Button>
               </div>
@@ -247,14 +245,14 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
           </aside>
 
           {/* Main Content - Matching reference design */}
-          <div className="flex-1">
-            <article className="prose prose-lg max-w-none">
+          <div className="flex-1 order-1 lg:order-2">
+            <article className="prose prose-base md:prose-lg max-w-none">
               {/* Introduction Section */}
-              <div id="intro" className="mb-12 scroll-mt-16">
-                <p className="text-lg text-gray-700 leading-relaxed mb-6">
+              <div id="intro" className="mb-8 md:mb-12 scroll-mt-16">
+                <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-4 md:mb-6">
                   {post.excerpt || `Choosing the right educational path after 12th is a critical decision that can shape your child's future. With an overwhelming number of courses and career options available, it's easy to feel lost. However, if your child is passionate about design, arts, and creativity, then Inframe School offers the perfect blend of education, expertise, and exposure.`}
                 </p>
-                <p className="text-lg text-gray-700 leading-relaxed mb-8">
+                <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-6 md:mb-8">
                   As your child completes their 12th grade, the question of &quot;what&apos;s next?&quot; becomes more important than ever. The right educational path can significantly influence their future. If your child has an interest in design, arts, and creativity, then Inframe School offers a unique opportunity for them to develop both academically and professionally.
                 </p>
               </div>
@@ -262,13 +260,13 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
               {/* Dynamic Sections from API */}
               {formattedPost.sections && formattedPost.sections.length > 0 ? (
                 formattedPost.sections.map((section: BlogSection, index: number) => (
-                  <section key={section.id} id={section.id} className="mb-12 scroll-mt-16">
-                    <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
+                  <section key={section.id} id={section.id} className="mb-8 md:mb-12 scroll-mt-16">
+                    <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 md:mb-6 text-gray-900">
                       {index + 1}. {section.title}
                     </h2>
 
                     {section.image && (
-                      <div className="mb-8 rounded-lg overflow-hidden">
+                      <div className="mb-6 md:mb-8 rounded-lg overflow-hidden">
                         <Image
                           src={section.image || "/placeholder.svg"}
                           alt={section.title}
@@ -279,9 +277,9 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
                       </div>
                     )}
 
-                    <div className="space-y-6">
+                    <div className="space-y-4 md:space-y-6">
                       {section.content && section.content.split("\n\n").map((paragraph: string, idx: number) => (
-                        <p key={idx} className="text-lg text-gray-700 leading-relaxed">
+                        <p key={idx} className="text-base md:text-lg text-gray-700 leading-relaxed">
                           {paragraph}
                         </p>
                       ))}
@@ -289,8 +287,8 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
 
                     {/* Quote Section */}
                     {section.quote && (
-                      <blockquote className="border-l-4 border-gray-300 pl-6 py-4 my-8 bg-gray-50 rounded-r-lg">
-                        <p className="text-xl italic text-gray-800 mb-2">
+                      <blockquote className="border-l-4 border-gray-300 pl-4 md:pl-6 py-4 my-6 md:my-8 bg-gray-50 rounded-r-lg">
+                        <p className="text-base md:text-xl italic text-gray-800 mb-2">
                           &ldquo;{section.quote}&rdquo;
                         </p>
                         {section.quoteAuthor && (
@@ -303,13 +301,13 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
 
                     {/* Highlights Section */}
                     {section.highlights && section.highlights.length > 0 && (
-                      <div className="bg-blue-50 p-6 rounded-lg my-8 border-l-4 border-blue-400">
-                        <h4 className="font-bold text-xl mb-4 text-gray-900">
+                      <div className="bg-blue-50 p-4 md:p-6 rounded-lg my-6 md:my-8 border-l-4 border-blue-400">
+                        <h4 className="font-bold text-lg md:text-xl mb-2 md:mb-4 text-gray-900">
                           {section.highlightTitle || "Key Points"}
                         </h4>
-                        <ul className="list-disc pl-5 space-y-2">
+                        <ul className="list-disc pl-5 space-y-1 md:space-y-2">
                           {section.highlights.map((highlight: string, idx: number) => (
-                            <li key={idx} className="text-gray-700">{highlight}</li>
+                            <li key={idx} className="text-gray-700 text-base md:text-lg">{highlight}</li>
                           ))}
                         </ul>
                       </div>
@@ -318,16 +316,16 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
                 ))
               ) : (
                 // Fallback content when no sections available
-                <div className="space-y-12">
+                <div className="space-y-8 md:space-y-12">
                   <section id="section1" className="scroll-mt-16">
-                    <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
+                    <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 md:mb-6 text-gray-900">
                       1. Industry-Driven Curriculum Designed for Future Creatives
                     </h2>
-                    <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                    <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-4 md:mb-6">
                       Inframe School offers a specialized curriculum aimed at nurturing future designers and artists. The programs are meticulously designed to combine theoretical knowledge with hands-on practice, enabling students to excel in their field of interest.
                     </p>
-                    <blockquote className="border-l-4 border-gray-300 pl-6 py-4 my-8 bg-gray-50 rounded-r-lg">
-                      <p className="text-xl italic text-gray-800 mb-2">
+                    <blockquote className="border-l-4 border-gray-300 pl-4 md:pl-6 py-4 my-6 md:my-8 bg-gray-50 rounded-r-lg">
+                      <p className="text-base md:text-xl italic text-gray-800 mb-2">
                         &ldquo;Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work.&rdquo;
                       </p>
                       <footer className="text-gray-600 font-medium">– Steve Jobs</footer>
@@ -335,77 +333,11 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
                   </section>
                 </div>
               )}
-
             </article>
           </div>
         </div>
       </div>
-
-      {/* Footer Section - Matching reference design */}
-      <footer className="bg-gray-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Quick Links */}
-            <div>
-              <h3 className="text-lg font-bold mb-4">Quick Links</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/about-us" className="hover:text-yellow-400">About Us</Link></li>
-                <li><Link href="/admission-process" className="hover:text-yellow-400">Admission Process</Link></li>
-                <li><Link href="/lifeatinframe" className="hover:text-yellow-400">Campus</Link></li>
-                <li><Link href="/blog" className="hover:text-yellow-400">Blog</Link></li>
-                <li><Link href="/advisors" className="hover:text-yellow-400">Advisors</Link></li>
-                <li><Link href="/news-events" className="hover:text-yellow-400">News & Events</Link></li>
-              </ul>
-            </div>
-
-            {/* Courses */}
-            <div>
-              <h3 className="text-lg font-bold mb-4">Courses We Offer</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/interior-design" className="hover:text-yellow-400">Interior Design</Link></li>
-                <li><Link href="/fashion-design" className="hover:text-yellow-400">Fashion Design</Link></li>
-                <li><Link href="/graphic-design" className="hover:text-yellow-400">Graphic Design</Link></li>
-                <li><Link href="/uiux-design" className="hover:text-yellow-400">UI & UX Design</Link></li>
-              </ul>
-            </div>
-
-            {/* Contact */}
-            <div>
-              <h3 className="text-lg font-bold mb-4">Locate Us</h3>
-              <div className="text-sm space-y-2">
-                <p>09, Pal Link Road,<br />
-                Marudhar Nagar, Kamla Nehru Nagar,<br />
-                Shyam Nagar, Jodhpur, Rajasthan 342008</p>
-                <p><strong>Admissions:</strong> +91 9649 9649 37</p>
-                <p><strong>Admin:</strong> +91 9649 9649 70</p>
-                <p><strong>Email:</strong> info@inframeschool.com</p>
-              </div>
-            </div>
-
-            {/* Newsletter */}
-            <div>
-              <h3 className="text-lg font-bold mb-4">Stay Updated</h3>
-              <p className="text-sm mb-4">Subscribe to our newsletter for the latest updates.</p>
-              <div className="flex">
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="flex-1 px-3 py-2 text-black rounded-l-md text-sm"
-                />
-                <Button className="bg-yellow-400 text-black hover:bg-yellow-500 px-4 py-2 rounded-r-md text-sm">
-                  Subscribe
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-700 mt-12 pt-8 text-center text-sm">
-            <p>© 2025 Inframe School of Art, Design & Business. All rights reserved</p>
-          </div>
-        </div>
-      </footer>
-
-    </main>
+    </div>
   );
 };
 

@@ -19,6 +19,8 @@ const categoryColors: Record<string, string> = {
   Placements: "bg-indigo-500 text-white",
   Faculty: "bg-pink-500 text-white",
   "Student Life": "bg-orange-500 text-white",
+  "Video Editing": "bg-cyan-500 text-white",
+  "BBA Course in Advertising and Marketing": "bg-emerald-500 text-white",
   // Add more categories as needed
   ws2: "bg-gray-500 text-white",
 };

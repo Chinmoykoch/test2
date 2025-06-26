@@ -8,7 +8,6 @@ import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { ChevronRight, Search, Tag, Loader2 } from 'lucide-react';
 import { apiHelpers, type BlogPost } from '../utils/api';
-import Head from 'next/head';
 
 // Category colors mapping
 const categoryColors: Record<string, string> = {
@@ -20,6 +19,8 @@ const categoryColors: Record<string, string> = {
   Placements: "bg-indigo-500 text-white",
   Faculty: "bg-pink-500 text-white",
   "Student Life": "bg-orange-500 text-white",
+  "Video Editing": "bg-cyan-500 text-white",
+  "BBA Course in Advertising and Marketing": "bg-emerald-500 text-white",
   ws2: "bg-gray-500 text-white",
   // Add more categories as needed
 };
@@ -193,10 +194,10 @@ const DynamicBlogPage: React.FC = () => {
   // Loading state
   if (loading) {
     return (
-      <main className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white">
         {/* Hero Section */}
         <div className="relative z-10">
-          <div className="relative h-[80vh]">
+          <div className="relative h-[80vh] pt-24">
             <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10" />
             <Image
               src="/images/gallery/DSC04232.JPG"
@@ -232,15 +233,15 @@ const DynamicBlogPage: React.FC = () => {
             <span className="ml-2 text-gray-600">Loading blog posts from backend...</span>
           </div>
         </section>
-      </main>
+      </div>
     );
   }
 
   // Error state
   if (error) {
     return (
-      <main className="min-h-screen bg-white">
-        <div className="max-w-7xl mx-auto px-4 py-20">
+      <div className="min-h-screen bg-white">
+        <div className="max-w-7xl mx-auto px-4 py-20 pt-32">
           <div className="text-center">
             <h1 className="text-3xl font-bold mb-4 text-red-600">Error Loading Blogs</h1>
             <p className="text-gray-600 mb-6">{error}</p>
@@ -252,231 +253,194 @@ const DynamicBlogPage: React.FC = () => {
             </Button>
           </div>
         </div>
-      </main>
+      </div>
     );
   }
 
   return (
-    <>
-      <Head>
-        {/* Schema.org JSON-LD structured data for better SEO */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Blog",
-              "name": "Inframe School Blog",
-              "description": "Insights, stories, and information about the best design school in Rajasthan",
-              "url": "https://inframeschool.edu.in/blog",
-              "publisher": {
-                "@type": "Organization",
-                "name": "Inframe School",
-                "logo": {
-                  "@type": "ImageObject",
-                  "url": "https://inframeschool.edu.in/logo.png"
-                }
-              },
-              "blogPost": filteredBlogs.map(blog => {
-                const formatted = formatBlogForDisplay(blog);
-                return {
-                  "@type": "BlogPosting",
-                  "headline": formatted.title,
-                  "description": formatted.excerpt,
-                  "keywords": formatted.keywords,
-                  "datePublished": formatted.date,
-                  "image": formatted.image
-                };
-              })
-            })
-          }}
-        />
-      </Head>
-
-      <main className="min-h-screen bg-white">
-        {/* Hero Section with Enhanced SEO */}
-        <div className="relative z-10">
-          <div className="relative h-[80vh]">
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10" />
-            <Image
-              src="/images/gallery/DSC04232.JPG"
-              alt="Inframe School - Best Design School in Rajasthan - Campus Life"
-              fill
-              className="object-cover"
-              priority
-              sizes="100vw"
-              quality={90}
-              placeholder="blur"
-              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx0fHRsdHSIfIR0jIyUkJSMiIiMlKy4wLisqMx8hJzQnKi46PT4+JSZHSUFQLTc6Tj7/2wBDARUXFx4bHt0dHT4qIio+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj7/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-            />
-            <div className="absolute inset-0 z-20 flex items-center">
-              <div className="max-w-7xl mx-auto px-4 w-full">
-                <div className="max-w-3xl">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-1.5 h-12 bg-yellow-500" />
-                    <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight">
-                      Inframe School Blog
-                    </h1>
+    <div className="min-h-screen bg-white">
+      {/* Hero Section with Enhanced SEO */}
+      <div className="relative z-10 mt-24">
+        <div className="relative h-[80vh]">
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10" />
+          <Image
+            src="/images/gallery/DSC04232.JPG"
+            alt="Inframe School - Best Design School in Rajasthan - Campus Life"
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+            quality={90}
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx0fHRsdHSIfIR0jIyUkJSMiIiMlKy4wLisqMx8hJzQnKi46PT4+JSZHSUFQLTc6Tj7/2wBDARUXFx4bHt0dHT4qIio+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj7/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+          />
+          <div className="absolute inset-0 z-20 flex items-center">
+            <div className="max-w-7xl mx-auto px-4 w-full">
+              <div className="max-w-3xl">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-1.5 h-12 bg-yellow-500" />
+                  <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight">
+                    Inframe School Blog
+                  </h1>
+                </div>
+                <p className="text-xl text-white/90 max-w-2xl mb-8">
+                  Insights, stories, and inspiration from the top design school in Rajasthan focused on creating future-ready creative professionals
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="relative flex-grow max-w-lg">
+                    <input
+                      type="text"
+                      placeholder="Search articles, topics, keywords..."
+                      className="w-full py-3 px-4 pl-12 rounded-md text-black"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      aria-label="Search blog posts"
+                    />
+                    <Search className="absolute left-3 top-3 text-gray-500" size={20} />
                   </div>
-                  <p className="text-xl text-white/90 max-w-2xl mb-8">
-                    Insights, stories, and inspiration from the top design school in Rajasthan focused on creating future-ready creative professionals
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="relative flex-grow max-w-lg">
-                      <input
-                        type="text"
-                        placeholder="Search articles, topics, keywords..."
-                        className="w-full py-3 px-4 pl-12 rounded-md text-black"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        aria-label="Search blog posts"
-                      />
-                      <Search className="absolute left-3 top-3 text-gray-500" size={20} />
-                    </div>
-                    <Button className="bg-yellow-400 text-black hover:bg-yellow-500 px-6 py-6">
-                      Search
-                    </Button>
-                  </div>
+                  <Button className="bg-yellow-400 text-black hover:bg-yellow-500 px-6 py-6">
+                    Search
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Popular Tags Section for SEO */}
-        <section className="bg-gray-50 py-8 border-t border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center gap-4 mb-4">
-              <Tag className="text-yellow-500" />
-              <h2 className="text-xl font-semibold">Popular Topics</h2>
-              {error && (
-                <div className="ml-auto">
-                  <Badge className="bg-yellow-100 text-yellow-800 border border-yellow-300">
-                    ⚠️ Using cached content
-                  </Badge>
-                </div>
-              )}
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {allTags.map((tag, index) => (
-                <Link key={index} href={`/tag/${tag.replace(/\s+/g, '-').toLowerCase()}`}>
-                  <Badge className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-3 py-1">
-                    #{tag}
-                  </Badge>
-                </Link>
-              ))}
-            </div>
+      {/* Popular Tags Section for SEO */}
+      <section className="bg-gray-50 py-8 border-t border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center gap-4 mb-4">
+            <Tag className="text-yellow-500" />
+            <h2 className="text-xl font-semibold">Popular Topics</h2>
+            {error && (
+              <div className="ml-auto">
+                <Badge className="bg-yellow-100 text-yellow-800 border border-yellow-300">
+                  ⚠️ Using cached content
+                </Badge>
+              </div>
+            )}
           </div>
-        </section>
-
-        {/* Featured Articles Section with Enhanced UI */}
-        <section id="featured-articles" className="py-16 px-4 md:px-8 max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold flex items-center gap-2">
-              <span className="w-2 h-8 bg-yellow-400 inline-block"></span>
-              Featured Articles
-            </h2>
-            <div className="flex gap-2 mt-4 sm:mt-0">
-              <Button variant="outline" className="border-yellow-400 text-black hover:bg-yellow-50">
-                All Categories
-              </Button>
-              <Button variant="outline" className="border-yellow-400 text-black hover:bg-yellow-50">
-                Most Popular
-              </Button>
-            </div>
+          <div className="flex flex-wrap gap-2">
+            {allTags.map((tag, index) => (
+              <Link key={index} href={`/tag/${tag.replace(/\s+/g, '-').toLowerCase()}`}>
+                <Badge className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-3 py-1">
+                  #{tag}
+                </Badge>
+              </Link>
+            ))}
           </div>
+        </div>
+      </section>
 
-          {/* Category Filter Tabs */}
-          <div className="mb-10 overflow-x-auto">
-            <div className="flex gap-2 min-w-max pb-2">
-              <Button className="bg-black text-white hover:bg-yellow-400 hover:text-black">
-                All
-              </Button>
-              {Object.keys(categoryColors).map((category) => (
-                <Button
-                  key={category}
-                  variant="outline"
-                  className={`border-2 ${categoryColors[category].replace('bg-', 'border-').replace(' text-white', '')} hover:bg-opacity-10`}
-                >
-                  {category}
-                </Button>
-              ))}
-            </div>
+      {/* Featured Articles Section with Enhanced UI */}
+      <section id="featured-articles" className="py-16 px-4 md:px-8 max-w-7xl mx-auto">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-bold flex items-center gap-2">
+            <span className="w-2 h-8 bg-yellow-400 inline-block"></span>
+            Featured Articles
+          </h2>
+          <div className="flex gap-2 mt-4 sm:mt-0">
+            <Button variant="outline" className="border-yellow-400 text-black hover:bg-yellow-50">
+              All Categories
+            </Button>
+            <Button variant="outline" className="border-yellow-400 text-black hover:bg-yellow-50">
+              Most Popular
+            </Button>
           </div>
+        </div>
 
-          {/* Blog Cards Grid - Enhanced Design */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredBlogs.map((blog) => {
-              const formattedBlog = formatBlogForDisplay(blog);
-              return (
-                <div key={formattedBlog.id || ('_id' in blog ? blog._id : '')} id={formattedBlog.id} className="scroll-mt-16">
-                  <Link href={`/blog/${formattedBlog.id}`} className="group">
-                    <Card className="overflow-hidden border-2 hover:border-yellow-400 transition-all duration-300 hover:shadow-xl h-full flex flex-col">
-                      <div className="relative h-56 overflow-hidden">
-                        <Image
-                          src={formattedBlog.image || "/placeholder.svg"}
-                          alt={formattedBlog.title}
-                          fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                        <div className="absolute top-4 left-4">
-                          <Badge className={`${categoryColors[formattedBlog.category] || 'bg-gray-500 text-white'} px-3 py-1 text-xs font-semibold`}>
-                            {formattedBlog.category}
-                          </Badge>
-                        </div>
-                        {'views' in blog && blog.views && (
-                          <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded text-xs">
-                            {blog.views} views
-                          </div>
-                        )}
+        {/* Category Filter Tabs */}
+        <div className="mb-10 overflow-x-auto">
+          <div className="flex gap-2 min-w-max pb-2">
+            <Button className="bg-black text-white hover:bg-yellow-400 hover:text-black">
+              All
+            </Button>
+            {Object.keys(categoryColors).map((category) => (
+              <Button
+                key={category}
+                variant="outline"
+                className={`border-2 ${categoryColors[category].replace('bg-', 'border-').replace(' text-white', '')} hover:bg-opacity-10`}
+              >
+                {category}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        {/* Blog Cards Grid - Enhanced Design */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredBlogs.map((blog) => {
+            const formattedBlog = formatBlogForDisplay(blog);
+            return (
+              <div key={formattedBlog.id || ('_id' in blog ? blog._id : '')} id={formattedBlog.id} className="scroll-mt-16">
+                <Link href={`/blog/${formattedBlog.id}`} className="group">
+                  <Card className="overflow-hidden border-2 hover:border-yellow-400 transition-all duration-300 hover:shadow-xl h-full flex flex-col">
+                    <div className="relative h-56 overflow-hidden">
+                      <Image
+                        src={formattedBlog.image || "/placeholder.svg"}
+                        alt={formattedBlog.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute top-4 left-4">
+                        <Badge className={`${categoryColors[formattedBlog.category] || 'bg-gray-500 text-white'} px-3 py-1 text-xs font-semibold`}>
+                          {formattedBlog.category}
+                        </Badge>
                       </div>
-                      <CardContent className="p-6 flex-grow flex flex-col">
-                        <h3 className="text-xl font-bold mb-3 group-hover:text-yellow-600 transition-colors">
-                          {formattedBlog.title}
-                        </h3>
-                        <p className="text-gray-600 mb-4 flex-grow">{formattedBlog.excerpt}</p>
-                        <div className="flex items-center justify-between text-sm text-gray-500 mt-auto">
-                          <span>{formattedBlog.date}</span>
-                          <span>{formattedBlog.readTime}</span>
+                      {'views' in blog && blog.views && (
+                        <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded text-xs">
+                          {blog.views} views
                         </div>
-                        <Button className="mt-4 bg-black text-white hover:bg-yellow-400 hover:text-black transition-colors w-full">
-                          Read More <ChevronRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
+                      )}
+                    </div>
+                    <CardContent className="p-6 flex-grow flex flex-col">
+                      <h3 className="text-xl font-bold mb-3 group-hover:text-yellow-600 transition-colors">
+                        {formattedBlog.title}
+                      </h3>
+                      <p className="text-gray-600 mb-4 flex-grow">{formattedBlog.excerpt}</p>
+                      <div className="flex items-center justify-between text-sm text-gray-500 mt-auto">
+                        <span>{formattedBlog.date}</span>
+                        <span>{formattedBlog.readTime}</span>
+                      </div>
+                      <Button className="mt-4 bg-black text-white hover:bg-yellow-400 hover:text-black transition-colors w-full">
+                        Read More <ChevronRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </div>
+            );
+          })}
+        </div>
 
-          {filteredBlogs.length === 0 && (
-            <div className="text-center py-20">
-              <p className="text-gray-600 text-lg">No blog posts found matching your search.</p>
-              <p className="text-gray-500 text-sm mt-2">Try adjusting your search terms.</p>
-            </div>
-          )}
-        </section>
-
-        {/* Enhanced Newsletter Section with SEO */}
-        <section className="py-16 my-10 bg-black text-white">
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4">Stay Updated with Inframe School</h2>
-            <p className="mb-8">Subscribe to our newsletter to receive the latest articles, news, and updates about design education and career opportunities.</p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="px-4 py-3 rounded-md flex-grow text-black"
-                aria-label="Email for newsletter"
-              />
-              <Button className="bg-yellow-400 text-black hover:bg-yellow-500 px-6 py-6">Subscribe</Button>
-            </div>
-            <p className="mt-4 text-sm text-gray-400">By subscribing, you&apos;ll receive exclusive content about design education, career opportunities, and admission updates.</p>
+        {filteredBlogs.length === 0 && (
+          <div className="text-center py-20">
+            <p className="text-gray-600 text-lg">No blog posts found matching your search.</p>
+            <p className="text-gray-500 text-sm mt-2">Try adjusting your search terms.</p>
           </div>
-        </section>
-      </main>
-    </>
+        )}
+      </section>
+
+      {/* Enhanced Newsletter Section with SEO */}
+      <section className="py-16 my-10 bg-black text-white">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-4">Stay Updated with Inframe School</h2>
+          <p className="mb-8">Subscribe to our newsletter to receive the latest articles, news, and updates about design education and career opportunities.</p>
+          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <input
+              type="email"
+              placeholder="Your email address"
+              className="px-4 py-3 rounded-md flex-grow text-black"
+              aria-label="Email for newsletter"
+            />
+            <Button className="bg-yellow-400 text-black hover:bg-yellow-500 px-6 py-6">Subscribe</Button>
+          </div>
+          <p className="mt-4 text-sm text-gray-400">By subscribing, you&apos;ll receive exclusive content about design education, career opportunities, and admission updates.</p>
+        </div>
+      </section>
+    </div>
   );
 };
 

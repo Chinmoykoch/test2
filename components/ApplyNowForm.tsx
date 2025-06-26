@@ -37,6 +37,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { apiHelpers } from "@/utils/api";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -45,11 +46,11 @@ const poppins = Poppins({
 
 const cities: { [key: string]: string[] } = citiesData;
 
-// Form validation schema remains the same
+// Form validation schema - restored to original structure
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-  phone: z.string().regex(/^\d{10}$/, "Phone number must be 10 digits"),
+  phoneNumber: z.string().regex(/^\d{10}$/, "Phone number must be 10 digits"),
   state: z.string().min(1, "Please select a state"),
   city: z.string().min(1, "Please select a city"),
   level: z.string().min(1, "Please select a level"),
@@ -80,7 +81,7 @@ const ApplyNowForm = ({
     defaultValues: {
       name: "",
       email: "",
-      phone: "",
+      phoneNumber: "",
       state: "",
       city: "",
       level: "",
@@ -100,16 +101,24 @@ const ApplyNowForm = ({
     if (isSubmitting) return;
 
     setIsSubmitting(true);
+    setSubmissionMessage(null);
+    
     try {
-      const response = await fetch("https://formspree.io/f/mvgzrnyl", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
+      // Transform form data to match enquiry API structure
+      const enquiryData = {
+        name: values.name,
+        phoneNumber: values.phoneNumber,
+        email: values.email,
+        city: values.city,
+        course: values.program, // Use program as course
+        source: 'apply-now-form',
+        message: `State: ${values.state}, Level: ${values.level}`, // Include additional info in message
+      };
 
-      if (response.ok) {
+      // Submit to backend API
+      const response = await apiHelpers.submitEnquiry(enquiryData);
+
+      if (response && response.success) {
         router.push("/thank-you");
       } else {
         setSubmissionMessage(
@@ -160,7 +169,7 @@ const ApplyNowForm = ({
 
         <FormField
           control={form.control}
-          name="phone"
+          name="phoneNumber"
           render={({ field }) => (
             <FormItem>
               <FormControl>
@@ -245,7 +254,6 @@ const ApplyNowForm = ({
                 onValueChange={(value) => {
                   field.onChange(value);
                   setSelectedLevel(value);
-
                   form.setValue("program", "");
                 }}
                 value={field.value}
@@ -337,9 +345,10 @@ const ApplyNowForm = ({
 
         <Button
           type="submit"
+          disabled={isSubmitting}
           className="w-full h-12 mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
         >
-          Apply Now
+          {isSubmitting ? "Submitting..." : "Apply Now"}
         </Button>
       </form>
     </Form>

@@ -1,26 +1,35 @@
 "use client";
-import React, { useEffect,} from "react";
+import React, { useEffect } from "react";
 import { Card, CardContent } from "../components/ui/card";
-import { experienceCamputLife, highlights, LOGOS, studentImages, values } from "../utils/constant";
-import { Poppins } from "next/font/google"; // Importing Google Fonts via next/font
+import { LOGOS, studentImages } from "../utils/constant";
+import { Poppins } from "next/font/google";
 import Image from "next/image";
-import "aos/dist/aos.css"; // Import the CSS for animations
+import "aos/dist/aos.css";
 import CampusLife from "./CampusLife";
 import Aos from "aos";
-// import ApplyNowForm from "./ApplyNowForm";
-// import { Button } from "./ui/button";
-// Using the Poppins font
+import { useAboutUsData } from "../utils/api";
+
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["400", "500", "700"], // Including various font weights
+  weight: ["400", "500", "700"],
 });
 
 const AboutPage = () => {
-  // const [isFormOpen, setIsFormOpen] = useState(false);
-  //   const handleApplyClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
-  //     e.preventDefault();
-  //     setIsFormOpen(true);
-  //   };
+  const {
+    heroImages,
+    statistics,
+    coreValues,
+    campusImages,
+    whoWeAre,
+    aboutUs,
+    vision,
+    mission,
+    coreValuesText,
+    loading,
+    error,
+    refetch
+  } = useAboutUsData();
+
   useEffect(() => {
     Aos.init({
       duration: 1000,
@@ -28,21 +37,94 @@ const AboutPage = () => {
       once: true,
     });
   }, []);
-  // const { user, loginWithRedirect, logout, isAuthenticated,isLoading } = useAuth0();
 
-  // useEffect(()=>{
-  //   if(!isLoading && !isAuthenticated) {
-  //     loginWithRedirect();
-  //   }
-  // },[isAuthenticated,isLoading]);
+  // Fallback data for when API data is not available
+  const fallbackHeroImages = studentImages;
+  const fallbackStatistics = [
+    {
+      number: "15+",
+      title: "Years of Excellence",
+      description: "Decades of experience in art and design education",
+      imageUrl: "/images/gallery/1719304885452_1.jpg"
+    },
+    {
+      number: "1000+",
+      title: "Students Enrolled",
+      description: "Successful graduates across various disciplines",
+      imageUrl: "/images/gallery/IMG_20240605_124215.jpg"
+    },
+    {
+      number: "50+",
+      title: "Industry Partners",
+      description: "Strong network of industry connections",
+      imageUrl: "/images/gallery/1721366668571.jpg"
+    }
+  ];
+  const fallbackCoreValues = [
+    {
+      title: "Innovation",
+      description: "Fostering creative thinking and innovative solutions",
+      imageUrl: "/images/gallery/1719575193328.jpg"
+    },
+    {
+      title: "Excellence",
+      description: "Maintaining high standards in education and practice",
+      imageUrl: "/images/gallery/1719748180116.jpg"
+    },
+    {
+      title: "Collaboration",
+      description: "Building strong partnerships and teamwork",
+      imageUrl: "/images/gallery/1719304885452_1.jpg"
+    }
+  ];
 
-  // if(isLoading){
-  //   return <div>Loading...</div>
-  // }
+  // Use API data if available, otherwise use fallback data
+  const displayHeroImages = heroImages.length > 0 ? heroImages : fallbackHeroImages.map((url, index) => ({
+    imageUrl: url,
+    altText: `University Life ${index + 1}`,
+    order: index
+  }));
+  const displayStatistics = statistics.length > 0 ? statistics : fallbackStatistics;
+  const displayCoreValues = coreValues.length > 0 ? coreValues : fallbackCoreValues;
 
-  // if(!isAuthenticated) {
-  //   return null;
-  // }
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-yellow-400 mx-auto"></div>
+          <p className="mt-4 text-lg text-gray-600">Loading About Us content...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto px-4">
+          <div className="text-red-500 text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Unable to Load Content</h2>
+          <p className="text-gray-600 mb-6">
+            {error.includes('Failed to fetch') 
+              ? "We're having trouble connecting to our servers. This might be a temporary issue."
+              : error
+            }
+          </p>
+          <div className="space-y-3">
+            <button 
+              onClick={refetch}
+              className="bg-yellow-400 text-black px-6 py-3 rounded-lg hover:bg-yellow-500 transition-colors font-semibold"
+            >
+              Try Again
+            </button>
+            <div className="text-sm text-gray-500">
+              <p>If the problem persists, please check your internet connection or try again later.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white text-justify">
@@ -53,13 +135,13 @@ const AboutPage = () => {
             className="grid grid-cols-3 md:grid-cols-6 gap-2 mb-8"
             data-aos="fade-up"
           >
-            {studentImages.map((imgUrl, i) => (
+            {displayHeroImages.slice(0, 6).map((img, i) => (
               <div key={i} className="aspect-square">
                 <Image
-                  src={imgUrl}
-                  alt={`University Life ${i + 1}`}
-                  width={200} // Adjust as needed
-                  height={200} // Adjust as needed
+                  src={img.imageUrl}
+                  alt={img.altText || `University Life ${i + 1}`}
+                  width={200}
+                  height={200}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -68,15 +150,10 @@ const AboutPage = () => {
           <h1
             className={`text-4xl md:text-5xl text-black font-bold mb-4 ${poppins.className}`}
           >
-            WHO WE ARE?
+            {whoWeAre?.title || "WHO WE ARE?"}
           </h1>
-          <p className="text-lg  md:text-xl text-black font-sans">
-            Inframe is an innovative platform that blends creativity with
-            business, offering a dynamic space where art and design
-            professionals come together to shape the future. With a vibrant and
-            inclusive community, Inframe empowers creators to transform their
-            passion into a successful career while fostering a collaborative
-            environment where ideas thrive.
+          <p className="text-lg md:text-xl text-black font-sans">
+            {whoWeAre?.content || "Inframe is an innovative platform that blends creativity with business, offering a dynamic space where art and design professionals come together to shape the future. With a vibrant and inclusive community, Inframe empowers creators to transform their passion into a successful career while fostering a collaborative environment where ideas thrive."}
           </p>
         </div>
       </section>
@@ -87,7 +164,7 @@ const AboutPage = () => {
             {/* Left side: Heading and Image */}
             <div data-aos="fade-right">
               <Image
-                src={"/images/gallery/1719304885452_1.jpg"}
+                src={aboutUs?.imageUrl || "/images/gallery/1719304885452_1.jpg"}
                 alt={"Cultural Event"}
                 width={720}
                 height={480}
@@ -98,26 +175,10 @@ const AboutPage = () => {
             {/* Right side: Text */}
             <div data-aos="fade-left">
               <h2 className={`text-4xl font-bold mb-6 ${poppins.className}`}>
-                About Us
+                {aboutUs?.title || "About Us"}
               </h2>
               <p className="text-lg font-sans leading-relaxed text-justify">
-                Inframe school of art, design & business is established by the
-                Inframe Educational Society under Rajasthan Societies Act 1958.
-                Inframe school of art, design and business will be one of a kind
-                design institute in Jodhpur which will commence it&apos;s curriculum
-                with the aim to expand the design and business field in Jodhpur
-                and it&apos;s surrounding regions by being the first design and
-                business school of Jodhpur to offer degree, diploma and
-                professional courses in various fields of interior design,
-                graphic design, fine arts and digital marketing .
-                <br />
-                <br />
-                To pursue a design course the candidate need it have to qualify
-                in specific subject .The candidate from any educational
-                background can pursue or take admission to a design course and
-                fulfill their dreams of becoming designer with inframe design
-                school .In school will not only help the students to learn more
-                effectively and have a great future.
+                {aboutUs?.content || "Inframe school of art, design & business is established by the Inframe Educational Society under Rajasthan Societies Act 1958. Inframe school of art, design and business will be one of a kind design institute in Jodhpur which will commence it's curriculum with the aim to expand the design and business field in Jodhpur and it's surrounding regions by being the first design and business school of Jodhpur to offer degree, diploma and professional courses in various fields of interior design, graphic design, fine arts and digital marketing."}
               </p>
             </div>
           </div>
@@ -128,27 +189,27 @@ const AboutPage = () => {
       <section className="py-20 bg-yellow-50" data-aos="fade-down">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8">
-            {highlights.map((item, index) => (
+            {displayStatistics.map((item, index) => (
               <div
                 key={index}
                 className="group relative overflow-hidden rounded-xl"
               >
                 <Image
-                  src={item.image}
+                  src={item.imageUrl}
                   alt={item.title}
-                  width={400} // Adjust as needed
-                  height={400} // Adjust as needed
+                  width={400}
+                  height={400}
                   className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent flex flex-col justify-end p-6">
                   <span className="text-5xl font-bold text-yellow-400 mb-2">
-                    {item.count}
+                    {item.number}
                   </span>
                   <h3 className="text-2xl font-semibold text-white mb-1">
                     {item.title}
                   </h3>
-                  <p className="text-gray-300">{item.desc}</p>
+                  <p className="text-gray-300">{item.description}</p>
                 </div>
               </div>
             ))}
@@ -165,29 +226,17 @@ const AboutPage = () => {
           >
             <div>
               <h2 className={`text-4xl font-bold mb-6 ${poppins.className}`}>
-                VISION
+                {vision?.title || "VISION"}
               </h2>
               <p className="text-lg font-sans leading-relaxed">
-                Inframe school of art, design and business aspires to be a
-                nationally and internationally recognized institution for
-                education in various fields of design, art and business. We want
-                the students of our city/state to flourish in their life and at
-                the same time help the design industry grow in this region. Our
-                learning will consist of some basic theoretical knowledge about,
-                developing a creative thinking and then turning towards the
-                practical aspects which would be taken care of by our industry
-                partners and hand on leadership opportunities delivered by our
-                distinguished and experienced faculties. Our learning will not
-                only be limited to the curriculum but we will also be preparing
-                the students to perform well in real life conditions and excel
-                in their career ahead of them.
+                {vision?.content || "Inframe school of art, design and business aspires to be a nationally and internationally recognized institution for education in various fields of design, art and business. We want the students of our city/state to flourish in their life and at the same time help the design industry grow in this region."}
               </p>
             </div>
 
             {/* Right side: Heading and Image */}
             <div data-aos="fade-right">
               <Image
-                src={"/images/gallery/IMG_20240605_124215.jpg"}
+                src={vision?.imageUrl || "/images/gallery/IMG_20240605_124215.jpg"}
                 alt={"Cultural Event"}
                 width={720}
                 height={480}
@@ -210,7 +259,7 @@ const AboutPage = () => {
             OUR CORE VALUES
           </h2>
           <div className="grid md:grid-cols-3 gap-12">
-            {values.map((value, index) => (
+            {displayCoreValues.map((value, index) => (
               <Card
                 key={index}
                 className="overflow-hidden border-none shadow-lg bg-zinc-100 "
@@ -218,10 +267,10 @@ const AboutPage = () => {
                 <CardContent className="p-0">
                   <div className="h-48 overflow-hidden">
                     <Image
-                      src={value.image}
+                      src={value.imageUrl}
                       alt={value.title}
-                      width={400} // Adjust as needed
-                      height={300} // Adjust as needed
+                      width={400}
+                      height={300}
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -246,7 +295,7 @@ const AboutPage = () => {
             {/* Left side: Heading and Image */}
             <div data-aos="fade-right">
               <Image
-                src={"/images/gallery/1721366668571.jpg"}
+                src={mission?.imageUrl || "/images/gallery/1721366668571.jpg"}
                 alt="Cultural Event"
                 width={720}
                 height={480}
@@ -257,31 +306,10 @@ const AboutPage = () => {
             {/* Right side: Text */}
             <div data-aos="fade-left">
               <h2 className={`text-4xl font-bold mb-6 ${poppins.className}`}>
-                MISSION
+                {mission?.title || "MISSION"}
               </h2>
               <p className="text-lg font-sans leading-relaxed">
-                Inframe school of art, design and business believes in
-                innovative and effective way of learning rather than just
-                sticking to the curriculum. We want to prepare our students to
-                get into the industry of their choice and outperform everyone
-                else with the perk of having learned every aspect of the
-                industry. The main mission of our school is to prepare the
-                students in becoming the designers, artists and entrepreneurs of
-                tomorrow so that they can take on the world by storm and mark
-                their presence in the world. Our school is collaborating with
-                the various industries and leading designers of Jodhpur to
-                conduct workshops, have work experience, real world problem
-                solving and have various business opportunities which will help
-                the students in developing design thinking with relation to the
-                market requirements and desires
-                <br />
-                <br />
-                To pursue a design course the candidate need it have to qualify
-                in specific subject .The candidate from any educational
-                background can pursue or take admission to a design course and
-                fulfill their dreams of becoming designer with inframe design
-                school .In school will not only help the students to learn more
-                effectively and have a great future.
+                {mission?.content || "Inframe school of art, design and business believes in innovative and effective way of learning rather than just sticking to the curriculum. We want to prepare our students to get into the industry of their choice and outperform everyone else with the perk of having learned every aspect of the industry."}
               </p>
             </div>
           </div>
@@ -451,7 +479,8 @@ const AboutPage = () => {
       </section>
 
       {/* Campus Life Grid */}
-      <CampusLife  experienceCamputLife={experienceCamputLife}/>
+      <CampusLife experienceCamputLife={campusImages.length > 0 ? campusImages.map(img => img.imageUrl) : []} />
+      
       <section className="bg-white text-black py-16">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 xl:gap-20 items-center">
@@ -482,23 +511,10 @@ const AboutPage = () => {
             {/* Right side: Text */}
             <div data-aos="fade-left" className="mt-8 lg:mt-0">
               <h2 className={`text-3xl md:text-4xl font-bold mb-6 ${poppins.className}`}>
-                CORE VALUES
+                {coreValuesText?.title || "CORE VALUES"}
               </h2>
               <p className="text-base md:text-lg font-sans leading-relaxed">
-                Inframe school of art, design and business inculcates design
-                thinking in students which enables them to think from a
-                different perspective and understand the needs and wants of the
-                user. Our institute has developed a curriculum which not only
-                focuses on the theoretical knowledge but also focuses on the
-                practical learning and innovation. The school organises various
-                workshops and internship opportunities for the students with the
-                help of industry experts and glorified designers. With the main
-                aim of &ldquo;developing sustainable design for the people of
-                tomorrow&rdquo; our institute leads the students in the direction to
-                the future of design and business. ICADB helps the students in
-                learning design and business with the help of various practical
-                projects so that students can actually understand how are such
-                projects done in the real world and how to work in a team.
+                {coreValuesText?.content || "Inframe school of art, design and business inculcates design thinking in students which enables them to think from a different perspective and understand the needs and wants of the user. Our institute has developed a curriculum which not only focuses on the theoretical knowledge but also focuses on the practical learning and innovation."}
               </p>
             </div>
           </div>
@@ -530,7 +546,7 @@ const AboutPage = () => {
                   <Image
                     src={logo.src}
                     alt="not loaded"
-                    width={192} // Set width dynamically based on container size (adjust as needed)
+                    width={192}
                     height={192}
                     className="object-contain w-full h-full"
                   />
@@ -544,23 +560,6 @@ const AboutPage = () => {
             ))}
           </div>
         </div>
-{/* 
-        <div className="flex justify-center">
-  <Button
-    onClick={handleApplyClick}
-    className="bg-black text-white hover:bg-gray-700 mb-10 hover:text-white px-6 py-3 rounded-md transition duration-300"
-  >
-    Apply Now
-  </Button>
-</div> */}
-
-
-              {/* <ApplyNowForm
-                  isFormOpen={isFormOpen}
-                  setIsFormOpen={setIsFormOpen}
-                  isScrolled={false}
-              /> */}
-
       </section>
     </div>
   );

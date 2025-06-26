@@ -2,9 +2,13 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useSportsFacilities, SportsFacility } from "@/utils/api";
 
 const SportsArena = () => {
-  const images = [
+  const { facilities, loading, error } = useSportsFacilities();
+
+  // Fallback images if API data is not available
+  const fallbackImages = [
     {
       src: "/sports day/IMG_8860.jpg",
       alt: "Snooker Room",
@@ -42,6 +46,39 @@ const SportsArena = () => {
     },
   ];
 
+  // Use API data if available, otherwise use fallback
+  const displayImages = facilities.length > 0 
+    ? facilities.map((facility: SportsFacility, index: number) => ({
+        src: facility.image,
+        alt: facility.name,
+        className: index === 2 ? "h-[32rem] md:row-span-2" : index === 3 ? "h-64 md:col-span-2" : "h-64",
+      }))
+    : fallbackImages;
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="max-w-7xl mx-auto px-4 py-24">
+        <div className="flex justify-center items-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500"></div>
+        </div>
+      </section>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <section className="max-w-7xl mx-auto px-4 py-24">
+        <div className="text-center py-12">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+            <p className="text-red-600">{error}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="max-w-7xl mx-auto px-4 py-24">
       {/* Header Section */}
@@ -76,7 +113,7 @@ const SportsArena = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {images.map((image, index) => (
+        {displayImages.map((image, index) => (
           <div key={index} className={`relative ${image.className}`}>
             <Image
               src={image.src}
