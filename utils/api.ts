@@ -1300,6 +1300,16 @@ export const useEnquiries = () => {
     }
   };
 
+  const getEnquiryStats = async () => {
+    try {
+      const statsData = await apiHelpers.getEnquiryStats();
+      return statsData;
+    } catch (err) {
+      console.error('Failed to fetch enquiry stats:', err);
+      throw err;
+    }
+  };
+
   useEffect(() => {
     fetchEnquiries();
   }, []);
@@ -1311,6 +1321,7 @@ export const useEnquiries = () => {
     refetch: fetchEnquiries,
     updateEnquiryStatus,
     deleteEnquiry,
+    getEnquiryStats,
   };
 };
 
