@@ -288,20 +288,24 @@ export const apiClient = axios.create({
   },
 });
 
-// Debug logging
-console.log('API Client Configuration:', {
-  baseURL: API_BASE_URL,
-  backendURL: BACKEND_URL,
-  apiBaseURL: API_BASE_URL
-});
+// Debug logging only in development
+if (process.env.NODE_ENV === 'development') {
+  console.log('API Client Configuration:', {
+    baseURL: API_BASE_URL,
+    backendURL: BACKEND_URL,
+    apiBaseURL: API_BASE_URL
+  });
+}
 
 // Request interceptor to add auth token if available
 apiClient.interceptors.request.use(
   (config) => {
-    // Add auth token if available
-    const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    // Add auth token if available (only on client side)
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   },
@@ -318,8 +322,8 @@ apiClient.interceptors.response.use(
   (error) => {
     // Handle common errors
     if (error.response?.status === 401) {
-      // Handle unauthorized access
-      if (typeof window !== 'undefined') {
+      // Handle unauthorized access (only on client side)
+      if (typeof window !== 'undefined' && window.localStorage) {
         localStorage.removeItem('authToken');
         // Redirect to login page if needed
         // window.location.href = '/login';
@@ -490,21 +494,10 @@ export const apiHelpers = {
   // Submit enquiry
   submitEnquiry: async (enquiryData: any) => {
     try {
-      console.log('Submitting enquiry with data:', enquiryData);
-      console.log('Using endpoint:', API_ENDPOINTS.GET_ENQUIRIES);
-      console.log('Full URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_ENQUIRIES}`);
-      
       const response = await apiClient.post(API_ENDPOINTS.GET_ENQUIRIES, enquiryData);
-      console.log('Enquiry submission response:', response.data);
       return response.data;
     } catch (error: any) {
       console.error('Enquiry submission failed:', error);
-      console.error('Error details:', {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status,
-        statusText: error.response?.statusText
-      });
       throw error;
     }
   },
@@ -938,590 +931,23 @@ export const apiHelpers = {
         apiClient.get<AboutUsResponse<AboutUsContent>>(`${API_ENDPOINTS.GET_CONTENT_BY_TYPE}/about-us`),
         apiClient.get<AboutUsResponse<AboutUsContent>>(`${API_ENDPOINTS.GET_CONTENT_BY_TYPE}/vision`),
         apiClient.get<AboutUsResponse<AboutUsContent>>(`${API_ENDPOINTS.GET_CONTENT_BY_TYPE}/mission`),
-        apiClient.get<AboutUsResponse<AboutUsContent>>(`${API_ENDPOINTS.GET_CONTENT_BY_TYPE}/core-values-text`)
+        apiClient.get<AboutUsResponse<AboutUsContent>>(`${API_ENDPOINTS.GET_CONTENT_BY_TYPE}/core-values-text`),
       ]);
 
-      // Combine all content sections
-      const content = [
-        whoWeAreContent.data.data,
-        aboutUsContent.data.data,
-        visionContent.data.data,
-        missionContent.data.data,
-        coreValuesTextContent.data.data
-      ].filter(Boolean); // Remove any null/undefined values
-
       return {
-        heroImages: heroImages.data.data || [],
-        statistics: statistics.data.data || [],
-        coreValues: coreValues.data.data || [],
-        campusImages: campusImages.data.data || [],
-        content: content
+        heroImages: heroImages.data.data,
+        statistics: statistics.data.data,
+        coreValues: coreValues.data.data,
+        campusImages: campusImages.data.data,
+        whoWeAreContent: whoWeAreContent.data.data,
+        aboutUsContent: aboutUsContent.data.data,
+        visionContent: visionContent.data.data,
+        missionContent: missionContent.data.data,
+        coreValuesTextContent: coreValuesTextContent.data.data,
       };
     } catch (error) {
       console.error('Failed to fetch about us data:', error);
-      // Return empty data instead of throwing to prevent page crashes
-      return {
-        heroImages: [],
-        statistics: [],
-        coreValues: [],
-        campusImages: [],
-        content: []
-      };
-    }
-  },
-
-  // Life at Inframe Sections
-  getLifeAtInframeSections: async (): Promise<LifeAtInframeSection[]> => {
-    try {
-      const response = await apiClient.get<{success: boolean; data: LifeAtInframeSection[]}>(API_ENDPOINTS.GET_LIFE_AT_INFRAME_SECTIONS);
-      if (response.data && response.data.success && Array.isArray(response.data.data)) {
-        return response.data.data;
-      } else {
-        console.warn('Unexpected life at inframe sections response structure:', response.data);
-        return [];
-      }
-    } catch (error) {
-      console.error('Failed to fetch life at inframe sections:', error);
       throw error;
     }
   },
-
-  // Student Services
-  getStudentServices: async (): Promise<StudentService[]> => {
-    try {
-      const response = await apiClient.get<{success: boolean; data: StudentService[]}>(API_ENDPOINTS.GET_STUDENT_SERVICES);
-      if (response.data && response.data.success && Array.isArray(response.data.data)) {
-        return response.data.data;
-      } else {
-        console.warn('Unexpected student services response structure:', response.data);
-        return [];
-      }
-    } catch (error) {
-      console.error('Failed to fetch student services:', error);
-      throw error;
-    }
-  },
-
-  // Sports Facilities
-  getSportsFacilities: async (): Promise<SportsFacility[]> => {
-    try {
-      const response = await apiClient.get<{success: boolean; data: SportsFacility[]}>(API_ENDPOINTS.GET_SPORTS_FACILITIES);
-      if (response.data && response.data.success && Array.isArray(response.data.data)) {
-        return response.data.data;
-      } else {
-        console.warn('Unexpected sports facilities response structure:', response.data);
-        return [];
-      }
-    } catch (error) {
-      console.error('Failed to fetch sports facilities:', error);
-      throw error;
-    }
-  },
-
-  // Get life at inframe gallery images
-  getLifeAtInframeGalleryImages: async (): Promise<GalleryImage[]> => {
-    try {
-      const response = await apiClient.get<AboutUsListResponse<GalleryImage>>(API_ENDPOINTS.GET_LIFE_AT_INFRAME_GALLERY);
-      if (response.data && response.data.success && Array.isArray(response.data.data)) {
-        return response.data.data.sort((a, b) => a.order - b.order);
-      } else {
-        console.warn('Unexpected gallery images response structure:', response.data);
-        return [];
-      }
-    } catch (error) {
-      console.error('Failed to fetch gallery images:', error);
-      throw error;
-    }
-  },
-
-  // Industry Partner API Helpers
-  // Get all industry partners
-  getIndustryPartners: async (): Promise<IndustryPartner[]> => {
-    try {
-      const response = await apiClient.get<IndustryPartnersResponse>(API_ENDPOINTS.GET_INDUSTRY_PARTNERS);
-      if (response.data && response.data.success && Array.isArray(response.data.data)) {
-        return response.data.data;
-      } else {
-        console.warn('Unexpected industry partners response structure:', response.data);
-        return [];
-      }
-    } catch (error) {
-      console.error('Failed to fetch industry partners:', error);
-      throw error;
-    }
-  },
-
-  // Get industry partner by ID
-  getIndustryPartnerById: async (id: string): Promise<IndustryPartner | null> => {
-    try {
-      const response = await apiClient.get<IndustryPartnerResponse>(`${API_ENDPOINTS.GET_INDUSTRY_PARTNER_BY_ID}/${id}`);
-      if (response.data && response.data.success && response.data.data) {
-        return response.data.data;
-      } else {
-        console.warn('Industry partner not found:', id);
-        return null;
-      }
-    } catch (error) {
-      console.error('Failed to fetch industry partner by ID:', error);
-      throw error;
-    }
-  },
-
-  // Create new industry partner
-  createIndustryPartner: async (partnerData: { name: string; src?: string }): Promise<IndustryPartner> => {
-    try {
-      const response = await apiClient.post<IndustryPartnerResponse>(API_ENDPOINTS.CREATE_INDUSTRY_PARTNER, partnerData);
-      if (response.data && response.data.success && response.data.data) {
-        return response.data.data;
-      } else {
-        throw new Error('Failed to create industry partner');
-      }
-    } catch (error) {
-      console.error('Failed to create industry partner:', error);
-      throw error;
-    }
-  },
-
-  // Update industry partner
-  updateIndustryPartner: async (id: string, partnerData: { name: string; src?: string }): Promise<IndustryPartner> => {
-    try {
-      const response = await apiClient.put<IndustryPartnerResponse>(`${API_ENDPOINTS.UPDATE_INDUSTRY_PARTNER}/${id}`, partnerData);
-      if (response.data && response.data.success && response.data.data) {
-        return response.data.data;
-      } else {
-        throw new Error('Failed to update industry partner');
-      }
-    } catch (error) {
-      console.error('Failed to update industry partner:', error);
-      throw error;
-    }
-  },
-
-  // Delete industry partner
-  deleteIndustryPartner: async (id: string): Promise<boolean> => {
-    try {
-      const response = await apiClient.delete<{success: boolean}>(`${API_ENDPOINTS.DELETE_INDUSTRY_PARTNER}/${id}`);
-      if (response.data && response.data.success) {
-        return true;
-      } else {
-        throw new Error('Failed to delete industry partner');
-      }
-    } catch (error) {
-      console.error('Failed to delete industry partner:', error);
-      throw error;
-    }
-  },
-};
-
-// Environment configuration helper
-export const config = {
-  backendUrl: BACKEND_URL,
-  apiBaseUrl: API_BASE_URL,
-  isProduction: process.env.NODE_ENV === 'production',
-  isDevelopment: process.env.NODE_ENV === 'development',
-  appUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://backend-rakj.onrender.com',
-};
-
-export default apiClient;
-
-// Custom hook for managing advisors
-export const useAdvisors = () => {
-  const [advisors, setAdvisors] = React.useState<Advisor[]>([]);
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
-
-  // Fetch all advisors
-  const fetchAdvisors = React.useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await apiHelpers.getAdvisors();
-      setAdvisors(data);
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch advisors');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Get advisor by ID
-  const getAdvisorById = React.useCallback(async (id: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await apiHelpers.getAdvisorById(id);
-      return data;
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch advisor');
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Create advisor
-  const createAdvisor = React.useCallback(async (advisorData: Omit<Advisor, '_id' | 'createdAt' | 'updatedAt' | '__v'>) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const newAdvisor = await apiHelpers.createAdvisor(advisorData);
-      setAdvisors(prev => [...prev, newAdvisor]);
-      return newAdvisor;
-    } catch (err: any) {
-      setError(err.message || 'Failed to create advisor');
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Update advisor
-  const updateAdvisor = React.useCallback(async (id: string, advisorData: Partial<Omit<Advisor, '_id' | 'createdAt' | 'updatedAt' | '__v'>>) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const updatedAdvisor = await apiHelpers.updateAdvisor(id, advisorData);
-      setAdvisors(prev => 
-        prev.map(advisor => 
-          advisor._id === id ? updatedAdvisor : advisor
-        )
-      );
-      return updatedAdvisor;
-    } catch (err: any) {
-      setError(err.message || 'Failed to update advisor');
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Delete advisor
-  const deleteAdvisor = React.useCallback(async (id: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      await apiHelpers.deleteAdvisor(id);
-      setAdvisors(prev => prev.filter(advisor => advisor._id !== id));
-      return true;
-    } catch (err: any) {
-      setError(err.message || 'Failed to delete advisor');
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Load advisors on component mount
-  React.useEffect(() => {
-    fetchAdvisors();
-  }, [fetchAdvisors]);
-
-  return {
-    advisors,
-    loading,
-    error,
-    fetchAdvisors,
-    getAdvisorById,
-    createAdvisor,
-    updateAdvisor,
-    deleteAdvisor,
-  };
-};
-
-// Custom hook for managing enquiries
-export const useEnquiries = () => {
-  const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchEnquiries = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await apiClient.get<EnquiriesResponse>(API_ENDPOINTS.GET_ENQUIRIES);
-      
-      if (response.data && response.data.success && Array.isArray(response.data.data)) {
-        setEnquiries(response.data.data);
-      } else {
-        setError('Invalid response format');
-      }
-    } catch (error: any) {
-      console.error('Failed to fetch enquiries:', error);
-      setError(error.message || 'Failed to fetch enquiries');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const updateEnquiryStatus = useCallback(async (id: string, status: string, notes?: string) => {
-    try {
-      const response = await apiClient.put(`${API_ENDPOINTS.UPDATE_ENQUIRY_STATUS}/${id}`, {
-        status,
-        notes
-      });
-      
-      if (response.data && response.data.success) {
-        // Refresh the enquiries list
-        await fetchEnquiries();
-        return response.data.data;
-      } else {
-        throw new Error('Failed to update enquiry status');
-      }
-    } catch (error: any) {
-      console.error('Failed to update enquiry status:', error);
-      throw error;
-    }
-  }, [fetchEnquiries]);
-
-  const deleteEnquiry = useCallback(async (id: string) => {
-    try {
-      const response = await apiClient.delete(`${API_ENDPOINTS.DELETE_ENQUIRY}/${id}`);
-      
-      if (response.data && response.data.success) {
-        // Refresh the enquiries list
-        await fetchEnquiries();
-        return true;
-      } else {
-        throw new Error('Failed to delete enquiry');
-      }
-    } catch (error: any) {
-      console.error('Failed to delete enquiry:', error);
-      throw error;
-    }
-  }, [fetchEnquiries]);
-
-  const getEnquiryStats = useCallback(async () => {
-    try {
-      const response = await apiClient.get<EnquiryStatsResponse>(API_ENDPOINTS.GET_ENQUIRY_STATS);
-      
-      if (response.data && response.data.success) {
-        return response.data.data;
-      } else {
-        throw new Error('Failed to fetch enquiry stats');
-      }
-    } catch (error: any) {
-      console.error('Failed to fetch enquiry stats:', error);
-      throw error;
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchEnquiries();
-  }, [fetchEnquiries]);
-
-  return {
-    enquiries,
-    loading,
-    error,
-    fetchEnquiries,
-    updateEnquiryStatus,
-    deleteEnquiry,
-    getEnquiryStats
-  };
-};
-
-// About Us Custom Hooks
-export const useAboutUsData = () => {
-  const [data, setData] = useState<{
-    heroImages: AboutUsHeroImage[];
-    statistics: AboutUsStatistic[];
-    coreValues: AboutUsCoreValue[];
-    campusImages: AboutUsCampusImage[];
-    content: AboutUsContent[];
-  } | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Extracted content sections
-  const [whoWeAre, setWhoWeAre] = useState<AboutUsContent | null>(null);
-  const [aboutUs, setAboutUs] = useState<AboutUsContent | null>(null);
-  const [vision, setVision] = useState<AboutUsContent | null>(null);
-  const [mission, setMission] = useState<AboutUsContent | null>(null);
-  const [coreValuesText, setCoreValuesText] = useState<AboutUsContent | null>(null);
-
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      console.log('Fetching About Us data...');
-      const result = await apiHelpers.getAboutUsData();
-      console.log('About Us data fetched successfully:', result);
-      setData(result);
-      setError(null);
-      // Extract content sections
-      if (result && result.content) {
-        setWhoWeAre(result.content.find((c) => c.sectionType === 'who-we-are') || null);
-        setAboutUs(result.content.find((c) => c.sectionType === 'about-us') || null);
-        setVision(result.content.find((c) => c.sectionType === 'vision') || null);
-        setMission(result.content.find((c) => c.sectionType === 'mission') || null);
-        setCoreValuesText(result.content.find((c) => c.sectionType === 'core-values-text') || null);
-      }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch about us data';
-      console.error('Error fetching about us data:', err);
-      setError(errorMessage);
-      // Set empty data to prevent crashes
-      setData({
-        heroImages: [],
-        statistics: [],
-        coreValues: [],
-        campusImages: [],
-        content: []
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  return {
-    heroImages: data?.heroImages || [],
-    statistics: data?.statistics || [],
-    coreValues: data?.coreValues || [],
-    campusImages: data?.campusImages || [],
-    content: data?.content || [],
-    whoWeAre,
-    aboutUs,
-    vision,
-    mission,
-    coreValuesText,
-    loading,
-    error,
-    refetch: fetchData,
-  };
-};
-
-// Life at Inframe custom hooks
-export const useLifeAtInframeSections = () => {
-  const [sections, setSections] = useState<LifeAtInframeSection[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchSections = async () => {
-      try {
-        setLoading(true);
-        const result = await apiHelpers.getLifeAtInframeSections();
-        setSections(result);
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch life at inframe sections');
-        console.error('Error fetching life at inframe sections:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSections();
-  }, []);
-
-  return { sections, loading, error };
-};
-
-export const useStudentServices = () => {
-  const [services, setServices] = useState<StudentService[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        setLoading(true);
-        const result = await apiHelpers.getStudentServices();
-        setServices(result);
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch student services');
-        console.error('Error fetching student services:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchServices();
-  }, []);
-
-  return { services, loading, error };
-};
-
-export const useSportsFacilities = () => {
-  const [facilities, setFacilities] = useState<SportsFacility[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchFacilities = async () => {
-      try {
-        setLoading(true);
-        const result = await apiHelpers.getSportsFacilities();
-        setFacilities(result);
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch sports facilities');
-        console.error('Error fetching sports facilities:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFacilities();
-  }, []);
-
-  return { facilities, loading, error };
-};
-
-export const useLifeAtInframeGallery = () => {
-  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchGalleryImages = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const images = await apiHelpers.getLifeAtInframeGalleryImages();
-        setGalleryImages(images);
-      } catch (err) {
-        console.error('Failed to fetch gallery images:', err);
-        setError('Failed to load gallery images. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchGalleryImages();
-  }, []);
-
-  return { galleryImages, loading, error };
-};
-
-// Industry Partners Hook
-export const useIndustryPartners = () => {
-  const [partners, setPartners] = useState<IndustryPartner[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchPartners = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const partnersData = await apiHelpers.getIndustryPartners();
-        setPartners(partnersData);
-      } catch (err) {
-        console.error('Failed to fetch industry partners:', err);
-        setError('Failed to load industry partners. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPartners();
-  }, []);
-
-  return { partners, loading, error };
 };

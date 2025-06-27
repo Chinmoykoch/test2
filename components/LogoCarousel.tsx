@@ -26,7 +26,7 @@ const InfiniteSlider: React.FC = () => {
         <p
           className={`text-center w-3/4 xl:text-left text-lg text-gray-600 mb-8 ${poppins.className}`}
         >
-          Inframe's strong industry partnerships provide students with
+          Inframe&apos;s strong industry partnerships provide students with
           unparalleled career opportunities and real-world experience to excel in
           design and business.
         </p>
@@ -49,7 +49,7 @@ const InfiniteSlider: React.FC = () => {
         <p
           className={`text-center w-3/4 xl:text-left text-lg text-gray-600 mb-8 ${poppins.className}`}
         >
-          Inframe's strong industry partnerships provide students with
+          Inframe&apos;s strong industry partnerships provide students with
           unparalleled career opportunities and real-world experience to excel in
           design and business.
         </p>
@@ -74,7 +74,7 @@ const InfiniteSlider: React.FC = () => {
         <p
           className={`text-center w-3/4 xl:text-left text-lg text-gray-600 mb-8 ${poppins.className}`}
         >
-          Inframe's strong industry partnerships provide students with
+          Inframe&apos;s strong industry partnerships provide students with
           unparalleled career opportunities and real-world experience to excel in
           design and business.
         </p>
@@ -98,7 +98,7 @@ const InfiniteSlider: React.FC = () => {
       <p
         className={`text-center w-3/4 xl:text-left text-lg text-gray-600 mb-8 ${poppins.className}`}
       >
-        Inframe's strong industry partnerships provide students with
+        Inframe&apos;s strong industry partnerships provide students with
         unparalleled career opportunities and real-world experience to excel in
         design and business.
       </p>

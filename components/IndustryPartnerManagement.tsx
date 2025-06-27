@@ -81,9 +81,10 @@ const IndustryPartnerManagement: React.FC = () => {
       setFormData({ name: "", src: "" });
       setEditingPartner(null);
       setIsDialogOpen(false);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to save partner:', err);
-      setError(err.response?.data?.message || 'Failed to save partner. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to save partner. Please try again.';
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -112,9 +113,10 @@ const IndustryPartnerManagement: React.FC = () => {
       setPartners(prev => prev.filter(p => p._id !== deletingPartner._id));
       setIsDeleteDialogOpen(false);
       setDeletingPartner(null);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to delete partner:', err);
-      setError(err.response?.data?.message || 'Failed to delete partner. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to delete partner. Please try again.';
+      setError(errorMessage);
     }
   };
 
@@ -271,7 +273,7 @@ const IndustryPartnerManagement: React.FC = () => {
           </DialogHeader>
           <div className="py-4">
             <p className="text-gray-600">
-              Are you sure you want to delete "{deletingPartner?.name}"? This action cannot be undone.
+              Are you sure you want to delete &ldquo;{deletingPartner?.name}&rdquo;? This action cannot be undone.
             </p>
           </div>
           <DialogFooter>

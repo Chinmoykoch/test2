@@ -123,3 +123,62 @@ const checkBackend = async () => {
   }
 };
 ```
+
+# Environment Variables Setup for Vercel Deployment
+
+## Required Environment Variables
+
+To ensure successful deployment on Vercel, make sure to set the following environment variables in your Vercel project settings:
+
+### Backend API Configuration
+```bash
+NEXT_PUBLIC_BACKEND_URL=https://backend-rakj.onrender.com
+NEXT_PUBLIC_API_BASE_URL=https://backend-rakj.onrender.com
+```
+
+### Optional Environment Variables
+```bash
+# For development debugging (optional)
+NODE_ENV=production
+```
+
+## How to Set Environment Variables in Vercel
+
+1. **Go to your Vercel dashboard**
+2. **Select your project**
+3. **Navigate to Settings > Environment Variables**
+4. **Add each variable:**
+   - Name: `NEXT_PUBLIC_BACKEND_URL`
+   - Value: `https://backend-rakj.onrender.com`
+   - Environment: Production, Preview, Development
+   
+   - Name: `NEXT_PUBLIC_API_BASE_URL`
+   - Value: `https://backend-rakj.onrender.com`
+   - Environment: Production, Preview, Development
+
+## Important Notes
+
+- **NEXT_PUBLIC_** prefix is required for client-side access
+- Environment variables are case-sensitive
+- Changes to environment variables require a new deployment
+- The backend URL should be accessible from Vercel's servers
+
+## Troubleshooting
+
+If you encounter build errors related to API calls:
+
+1. **Check environment variables are set correctly**
+2. **Verify the backend URL is accessible**
+3. **Ensure all required variables have the NEXT_PUBLIC_ prefix**
+4. **Redeploy after setting environment variables**
+
+## Local Development
+
+For local development, create a `.env.local` file in your project root:
+
+```bash
+NEXT_PUBLIC_BACKEND_URL=https://backend-rakj.onrender.com
+NEXT_PUBLIC_API_BASE_URL=https://backend-rakj.onrender.com
+```
+
+**Note:** Never commit `.env.local` to version control.
