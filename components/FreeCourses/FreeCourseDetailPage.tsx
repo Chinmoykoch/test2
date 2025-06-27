@@ -102,7 +102,7 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
 
             {/* Learning Outcomes */}
             <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">What You'll Learn</h2>
+              <h2 className="text-2xl font-bold mb-6 text-gray-900">What You&apos;ll Learn</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {learningOutcomes.map((outcome, index) => (
                   <div key={index} className="flex items-center gap-3">

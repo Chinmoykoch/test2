@@ -10,7 +10,7 @@ const ModernGallery = () => {
   const { galleryImages, loading, error } = useLifeAtInframeGallery();
 
   // Fallback images if API data is not available
-  const fallbackImages = [
+  const fallbackImages = React.useMemo(() => [
     {
       url: "/campus-27.JPG",
       alt: "Pow Wow celebration with red balloons",
@@ -60,7 +60,7 @@ const ModernGallery = () => {
       width: 1080,
       height: 1320,
     },
-  ];
+  ], []);
 
   // Use API data if available, otherwise use fallback
   const displayImages = React.useMemo(() => {

@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
-import { ChevronRight, Search, Tag, Loader2 } from 'lucide-react';
+import { ChevronRight, Search, Loader2 } from 'lucide-react';
 import { apiHelpers, type BlogPost } from '../utils/api';
 
 // Category colors mapping
@@ -100,7 +100,6 @@ const DynamicBlogPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
   // Fetch blogs from API
   useEffect(() => {
@@ -144,13 +143,8 @@ const DynamicBlogPage: React.FC = () => {
                          blog.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          ('tags' in blog && blog.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())));
     
-    const matchesCategory = selectedCategory === 'All' || blog.category === selectedCategory;
-    
-    return matchesSearch && matchesCategory;
+    return matchesSearch;
   });
-
-  // Get unique categories from blogs
-  const categories = ['All', ...Array.from(new Set(allBlogs.map(blog => blog.category)))];
 
   // Loading state
   if (loading) {

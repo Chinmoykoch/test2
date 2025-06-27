@@ -19,7 +19,7 @@ const TestBackendConnectivity = () => {
   const [results, setResults] = useState<TestResult[]>([]);
   const [isTesting, setIsTesting] = useState(false);
 
-  const endpoints: EndpointTest[] = [
+  const endpoints: EndpointTest[] = React.useMemo(() => [
     { name: 'Enquiries', test: () => apiHelpers.getEnquiries() },
     { name: 'Blogs', test: () => apiHelpers.getBlogs() },
     { name: 'Testimonials', test: () => apiHelpers.getTestimonials() },
@@ -31,7 +31,7 @@ const TestBackendConnectivity = () => {
     { name: 'Student Clubs', test: () => apiHelpers.getStudentClubs() },
     { name: 'Campus Events', test: () => apiHelpers.getCampusEvents() },
     { name: 'Membership', test: () => apiHelpers.getMemberships() },
-  ];
+  ], []);
 
   const testAllEndpoints = useCallback(async () => {
     setIsTesting(true);
@@ -124,7 +124,7 @@ const TestBackendConnectivity = () => {
                   </span>
                 </div>
                 <p className="text-sm text-gray-600 mt-1">{result.message}</p>
-                {result.status === 'success' && result.data && (
+                {result.status === 'success' && result.data !== undefined && (
                   <details className="mt-2">
                     <summary className="text-sm text-blue-600 cursor-pointer">View Response</summary>
                     <pre className="mt-2 text-xs bg-gray-100 p-2 rounded overflow-auto max-h-40">
