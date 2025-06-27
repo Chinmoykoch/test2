@@ -279,6 +279,12 @@ export interface IndustryPartnerResponse {
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-rakj.onrender.com';
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || BACKEND_URL;
 
+// Export config for BackendStatus component
+export const config = {
+  backendUrl: BACKEND_URL,
+  apiBaseUrl: API_BASE_URL,
+};
+
 // Create axios instance with default configuration
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -1027,6 +1033,70 @@ export const apiHelpers = {
       throw error;
     }
   },
+
+  // Get sports facilities
+  getSportsFacilities: async (): Promise<SportsFacility[]> => {
+    try {
+      const response = await apiClient.get<{success: boolean; data: SportsFacility[]}>(API_ENDPOINTS.GET_SPORTS_FACILITIES);
+      if (response.data && response.data.success && Array.isArray(response.data.data)) {
+        return response.data.data;
+      } else {
+        console.warn('Unexpected sports facilities response structure:', response.data);
+        return [];
+      }
+    } catch (error) {
+      console.error('Failed to fetch sports facilities:', error);
+      throw error;
+    }
+  },
+
+  // Get life at inframe gallery images
+  getLifeAtInframeGallery: async (): Promise<GalleryImage[]> => {
+    try {
+      const response = await apiClient.get<AboutUsListResponse<GalleryImage>>(API_ENDPOINTS.GET_LIFE_AT_INFRAME_GALLERY);
+      if (response.data && response.data.success && Array.isArray(response.data.data)) {
+        return response.data.data.sort((a, b) => a.order - b.order);
+      } else {
+        console.warn('Unexpected gallery images response structure:', response.data);
+        return [];
+      }
+    } catch (error) {
+      console.error('Failed to fetch gallery images:', error);
+      throw error;
+    }
+  },
+
+  // Get life at inframe sections
+  getLifeAtInframeSections: async (): Promise<LifeAtInframeSection[]> => {
+    try {
+      const response = await apiClient.get<AboutUsListResponse<LifeAtInframeSection>>(API_ENDPOINTS.GET_LIFE_AT_INFRAME_SECTIONS);
+      if (response.data && response.data.success && Array.isArray(response.data.data)) {
+        return response.data.data.sort((a, b) => a.order - b.order);
+      } else {
+        console.warn('Unexpected life at inframe sections response structure:', response.data);
+        return [];
+      }
+    } catch (error) {
+      console.error('Failed to fetch life at inframe sections:', error);
+      throw error;
+    }
+  },
+
+  // Get student services
+  getStudentServices: async (): Promise<StudentService[]> => {
+    try {
+      const response = await apiClient.get<AboutUsListResponse<StudentService>>(API_ENDPOINTS.GET_STUDENT_SERVICES);
+      if (response.data && response.data.success && Array.isArray(response.data.data)) {
+        return response.data.data.sort((a, b) => a.order - b.order);
+      } else {
+        console.warn('Unexpected student services response structure:', response.data);
+        return [];
+      }
+    } catch (error) {
+      console.error('Failed to fetch student services:', error);
+      throw error;
+    }
+  },
 };
 
 // React hooks for data fetching
@@ -1119,5 +1189,251 @@ export const useIndustryPartners = () => {
     loading,
     error,
     refetch: fetchPartners,
+  };
+};
+
+export const useAdvisors = () => {
+  const [advisors, setAdvisors] = useState<Advisor[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchAdvisors = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const advisorsData = await apiHelpers.getAdvisors();
+      setAdvisors(advisorsData);
+    } catch (err) {
+      console.error('Failed to fetch advisors:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch advisors');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createAdvisor = async (advisorData: Omit<Advisor, '_id' | 'createdAt' | 'updatedAt' | '__v'>) => {
+    try {
+      const newAdvisor = await apiHelpers.createAdvisor(advisorData);
+      setAdvisors(prev => [newAdvisor, ...prev]);
+      return newAdvisor;
+    } catch (err) {
+      console.error('Failed to create advisor:', err);
+      throw err;
+    }
+  };
+
+  const updateAdvisor = async (id: string, advisorData: Partial<Omit<Advisor, '_id' | 'createdAt' | 'updatedAt' | '__v'>>) => {
+    try {
+      const updatedAdvisor = await apiHelpers.updateAdvisor(id, advisorData);
+      setAdvisors(prev => prev.map(advisor => advisor._id === id ? updatedAdvisor : advisor));
+      return updatedAdvisor;
+    } catch (err) {
+      console.error('Failed to update advisor:', err);
+      throw err;
+    }
+  };
+
+  const deleteAdvisor = async (id: string) => {
+    try {
+      await apiHelpers.deleteAdvisor(id);
+      setAdvisors(prev => prev.filter(advisor => advisor._id !== id));
+      return true;
+    } catch (err) {
+      console.error('Failed to delete advisor:', err);
+      throw err;
+    }
+  };
+
+  useEffect(() => {
+    fetchAdvisors();
+  }, []);
+
+  return {
+    advisors,
+    loading,
+    error,
+    refetch: fetchAdvisors,
+    createAdvisor,
+    updateAdvisor,
+    deleteAdvisor,
+  };
+};
+
+export const useEnquiries = () => {
+  const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchEnquiries = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const enquiriesData = await apiHelpers.getEnquiries();
+      setEnquiries(enquiriesData);
+    } catch (err) {
+      console.error('Failed to fetch enquiries:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch enquiries');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateEnquiryStatus = async (id: string, statusData: UpdateEnquiryStatusData) => {
+    try {
+      const updatedEnquiry = await apiHelpers.updateEnquiryStatus(id, statusData);
+      setEnquiries(prev => prev.map(enquiry => enquiry._id === id ? updatedEnquiry : enquiry));
+      return updatedEnquiry;
+    } catch (err) {
+      console.error('Failed to update enquiry status:', err);
+      throw err;
+    }
+  };
+
+  const deleteEnquiry = async (id: string) => {
+    try {
+      await apiHelpers.deleteEnquiry(id);
+      setEnquiries(prev => prev.filter(enquiry => enquiry._id !== id));
+      return true;
+    } catch (err) {
+      console.error('Failed to delete enquiry:', err);
+      throw err;
+    }
+  };
+
+  useEffect(() => {
+    fetchEnquiries();
+  }, []);
+
+  return {
+    enquiries,
+    loading,
+    error,
+    refetch: fetchEnquiries,
+    updateEnquiryStatus,
+    deleteEnquiry,
+  };
+};
+
+export const useSportsFacilities = () => {
+  const [facilities, setFacilities] = useState<SportsFacility[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchFacilities = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const facilitiesData = await apiHelpers.getSportsFacilities();
+      setFacilities(facilitiesData);
+    } catch (err) {
+      console.error('Failed to fetch sports facilities:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch sports facilities');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchFacilities();
+  }, []);
+
+  return {
+    facilities,
+    loading,
+    error,
+    refetch: fetchFacilities,
+  };
+};
+
+export const useLifeAtInframeGallery = () => {
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchGalleryImages = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const galleryData = await apiHelpers.getLifeAtInframeGallery();
+      setGalleryImages(galleryData);
+    } catch (err) {
+      console.error('Failed to fetch gallery images:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch gallery images');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchGalleryImages();
+  }, []);
+
+  return {
+    galleryImages,
+    loading,
+    error,
+    refetch: fetchGalleryImages,
+  };
+};
+
+export const useLifeAtInframeSections = () => {
+  const [sections, setSections] = useState<LifeAtInframeSection[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchSections = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const sectionsData = await apiHelpers.getLifeAtInframeSections();
+      setSections(sectionsData);
+    } catch (err) {
+      console.error('Failed to fetch life at inframe sections:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch life at inframe sections');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSections();
+  }, []);
+
+  return {
+    sections,
+    loading,
+    error,
+    refetch: fetchSections,
+  };
+};
+
+export const useStudentServices = () => {
+  const [services, setServices] = useState<StudentService[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchServices = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const servicesData = await apiHelpers.getStudentServices();
+      setServices(servicesData);
+    } catch (err) {
+      console.error('Failed to fetch student services:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch student services');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  return {
+    services,
+    loading,
+    error,
+    refetch: fetchServices,
   };
 };
