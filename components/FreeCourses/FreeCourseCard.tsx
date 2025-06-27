@@ -31,7 +31,7 @@ interface FreeCourseCardProps {
 const FreeCourseCard: React.FC<FreeCourseCardProps> = ({ course }) => {
   return (
     <Link href={`/free-courses/${course.id}`}>
-      <div className={`bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-blue-200 group ${poppins.className}`}>
+      <div className={`bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-yellow-200 group ${poppins.className}`}>
         {/* Course Image */}
         <div className="relative h-48 w-full overflow-hidden">
           <Image
@@ -42,7 +42,7 @@ const FreeCourseCard: React.FC<FreeCourseCardProps> = ({ course }) => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
           <div className="absolute top-4 left-4">
-            <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+            <span className="bg-yellow-300 text-white px-3 py-1 rounded-full text-xs font-semibold">
               {course.category}
             </span>
           </div>
@@ -56,7 +56,7 @@ const FreeCourseCard: React.FC<FreeCourseCardProps> = ({ course }) => {
         {/* Course Content */}
         <div className="p-6">
           {/* Title */}
-          <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+          <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-yellow-300 transition-colors">
             {course.title}
           </h3>
 
@@ -79,7 +79,7 @@ const FreeCourseCard: React.FC<FreeCourseCardProps> = ({ course }) => {
 
           {/* Why to Learn */}
           <div className="mb-4">
-            <h4 className="text-blue-600 font-semibold text-sm mb-1 flex items-center gap-1">
+            <h4 className="text-yellow-300 font-semibold text-sm mb-1 flex items-center gap-1">
               <Star size={14} />
               Why Learn This?
             </h4>
@@ -90,7 +90,7 @@ const FreeCourseCard: React.FC<FreeCourseCardProps> = ({ course }) => {
 
           {/* Career Opportunities */}
           <div className="mb-6">
-            <h4 className="text-blue-600 font-semibold text-sm mb-1 flex items-center gap-1">
+            <h4 className="text-yellow-300 font-semibold text-sm mb-1 flex items-center gap-1">
               <Award size={14} />
               Career Opportunities
             </h4>
@@ -101,8 +101,8 @@ const FreeCourseCard: React.FC<FreeCourseCardProps> = ({ course }) => {
 
           {/* Action Button */}
           <div className="flex items-center justify-between">
-            <span className="text-blue-600 font-semibold text-sm">Start Learning</span>
-            <ArrowRight size={16} className="text-blue-600 group-hover:translate-x-1 transition-transform" />
+            <span className="text-yellow-300 font-semibold text-sm">Start Learning</span>
+            <ArrowRight size={16} className="text-yellow-300 group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
       </div>

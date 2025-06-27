@@ -75,7 +75,7 @@ export default function BlogPost() {
           priority
         />
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4">
-        <Badge className="bg-blue-500 hover:bg-blue-600 my-20 text-white px-4 py-1 rounded-full mb-4 text-sm font-medium">
+        <Badge className="bg-yellow-300 hover:bg-yellow-400 my-20 text-white px-4 py-1 rounded-full mb-4 text-sm font-medium">
             Career
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 max-w-4xl">
@@ -128,8 +128,8 @@ export default function BlogPost() {
                       <button
                         onClick={() => scrollToSection(item.id)}
                         className={cn(
-                          "text-left w-full py-1 px-2 rounded hover:bg-blue-100 transition-colors",
-                          activeSection === item.id ? "bg-blue-200 font-medium" : "",
+                          "text-left w-full py-1 px-2 rounded hover:bg-yellow-100 transition-colors",
+                          activeSection === item.id ? "bg-yellow-200 font-medium" : "",
                           item.level === 1 ? "text-base" : "text-sm pl-4",
                         )}
                       >
@@ -165,7 +165,7 @@ export default function BlogPost() {
               </section>
 
               <section id="reason1" ref={(el) => { sectionRefs.current["reason1"] = el }} className="mb-12">
-                <Card className="mb-6 border-l-4 border-l-blue-400">
+                <Card className="mb-6 border-l-4 border-l-yellow-300">
                   <CardContent className="p-6">
                     <h2 className="text-2xl font-bold mb-4">
                       1. Industry-Driven Curriculum Designed for Future Creatives
@@ -182,7 +182,7 @@ export default function BlogPost() {
                       real-world challenges. If you're looking for a course that bridges the gap between education and
                       industry for your child, Inframe School is one of the best design schools in Rajasthan.`}
                     </p>
-                    <blockquote className="border-l-4 border-blue-500 pl-4 italic my-4">
+                    <blockquote className="border-l-4 border-yellow-300 pl-4 italic my-4">
                       {`"Your work is going to fill a large part of your life, and the only way to be truly satisfied is
                       to do what you believe is great work." – Steve Jobs`}
                     </blockquote>
@@ -191,7 +191,7 @@ export default function BlogPost() {
               </section>
 
               <section id="reason2" ref={(el) => { sectionRefs.current["reason2"] = el }} className="mb-12">
-                <Card className="mb-6 border-l-4 border-l-blue-400">
+                <Card className="mb-6 border-l-4 border-l-yellow-300">
                   <CardContent className="p-6">
                     <h2 className="text-2xl font-bold mb-4">2. Top-Notch Infrastructure for Creativity to Thrive</h2>
                     <p>
@@ -205,7 +205,7 @@ export default function BlogPost() {
                       {`For students considering their options after 12th, Inframe School provides an environment where
                       creativity thrives. Its facilities make it one of the best designing schools in Rajasthan.`}
                     </p>
-                    <div className="bg-blue-100 p-4 rounded-md my-4">
+                    <div className="bg-yellow-100 p-4 rounded-md my-4">
                       <h4 className="font-bold text-lg">
                         {`Where Creativity Meets Technology: The Power of Inframe School's Facilities`}
                       </h4>
@@ -221,7 +221,7 @@ export default function BlogPost() {
               </section>
 
               <section id="reason3" ref={(el) => { sectionRefs.current["reason3"] = el }} className="mb-12">
-                <Card className="mb-6 border-l-4 border-l-blue-400">
+                <Card className="mb-6 border-l-4 border-l-yellow-300">
                   <CardContent className="p-6">
                     <h2 className="text-2xl font-bold mb-4">3. Faculty with Practical Industry Expertise</h2>
                     <p>
@@ -236,7 +236,7 @@ export default function BlogPost() {
                       offer guidance, mentorship, and practical insights to help them succeed. It's this blend of
                       academic rigor and industry expertise that makes Inframe School an outstanding choice.`}
                     </p>
-                    <blockquote className="border-l-4 border-blue-500 pl-4 italic my-4">
+                    <blockquote className="border-l-4 border-yellow-300 pl-4 italic my-4">
                       {`"The best way to predict the future is to create it." – Peter Drucker`}
                     </blockquote>
                   </CardContent>
@@ -244,7 +244,7 @@ export default function BlogPost() {
               </section>
 
               <section id="reason4" ref={(el) => { sectionRefs.current["reason4"] = el }} className="mb-12">
-                <Card className="mb-6 border-l-4 border-l-blue-400">
+                <Card className="mb-6 border-l-4 border-l-yellow-300">
                   <CardContent className="p-6">
                     <h2 className="text-2xl font-bold mb-4">4. Career-Oriented Opportunities and Placement Support</h2>
                     <p>
@@ -258,7 +258,7 @@ export default function BlogPost() {
                       School's strong ties with design firms and professionals offer the ideal platform to launch your
                       child's career. The school ensures that your child is career-ready by the time they graduate.`}
                     </p>
-                    <div className="bg-blue-50p-4 rounded-md my-4">
+                    <div className="bg-yellow-50 p-4 rounded-md my-4">
                       <h4 className="font-bold text-lg">
                         {`Turning Passion into Profession: How Inframe School Prepares Students for Career Success`}
                       </h4>
@@ -272,7 +272,7 @@ export default function BlogPost() {
               </section>
 
               <section id="reason5" ref={(el) => { sectionRefs.current["reason5"] = el }} className="mb-12">
-                <Card className="mb-6 border-l-4 border-l-blue-400">
+                <Card className="mb-6 border-l-4 border-l-yellow-300">
                   <CardContent className="p-6">
                     <h2 className="text-2xl font-bold mb-4">5. Fostering Holistic Growth Beyond Academics</h2>
                     <p>
@@ -286,7 +286,7 @@ export default function BlogPost() {
                       {`The school's comprehensive approach ensures that students not only excel in their academic field
                       but also develop the well-rounded personality needed to succeed in any career path.`}
                     </p>
-                    <blockquote className="border-l-4 border-blue-500 pl-4 italic my-4">
+                    <blockquote className="border-l-4 border-yellow-300 pl-4 italic my-4">
                       {`"Success is the sum of small efforts, repeated day in and day out." – Robert Collier`}
                     </blockquote>
                   </CardContent>
@@ -294,7 +294,7 @@ export default function BlogPost() {
               </section>
 
               <section id="reason6" ref={(el) => { sectionRefs.current["reason6"] = el }} className="mb-12">
-                <Card className="mb-6 border-l-4 border-l-blue-400">
+                <Card className="mb-6 border-l-4 border-l-yellow-300">
                   <CardContent className="p-6">
                     <h2 className="text-2xl font-bold mb-4">6. Strong Alumni Network and Industry Recognition</h2>
                     <p>
@@ -307,7 +307,7 @@ export default function BlogPost() {
                       {`Inframe School's industry recognition as one of the best designing schools in Rajasthan gives your
                       child a competitive edge, both during their studies and in their future career.`}
                     </p>
-                    <div className="bg-blue-50p-4 rounded-md my-4">
+                    <div className="bg-yellow-50 p-4 rounded-md my-4">
                       <h4 className="font-bold text-lg">The Inframe Advantage: A Network That Opens Doors</h4>
                       <p className="mt-2">
                         {`Alumni regularly return to campus for guest lectures, workshops, and recruitment drives,

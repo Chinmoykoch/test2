@@ -12,7 +12,7 @@ import { blogPostsData } from '../utils/constant';
 // Category colors mapping
 const categoryColors: Record<string, string> = {
   Education: "bg-yellow-400 text-black",
-  Career: "bg-blue-500 text-white",
+  Career: "bg-yellow-300 text-white",
   Facilities: "bg-green-500 text-white",
   Alumni: "bg-purple-500 text-white",
   Curriculum: "bg-red-500 text-white",
@@ -118,7 +118,7 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20 pt-32">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-yellow-300" />
         <span className="ml-2 text-gray-600">Loading blog post...</span>
       </div>
     );
@@ -174,7 +174,7 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="absolute bottom-0 left-0 right-0 px-4 md:px-8 pb-6 md:pb-8">
           <div className="max-w-7xl mx-auto">
-            <Badge className={`${categoryColors[formattedPost.category] || 'bg-blue-500 text-white'} px-3 py-1 text-xs md:text-sm font-semibold mb-4`}>
+            <Badge className={`${categoryColors[formattedPost.category] || 'bg-yellow-300 text-white'} px-3 py-1 text-xs md:text-sm font-semibold mb-4`}>
               {formattedPost.category}
             </Badge>
             <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold leading-tight break-words text-center md:text-left mb-4 max-w-4xl">
@@ -209,7 +209,7 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
                 <li>
                   <Link
                     href="#intro"
-                    className="block text-blue-600 hover:text-blue-800 hover:bg-blue-50 text-sm py-2 px-3 rounded-md transition-colors duration-200"
+                    className="block text-yellow-300 hover:text-yellow-400 hover:bg-yellow-50 text-sm py-2 px-3 rounded-md transition-colors duration-200"
                   >
                     Introduction
                   </Link>
@@ -218,29 +218,13 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
                   <li key={section.id}>
                     <Link
                       href={`#${section.id}`}
-                      className="block text-blue-600 hover:text-blue-800 hover:bg-blue-50 text-sm py-2 px-3 rounded-md transition-colors duration-200"
+                      className="block text-yellow-300 hover:text-yellow-400 hover:bg-yellow-50 text-sm py-2 px-3 rounded-md transition-colors duration-200"
                     >
                       {index + 1}. {section.title}
                     </Link>
                   </li>
                 ))}
               </ul>
-            </div>
-
-            {/* Share Card - Matching reference design */}
-            <div className="bg-gray-50 rounded-lg p-4 md:p-6">
-              <h3 className="text-base md:text-lg font-bold mb-4 text-gray-800">Share this article</h3>
-              <div className="flex flex-wrap gap-3">
-                <Button className="bg-[#1877F2] hover:bg-[#1877F2]/90 text-white px-4 py-2 text-xs md:text-sm">
-                  Facebook
-                </Button>
-                <Button className="bg-[#1DA1F2] hover:bg-[#1DA1F2]/90 text-white px-4 py-2 text-xs md:text-sm">
-                  Twitter
-                </Button>
-                <Button className="bg-[#0A66C2] hover:bg-[#0A66C2]/90 text-white px-4 py-2 text-xs md:text-sm">
-                  LinkedIn
-                </Button>
-              </div>
             </div>
           </aside>
 
@@ -301,7 +285,7 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
 
                     {/* Highlights Section */}
                     {section.highlights && section.highlights.length > 0 && (
-                      <div className="bg-blue-50 p-4 md:p-6 rounded-lg my-6 md:my-8 border-l-4 border-blue-400">
+                      <div className="bg-yellow-50 p-4 md:p-6 rounded-lg my-6 md:my-8 border-l-4 border-yellow-300">
                         <h4 className="font-bold text-lg md:text-xl mb-2 md:mb-4 text-gray-900">
                           {section.highlightTitle || "Key Points"}
                         </h4>

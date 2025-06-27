@@ -74,31 +74,25 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-8">
             {/* Course Image */}
-            <div className="relative h-64 md:h-80 w-full rounded-xl overflow-hidden mb-8 border border-gray-200 shadow-sm">
-  <Image
-    src={course.image}
-    alt={course.title}
-    fill
-    className="object-cover"
-    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-    quality={100}
-    priority
-    style={{
-      objectFit: 'cover',
-      objectPosition: 'center',
-    }}
-  />
-</div>
-
+            <div className="bg-white rounded-xl overflow-hidden shadow-sm">
+              <div className="relative h-64 md:h-80">
+                <Image
+                  src={course.image}
+                  alt={course.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
 
             {/* Why Learn This */}
-            <div className="bg-white rounded-xl p-8 mb-8 border border-gray-200 shadow-sm">
+            <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
               <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-gray-900">
-                <Target className="text-blue-600" size={24} />
+                <Target className="text-yellow-300" size={24} />
                 Why Learn This Course?
               </h2>
               <p className="text-gray-600 text-lg leading-relaxed">
@@ -107,14 +101,12 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
             </div>
 
             {/* Learning Outcomes */}
-            <div className="bg-white rounded-xl p-8 mb-8 border border-gray-200 shadow-sm">
-              <h3 className={`text-2xl font-bold mb-6 text-gray-900 ${poppins.className}`}>
-                What You&apos;ll Learn
-              </h3>
+            <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
+              <h2 className="text-2xl font-bold mb-6 text-gray-900">What You'll Learn</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {learningOutcomes.map((outcome, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <CheckCircle className="text-green-500 mt-1 flex-shrink-0" size={20} />
+                  <div key={index} className="flex items-center gap-3">
+                    <CheckCircle className="text-green-500" size={20} />
                     <span className="text-gray-700">{outcome}</span>
                   </div>
                 ))}
@@ -124,7 +116,7 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
             {/* Career Opportunities */}
             <div className="bg-white rounded-xl p-8 mb-8 border border-gray-200 shadow-sm">
               <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-gray-900">
-                <Briefcase className="text-blue-600" size={24} />
+                <Briefcase className="text-yellow-300" size={24} />
                 Career Opportunities
               </h2>
               <p className="text-gray-600 text-lg leading-relaxed">
@@ -138,7 +130,7 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {benefits.map((benefit, index) => (
                   <div key={index} className="flex items-center gap-3">
-                    <Star className="text-blue-600" size={20} />
+                    <Star className="text-yellow-300" size={20} />
                     <span className="text-gray-700">{benefit}</span>
                   </div>
                 ))}
@@ -153,7 +145,7 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
               
               <div className="space-y-4 mb-8">
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <Clock className="text-blue-600" size={20} />
+                  <Clock className="text-yellow-300" size={20} />
                   <div>
                     <div className="text-sm text-gray-500">Duration</div>
                     <div className="font-semibold text-gray-900">{course.duration}</div>
@@ -161,7 +153,7 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
                 </div>
                 
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <Globe className="text-blue-600" size={20} />
+                  <Globe className="text-yellow-300" size={20} />
                   <div>
                     <div className="text-sm text-gray-500">Mode</div>
                     <div className="font-semibold text-gray-900">{course.mode}</div>
@@ -169,7 +161,7 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
                 </div>
                 
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <Award className="text-blue-600" size={20} />
+                  <Award className="text-yellow-300" size={20} />
                   <div>
                     <div className="text-sm text-gray-500">Certificate</div>
                     <div className="font-semibold text-gray-900">Yes</div>
@@ -177,7 +169,7 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
                 </div>
                 
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <Users className="text-blue-600" size={20} />
+                  <Users className="text-yellow-300" size={20} />
                   <div>
                     <div className="text-sm text-gray-500">Level</div>
                     <div className="font-semibold text-gray-900">Beginner</div>
@@ -185,7 +177,7 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
                 </div>
               </div>
 
-              <button className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors duration-300 shadow-sm">
+              <button className="w-full bg-yellow-300 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-yellow-400 transition-colors duration-300 shadow-sm">
                 Start Learning Now
               </button>
             </div>

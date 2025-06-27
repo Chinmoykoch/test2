@@ -30,11 +30,11 @@ const FreeCoursesPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="bg-blue-100 p-3 rounded-full">
-                <BookOpen size={32} className="text-blue-600" />
+              <div className="bg-yellow-100 p-3 rounded-full">
+                <BookOpen size={32} className="text-yellow-300" />
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
-                Free <span className="text-blue-600">Courses</span>
+                Free <span className="text-yellow-300">Courses</span>
               </h1>
             </div>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -59,7 +59,7 @@ const FreeCoursesPage = () => {
                   placeholder="Search courses by title or description..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:border-yellow-300 transition-colors"
                 />
               </div>
             </div>
@@ -70,7 +70,7 @@ const FreeCoursesPage = () => {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:border-yellow-300 transition-colors"
               >
                 {freeCourseCategories.map((category) => (
                   <option key={category} value={category}>
@@ -89,7 +89,7 @@ const FreeCoursesPage = () => {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-6 py-2 rounded-full transition-all duration-300 text-sm font-medium ${
                   selectedCategory === category
-                    ? "bg-blue-600 text-white shadow-md"
+                    ? "bg-yellow-300 text-white shadow-md"
                     : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:border-gray-400"
                 }`}
               >
@@ -129,15 +129,15 @@ const FreeCoursesPage = () => {
 
         {/* Call to Action */}
         <div className="mt-20">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 md:p-12 text-center text-white">
+          <div className="bg-gradient-to-r from-yellow-300 to-yellow-400 rounded-2xl p-8 md:p-12 text-center text-white">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Ready to Start Learning?
             </h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-yellow-100 mb-8 max-w-2xl mx-auto">
               Join thousands of students who have transformed their careers with our free courses. 
               Start your learning journey today!
             </p>
-            <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg">
+            <button className="bg-white text-yellow-300 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg">
               Browse All Courses
             </button>
           </div>

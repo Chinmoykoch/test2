@@ -12,7 +12,7 @@ import { apiHelpers, type BlogPost } from '../utils/api';
 // Category colors mapping
 const categoryColors: Record<string, string> = {
   Education: "bg-yellow-400 text-black",
-  Career: "bg-blue-500 text-white",
+  Career: "bg-yellow-300 text-white",
   Facilities: "bg-green-500 text-white",
   Alumni: "bg-purple-500 text-white",
   Curriculum: "bg-red-500 text-white",
@@ -46,63 +46,41 @@ const staticBlogs = [
     category: "Career",
     date: "Feb 25, 2025",
     readTime: "6 min read",
-    tags: ["career guidance", "after 12th", "design career", "career planning", "design education"],
-    keywords: "design career after 12th, best design college, career opportunities in design",
-  },
-  {
-    id: "state-of-the-art-facilities",
-    title: "Explore the State-of-the-Art Facilities at Inframe School",
-    excerpt: "Take a virtual tour of our modern design labs, creative spaces, and innovative learning environments.",
-    image: "/images/gallery/SKF02844.JPG",
-    category: "Facilities",
-    date: "Feb 20, 2025",
-    readTime: "4 min read",
-    tags: ["design labs", "creative spaces", "modern facilities", "design infrastructure", "technology"],
-    keywords: "design school facilities, creative studio, design labs, modern campus",
-  },
-  {
-    id: "success-stories-from-inframe-alumni",
-    title: "Success Stories from Inframe School Alumni",
-    excerpt: "Read inspiring stories of our graduates who are making waves in the design and creative industries.",
-    image: "/images/gallery/1721366034581.jpg",
-    category: "Alumni",
-    date: "Feb 15, 2025",
-    readTime: "7 min read",
-    tags: ["alumni success", "design careers", "industry leaders", "graduate achievements", "placements"],
-    keywords: "design school alumni, successful designers, career after design school, placement success",
+    tags: ["career guidance", "design education", "student success", "future prospects", "creative careers"],
+    keywords: "design school career, creative education future, design student success",
   },
   {
     id: "creative-curriculum-at-inframe",
-    title: "The Creative Curriculum at Inframe School",
-    excerpt: "Discover our innovative approach to design education that combines theory, practice, and industry exposure.",
-    image: "/images/gallery/1717475821142 - Copy (8).jpg",
+    title: "Creative Curriculum at Inframe: Beyond Traditional Education",
+    excerpt: "Discover how our innovative curriculum prepares students for real-world challenges in the creative industry.",
+    image: "/images/gallery/1721737896096.jpg",
     category: "Curriculum",
-    date: "Feb 10, 2025",
-    readTime: "5 min read",
-    tags: ["design curriculum", "creative education", "practical learning", "industry exposure", "design theory"],
-    keywords: "design school curriculum, creative education, practical design training, industry-focused learning",
+    date: "Feb 20, 2025",
+    readTime: "7 min read",
+    tags: ["curriculum", "creative education", "innovation", "design thinking", "practical learning"],
+    keywords: "creative curriculum, design education innovation, practical learning design",
   },
   {
-    id: "industry-partnerships-and-placements",
-    title: "Industry Partnerships and Placement Opportunities at Inframe",
-    excerpt: "Learn about our extensive network of industry partners and how they help our students launch successful careers.",
-    image: "/images/gallery/1717475821142 - Copy (8).jpg",
-    category: "Placements",
-    date: "Feb 5, 2025",
-    readTime: "6 min read",
-    tags: ["placements", "industry partnerships", "career opportunities", "internships", "job placement"],
-    keywords: "design school placements, industry partnerships, design internships, career launch",
+    id: "state-of-the-art-facilities",
+    title: "State-of-the-Art Facilities at Inframe School",
+    excerpt: "Explore our world-class facilities designed to nurture creativity and provide hands-on learning experiences.",
+    image: "/images/gallery/1721738128651.jpg",
+    category: "Facilities",
+    date: "Feb 18, 2025",
+    readTime: "4 min read",
+    tags: ["facilities", "modern equipment", "creative spaces", "learning environment", "technology"],
+    keywords: "design school facilities, creative learning spaces, modern design equipment",
   },
   {
-    id: "faculty-spotlight-meet-our-experts",
-    title: "Faculty Spotlight: Meet Our Industry Experts",
-    excerpt: "Get to know the accomplished professionals who make up our teaching faculty at Inframe School.",
-    image: "/images/gallery/DSC04264.JPG",
-    category: "Faculty",
-    date: "Jan 30, 2025",
+    id: "success-stories-from-inframe-alumni",
+    title: "Success Stories from Inframe Alumni: Where Are They Now?",
+    excerpt: "Meet our successful alumni who have made their mark in the creative industry worldwide.",
+    image: "/images/gallery/1721737773149.jpg",
+    category: "Alumni",
+    date: "Feb 15, 2025",
     readTime: "8 min read",
-    tags: ["expert faculty", "industry professionals", "design mentors", "experienced teachers", "design education"],
-    keywords: "design school faculty, industry experts teaching, professional mentors, design educators",
+    tags: ["alumni", "success stories", "career achievements", "design industry", "inspiration"],
+    keywords: "design school alumni, creative career success, design industry professionals",
   },
   {
     id: "student-life-at-inframe-school",
@@ -118,10 +96,11 @@ const staticBlogs = [
 ];
 
 const DynamicBlogPage: React.FC = () => {
-  const [apiBlogs, setApiBlogs] = useState<BlogPost[]>([]);
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
   // Fetch blogs from API
   useEffect(() => {
@@ -129,14 +108,13 @@ const DynamicBlogPage: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        console.log('Fetching blogs from API...');
         const data = await apiHelpers.getBlogs();
-        console.log('Fetched blogs:', data);
-        setApiBlogs(data);
+        setBlogs(data);
       } catch (err) {
         console.error('Failed to fetch blogs:', err);
-        setError('Failed to load blogs from backend');
-        // Don't set apiBlogs to empty on error, keep existing data
+        setError('Failed to load blogs');
+        // Fallback to static blogs if API fails
+        setBlogs([]);
       } finally {
         setLoading(false);
       }
@@ -146,111 +124,42 @@ const DynamicBlogPage: React.FC = () => {
   }, []);
 
   // Use API blogs if available, otherwise fallback to static ones
-  const displayBlogs = apiBlogs.length > 0 ? apiBlogs : staticBlogs;
+  const allBlogs = blogs.length > 0 ? blogs : staticBlogs;
 
-  // Convert API blog to display format for consistency
-  const formatBlogForDisplay = (blog: BlogPost | { _id?: string; slug?: string; title: string; excerpt: string; heroImage?: string; category: string; date?: string; readTime?: string; views?: number; id?: string; image?: string; keywords?: string }) => {
-    if ('_id' in blog && blog._id) {
-      // API blog format
-      return {
-        id: blog.slug || blog._id,
-        title: blog.title,
-        excerpt: blog.excerpt,
-        image: blog.heroImage,
-        category: blog.category,
-        date: blog.date,
-        readTime: blog.readTime,
-        tags: [], // API doesn't have tags, we'll generate some
-        keywords: `${blog.category}, ${blog.title}`,
-      };
-    } else {
-      // Static blog format - ensure it has all required properties
-      return {
-        id: ('id' in blog ? blog.id : '') || ('slug' in blog ? blog.slug : '') || '',
-        title: blog.title,
-        excerpt: blog.excerpt,
-        image: ('image' in blog ? blog.image : '') || ('heroImage' in blog ? blog.heroImage : ''),
-        category: blog.category,
-        date: blog.date,
-        readTime: blog.readTime,
-        keywords: ('keywords' in blog ? blog.keywords : '') || `${blog.category}, ${blog.title}`,
-      };
-    }
-  };
-
-  // Get all tags from blogs for the hashtag section
-  const allTags = Array.from(new Set([
-    ...staticBlogs.flatMap(post => post.tags),
-    ...displayBlogs.map(blog => blog.category || 'General')
-  ]));
-
-  // Filter blogs based on search
-  const filteredBlogs = displayBlogs.filter(blog => {
-    const formattedBlog = formatBlogForDisplay(blog);
-    return formattedBlog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           formattedBlog.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+  // Convert API blog to display format
+  const formatBlogForDisplay = (blog: BlogPost) => ({
+    id: blog.slug || blog._id,
+    title: blog.title,
+    excerpt: blog.excerpt,
+    image: blog.heroImage,
+    category: blog.category,
+    date: blog.date,
+    readTime: blog.readTime,
+    author: blog.author,
   });
+
+  // Filter blogs based on search term and category
+  const filteredBlogs = allBlogs.filter(blog => {
+    const matchesSearch = blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         blog.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         ('tags' in blog && blog.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())));
+    
+    const matchesCategory = selectedCategory === 'All' || blog.category === selectedCategory;
+    
+    return matchesSearch && matchesCategory;
+  });
+
+  // Get unique categories from blogs
+  const categories = ['All', ...Array.from(new Set(allBlogs.map(blog => blog.category)))];
 
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-white">
-        {/* Hero Section */}
-        <div className="relative z-10">
-          <div className="relative h-[80vh] pt-24">
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10" />
-            <Image
-              src="/images/gallery/DSC04232.JPG"
-              alt="Inframe School - Best Design School in Rajasthan - Campus Life"
-              fill
-              className="object-cover"
-              priority
-              sizes="100vw"
-              quality={90}
-            />
-            <div className="absolute inset-0 z-20 flex items-center">
-              <div className="max-w-7xl mx-auto px-4 w-full">
-                <div className="max-w-3xl">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-1.5 h-12 bg-yellow-500" />
-                    <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight">
-                      Inframe School Blog
-                    </h1>
-                  </div>
-                  <p className="text-xl text-white/90 max-w-2xl mb-8">
-                    Insights, stories, and inspiration from the top design school in Rajasthan
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Loading Content */}
-        <section className="py-16 px-4 md:px-8 max-w-7xl mx-auto">
+      <div className="min-h-screen bg-gray-50 pt-24">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 py-16">
           <div className="flex justify-center items-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-            <span className="ml-2 text-gray-600">Loading blog posts from backend...</span>
-          </div>
-        </section>
-      </div>
-    );
-  }
-
-  // Error state
-  if (error) {
-    return (
-      <div className="min-h-screen bg-white">
-        <div className="max-w-7xl mx-auto px-4 py-20 pt-32">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold mb-4 text-red-600">Error Loading Blogs</h1>
-            <p className="text-gray-600 mb-6">{error}</p>
-            <Button 
-              onClick={() => window.location.reload()} 
-              className="bg-yellow-400 text-black hover:bg-yellow-500"
-            >
-              Try Again
-            </Button>
+            <Loader2 className="w-8 h-8 animate-spin text-yellow-300" />
+            <span className="ml-2 text-gray-600">Loading blog posts...</span>
           </div>
         </div>
       </div>
@@ -258,83 +167,43 @@ const DynamicBlogPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section with Enhanced SEO */}
-      <div className="relative z-10 mt-24">
-        <div className="relative h-[80vh]">
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10" />
-          <Image
-            src="/images/gallery/DSC04232.JPG"
-            alt="Inframe School - Best Design School in Rajasthan - Campus Life"
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-            quality={90}
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx0fHRsdHSIfIR0jIyUkJSMiIiMlKy4wLisqMx8hJzQnKi46PT4+JSZHSUFQLTc6Tj7/2wBDARUXFx4bHt0dHT4qIio+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj7/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-          />
-          <div className="absolute inset-0 z-20 flex items-center">
-            <div className="max-w-7xl mx-auto px-4 w-full">
-              <div className="max-w-3xl">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-1.5 h-12 bg-yellow-500" />
-                  <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight">
-                    Inframe School Blog
-                  </h1>
-                </div>
-                <p className="text-xl text-white/90 max-w-2xl mb-8">
-                  Insights, stories, and inspiration from the top design school in Rajasthan focused on creating future-ready creative professionals
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="relative flex-grow max-w-lg">
-                    <input
-                      type="text"
-                      placeholder="Search articles, topics, keywords..."
-                      className="w-full py-3 px-4 pl-12 rounded-md text-black"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      aria-label="Search blog posts"
-                    />
-                    <Search className="absolute left-3 top-3 text-gray-500" size={20} />
-                  </div>
-                  <Button className="bg-yellow-400 text-black hover:bg-yellow-500 px-6 py-6">
-                    Search
-                  </Button>
-                </div>
-              </div>
+    <>
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-yellow-50 to-yellow-100 pt-24 pb-16">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <div className="text-center max-w-4xl mx-auto">
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+              Our Blog
+            </h1>
+            <p className="text-xl text-gray-600 mb-8">
+              Discover insights, stories, and the latest updates from Inframe School
+            </p>
+            
+            {/* Search Bar */}
+            <div className="relative max-w-2xl mx-auto mb-8">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:border-transparent"
+              />
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Popular Tags Section for SEO */}
-      <section className="bg-gray-50 py-8 border-t border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center gap-4 mb-4">
-            <Tag className="text-yellow-500" />
-            <h2 className="text-xl font-semibold">Popular Topics</h2>
+            {/* Error Message */}
             {error && (
-              <div className="ml-auto">
-                <Badge className="bg-yellow-100 text-yellow-800 border border-yellow-300">
-                  ⚠️ Using cached content
-                </Badge>
+              <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md max-w-2xl mx-auto">
+                <p className="text-yellow-700 text-sm">
+                  ⚠️ {error}. Showing cached posts.
+                </p>
               </div>
             )}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {allTags.map((tag, index) => (
-              <Link key={index} href={`/tag/${tag.replace(/\s+/g, '-').toLowerCase()}`}>
-                <Badge className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-3 py-1">
-                  #{tag}
-                </Badge>
-              </Link>
-            ))}
           </div>
         </div>
       </section>
 
-      {/* Featured Articles Section with Enhanced UI */}
+      {/* Featured Articles Section */}
       <section id="featured-articles" className="py-16 px-4 md:px-8 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-10">
           <h2 className="text-3xl md:text-4xl font-bold flex items-center gap-2">
@@ -372,7 +241,7 @@ const DynamicBlogPage: React.FC = () => {
         {/* Blog Cards Grid - Enhanced Design */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredBlogs.map((blog) => {
-            const formattedBlog = formatBlogForDisplay(blog);
+            const formattedBlog = formatBlogForDisplay(blog as BlogPost);
             return (
               <div key={formattedBlog.id || ('_id' in blog ? blog._id : '')} id={formattedBlog.id} className="scroll-mt-16">
                 <Link href={`/blog/${formattedBlog.id}`} className="group">
@@ -396,10 +265,10 @@ const DynamicBlogPage: React.FC = () => {
                       )}
                     </div>
                     <CardContent className="p-6 flex-grow flex flex-col">
-                      <h3 className="text-xl font-bold mb-3 group-hover:text-yellow-600 transition-colors">
+                      <h3 className="text-xl font-bold mb-3 group-hover:text-yellow-300 transition-colors line-clamp-2">
                         {formattedBlog.title}
                       </h3>
-                      <p className="text-gray-600 mb-4 flex-grow">{formattedBlog.excerpt}</p>
+                      <p className="text-gray-600 mb-4 flex-grow line-clamp-3">{formattedBlog.excerpt}</p>
                       <div className="flex items-center justify-between text-sm text-gray-500 mt-auto">
                         <span>{formattedBlog.date}</span>
                         <span>{formattedBlog.readTime}</span>
@@ -415,32 +284,17 @@ const DynamicBlogPage: React.FC = () => {
           })}
         </div>
 
+        {/* Show message if no blogs available */}
         {filteredBlogs.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-gray-600 text-lg">No blog posts found matching your search.</p>
-            <p className="text-gray-500 text-sm mt-2">Try adjusting your search terms.</p>
+            <div className="text-gray-500 text-xl mb-4">No blog posts found</div>
+            <p className="text-gray-400">
+              Try adjusting your search terms or category filter
+            </p>
           </div>
         )}
       </section>
-
-      {/* Enhanced Newsletter Section with SEO */}
-      <section className="py-16 my-10 bg-black text-white">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Stay Updated with Inframe School</h2>
-          <p className="mb-8">Subscribe to our newsletter to receive the latest articles, news, and updates about design education and career opportunities.</p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Your email address"
-              className="px-4 py-3 rounded-md flex-grow text-black"
-              aria-label="Email for newsletter"
-            />
-            <Button className="bg-yellow-400 text-black hover:bg-yellow-500 px-6 py-6">Subscribe</Button>
-          </div>
-          <p className="mt-4 text-sm text-gray-400">By subscribing, you&apos;ll receive exclusive content about design education, career opportunities, and admission updates.</p>
-        </div>
-      </section>
-    </div>
+    </>
   );
 };
 

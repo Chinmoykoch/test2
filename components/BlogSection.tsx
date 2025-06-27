@@ -12,7 +12,7 @@ import { apiHelpers, type BlogPost, type BlogAuthor } from '../utils/api';
 // Category colors mapping
 const categoryColors: Record<string, string> = {
   Education: "bg-yellow-400 text-black",
-  Career: "bg-blue-500 text-white",
+  Career: "bg-yellow-300 text-white",
   Facilities: "bg-green-500 text-white",
   Alumni: "bg-purple-500 text-white",
   Curriculum: "bg-red-500 text-white",
@@ -104,7 +104,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
           </div>
         )}
         <div className="flex justify-center items-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-yellow-300" />
           <span className="ml-2 text-gray-600">Loading blog posts...</span>
         </div>
       </section>
@@ -158,7 +158,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
                     </div>
                   </div>
                   <CardContent className="p-6 flex-grow flex flex-col">
-                    <h3 className="text-xl font-bold mb-3 group-hover:text-yellow-600 transition-colors line-clamp-2">
+                    <h3 className="text-xl font-bold mb-3 group-hover:text-yellow-300 transition-colors line-clamp-2">
                       {formattedBlog.title}
                     </h3>
                     <p className="text-gray-600 mb-4 flex-grow line-clamp-3">{formattedBlog.excerpt}</p>
