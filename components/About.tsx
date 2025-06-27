@@ -7,7 +7,7 @@ import Image from "next/image";
 import "aos/dist/aos.css";
 import CampusLife from "./CampusLife";
 import Aos from "aos";
-import { useAboutUsData } from "../utils/api";
+import { useAboutUsData, useIndustryPartners } from "../utils/api";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,6 +29,9 @@ const AboutPage = () => {
     error,
     refetch
   } = useAboutUsData();
+
+  // Get industry partners data
+  const { partners: industryPartners, loading: partnersLoading, error: partnersError } = useIndustryPartners();
 
   useEffect(() => {
     Aos.init({
@@ -536,29 +539,56 @@ const AboutPage = () => {
             unparalleled career opportunities and real-world experience to excel
             in design and business.
           </p>
-          <div className="flex animate-[scroll_20s_linear_infinite] space-x-12">
-            {LOGOS.map((logo, index) => (
-              <div
-                key={`logo-1-${index}`}
-                className="flex flex-col items-center justify-center text-slate-800"
-              >
-                <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 shadow-md border bg-white border-gray-200 rounded-md flex items-center justify-center">
-                  <Image
-                    src={logo.src}
-                    alt="not loaded"
-                    width={192}
-                    height={192}
-                    className="object-contain w-full h-full"
-                  />
-                </div>
-                <span
-                  className={`mt-2 text-center text-sm md:text-base text-gray-700 ${poppins.className}`}
-                >
-                  {logo.name}
-                </span>
+          
+          {/* Loading State */}
+          {partnersLoading && (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600"></div>
+            </div>
+          )}
+
+          {/* Error State */}
+          {partnersError && (
+            <div className="text-center py-12">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+                <p className="text-red-600">{partnersError}</p>
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {/* Partners Display */}
+          {!partnersLoading && !partnersError && industryPartners && industryPartners.length > 0 && (
+            <div className="flex animate-[scroll_20s_linear_infinite] space-x-12">
+              {industryPartners.map((partner, index) => (
+                <div
+                  key={`partner-${partner._id}-${index}`}
+                  className="flex flex-col items-center justify-center text-slate-800"
+                >
+                  <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 shadow-md border bg-white border-gray-200 rounded-md flex items-center justify-center">
+                    <Image
+                      src={partner.src || "/company logo/logo.png"}
+                      alt={partner.name}
+                      width={192}
+                      height={192}
+                      className="object-contain w-full h-full"
+                    />
+                  </div>
+                  <span
+                    className={`mt-2 text-center text-sm md:text-base text-gray-700 ${poppins.className}`}
+                  >
+                    {partner.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!partnersLoading && !partnersError && (!industryPartners || industryPartners.length === 0) && (
+            <div className="text-center py-12">
+              <p className="text-gray-600">No industry partners available at the moment.</p>
+            </div>
+          )}
         </div>
       </section>
     </div>

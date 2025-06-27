@@ -253,6 +253,28 @@ export interface GalleryImage {
   order: number;
 }
 
+// Industry Partner interfaces
+export interface IndustryPartner {
+  _id: string;
+  name: string;
+  src?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
+}
+
+export interface IndustryPartnersResponse {
+  success: boolean;
+  data: IndustryPartner[];
+  message?: string;
+}
+
+export interface IndustryPartnerResponse {
+  success: boolean;
+  data: IndustryPartner;
+  message?: string;
+}
+
 // Get the backend URL from environment variables
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-rakj.onrender.com';
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || BACKEND_URL;
@@ -376,6 +398,13 @@ export const API_ENDPOINTS = {
   UPDATE_ENQUIRY_STATUS: '/api/v1/enquiries',
   DELETE_ENQUIRY: '/api/v1/enquiries',
   GET_ENQUIRY_STATS: '/api/v1/enquiries/stats',
+
+  // Industry Partners
+  GET_INDUSTRY_PARTNERS: '/api/v1/logo/getlogo',
+  GET_INDUSTRY_PARTNER_BY_ID: '/api/v1/logo/getlogoById',
+  CREATE_INDUSTRY_PARTNER: '/api/v1/logo/addlogo',
+  UPDATE_INDUSTRY_PARTNER: '/api/v1/logo/updatelogo',
+  DELETE_INDUSTRY_PARTNER: '/api/v1/logo/deletelogo',
 
   // About Us
   // Hero Gallery
@@ -989,23 +1018,97 @@ export const apiHelpers = {
     }
   },
 
-  // Life at Inframe Gallery Images
+  // Get life at inframe gallery images
   getLifeAtInframeGalleryImages: async (): Promise<GalleryImage[]> => {
     try {
-      const response = await apiClient.get<{success: boolean; data: GalleryImage[]}>(API_ENDPOINTS.GET_LIFE_AT_INFRAME_GALLERY);
-      console.log('Gallery API response:', response.data);
-      
+      const response = await apiClient.get<AboutUsListResponse<GalleryImage>>(API_ENDPOINTS.GET_LIFE_AT_INFRAME_GALLERY);
       if (response.data && response.data.success && Array.isArray(response.data.data)) {
-        console.log('Gallery images found:', response.data.data.length);
-        return response.data.data;
+        return response.data.data.sort((a, b) => a.order - b.order);
       } else {
         console.warn('Unexpected gallery images response structure:', response.data);
         return [];
       }
     } catch (error) {
       console.error('Failed to fetch gallery images:', error);
-      // Return empty array instead of throwing to prevent crashes
-      return [];
+      throw error;
+    }
+  },
+
+  // Industry Partner API Helpers
+  // Get all industry partners
+  getIndustryPartners: async (): Promise<IndustryPartner[]> => {
+    try {
+      const response = await apiClient.get<IndustryPartnersResponse>(API_ENDPOINTS.GET_INDUSTRY_PARTNERS);
+      if (response.data && response.data.success && Array.isArray(response.data.data)) {
+        return response.data.data;
+      } else {
+        console.warn('Unexpected industry partners response structure:', response.data);
+        return [];
+      }
+    } catch (error) {
+      console.error('Failed to fetch industry partners:', error);
+      throw error;
+    }
+  },
+
+  // Get industry partner by ID
+  getIndustryPartnerById: async (id: string): Promise<IndustryPartner | null> => {
+    try {
+      const response = await apiClient.get<IndustryPartnerResponse>(`${API_ENDPOINTS.GET_INDUSTRY_PARTNER_BY_ID}/${id}`);
+      if (response.data && response.data.success && response.data.data) {
+        return response.data.data;
+      } else {
+        console.warn('Industry partner not found:', id);
+        return null;
+      }
+    } catch (error) {
+      console.error('Failed to fetch industry partner by ID:', error);
+      throw error;
+    }
+  },
+
+  // Create new industry partner
+  createIndustryPartner: async (partnerData: { name: string; src?: string }): Promise<IndustryPartner> => {
+    try {
+      const response = await apiClient.post<IndustryPartnerResponse>(API_ENDPOINTS.CREATE_INDUSTRY_PARTNER, partnerData);
+      if (response.data && response.data.success && response.data.data) {
+        return response.data.data;
+      } else {
+        throw new Error('Failed to create industry partner');
+      }
+    } catch (error) {
+      console.error('Failed to create industry partner:', error);
+      throw error;
+    }
+  },
+
+  // Update industry partner
+  updateIndustryPartner: async (id: string, partnerData: { name: string; src?: string }): Promise<IndustryPartner> => {
+    try {
+      const response = await apiClient.put<IndustryPartnerResponse>(`${API_ENDPOINTS.UPDATE_INDUSTRY_PARTNER}/${id}`, partnerData);
+      if (response.data && response.data.success && response.data.data) {
+        return response.data.data;
+      } else {
+        throw new Error('Failed to update industry partner');
+      }
+    } catch (error) {
+      console.error('Failed to update industry partner:', error);
+      throw error;
+    }
+  },
+
+  // Delete industry partner
+  deleteIndustryPartner: async (id: string): Promise<boolean> => {
+    try {
+      const response = await apiClient.delete<{success: boolean}>(`${API_ENDPOINTS.DELETE_INDUSTRY_PARTNER}/${id}`);
+      if (response.data && response.data.success) {
+        return true;
+      } else {
+        throw new Error('Failed to delete industry partner');
+      }
+    } catch (error) {
+      console.error('Failed to delete industry partner:', error);
+      throw error;
     }
   },
 };
@@ -1380,13 +1483,11 @@ export const useLifeAtInframeGallery = () => {
       try {
         setLoading(true);
         setError(null);
-        const result = await apiHelpers.getLifeAtInframeGalleryImages();
-        console.log('Gallery hook result:', result);
-        setGalleryImages(Array.isArray(result) ? result : []);
+        const images = await apiHelpers.getLifeAtInframeGalleryImages();
+        setGalleryImages(images);
       } catch (err) {
-        console.error('Error in gallery hook:', err);
-        setError(err instanceof Error ? err.message : 'Failed to fetch gallery images');
-        setGalleryImages([]); // Set empty array on error
+        console.error('Failed to fetch gallery images:', err);
+        setError('Failed to load gallery images. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -1396,4 +1497,31 @@ export const useLifeAtInframeGallery = () => {
   }, []);
 
   return { galleryImages, loading, error };
+};
+
+// Industry Partners Hook
+export const useIndustryPartners = () => {
+  const [partners, setPartners] = useState<IndustryPartner[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchPartners = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const partnersData = await apiHelpers.getIndustryPartners();
+        setPartners(partnersData);
+      } catch (err) {
+        console.error('Failed to fetch industry partners:', err);
+        setError('Failed to load industry partners. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPartners();
+  }, []);
+
+  return { partners, loading, error };
 };
