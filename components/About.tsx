@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { Card, CardContent } from "../components/ui/card";
-import { LOGOS, studentImages } from "../utils/constant";
+import { studentImages } from "../utils/constant";
 import { Poppins } from "next/font/google";
 import Image from "next/image";
 import "aos/dist/aos.css";

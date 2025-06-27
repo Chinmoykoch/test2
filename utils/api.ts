@@ -950,4 +950,174 @@ export const apiHelpers = {
       throw error;
     }
   },
+
+  // Industry Partners
+  getIndustryPartners: async (): Promise<IndustryPartner[]> => {
+    try {
+      const response = await apiClient.get<IndustryPartnersResponse>(API_ENDPOINTS.GET_INDUSTRY_PARTNERS);
+      if (response.data && response.data.success && Array.isArray(response.data.data)) {
+        return response.data.data;
+      } else {
+        console.warn('Unexpected industry partners response structure:', response.data);
+        return [];
+      }
+    } catch (error) {
+      console.error('Failed to fetch industry partners:', error);
+      throw error;
+    }
+  },
+
+  // Industry Partner by ID
+  getIndustryPartnerById: async (id: string): Promise<IndustryPartner | null> => {
+    try {
+      const response = await apiClient.get<IndustryPartnerResponse>(`${API_ENDPOINTS.GET_INDUSTRY_PARTNER_BY_ID}/${id}`);
+      if (response.data && response.data.success && response.data.data) {
+        return response.data.data;
+      } else {
+        console.warn('Industry partner not found:', id);
+        return null;
+      }
+    } catch (error) {
+      console.error('Failed to fetch industry partner by ID:', error);
+      throw error;
+    }
+  },
+
+  // Create industry partner
+  createIndustryPartner: async (partnerData: Omit<IndustryPartner, '_id' | 'createdAt' | 'updatedAt' | '__v'>): Promise<IndustryPartner> => {
+    try {
+      const response = await apiClient.post<IndustryPartnerResponse>(API_ENDPOINTS.CREATE_INDUSTRY_PARTNER, partnerData);
+      if (response.data && response.data.success && response.data.data) {
+        return response.data.data;
+      } else {
+        throw new Error('Failed to create industry partner');
+      }
+    } catch (error) {
+      console.error('Failed to create industry partner:', error);
+      throw error;
+    }
+  },
+
+  // Update industry partner
+  updateIndustryPartner: async (id: string, partnerData: Partial<Omit<IndustryPartner, '_id' | 'createdAt' | 'updatedAt' | '__v'>>): Promise<IndustryPartner> => {
+    try {
+      const response = await apiClient.put<IndustryPartnerResponse>(`${API_ENDPOINTS.UPDATE_INDUSTRY_PARTNER}/${id}`, partnerData);
+      if (response.data && response.data.success && response.data.data) {
+        return response.data.data;
+      } else {
+        throw new Error('Failed to update industry partner');
+      }
+    } catch (error) {
+      console.error('Failed to update industry partner:', error);
+      throw error;
+    }
+  },
+
+  // Delete industry partner
+  deleteIndustryPartner: async (id: string): Promise<boolean> => {
+    try {
+      const response = await apiClient.delete<IndustryPartnerResponse>(`${API_ENDPOINTS.DELETE_INDUSTRY_PARTNER}/${id}`);
+      if (response.data && response.data.success) {
+        return true;
+      } else {
+        throw new Error('Failed to delete industry partner');
+      }
+    } catch (error) {
+      console.error('Failed to delete industry partner:', error);
+      throw error;
+    }
+  },
+};
+
+// React hooks for data fetching
+export const useAboutUsData = () => {
+  const [data, setData] = useState<{
+    heroImages: AboutUsHeroImage[];
+    statistics: AboutUsStatistic[];
+    coreValues: AboutUsCoreValue[];
+    campusImages: AboutUsCampusImage[];
+    whoWeAre: AboutUsContent | null;
+    aboutUs: AboutUsContent | null;
+    vision: AboutUsContent | null;
+    mission: AboutUsContent | null;
+    coreValuesText: AboutUsContent | null;
+  }>({
+    heroImages: [],
+    statistics: [],
+    coreValues: [],
+    campusImages: [],
+    whoWeAre: null,
+    aboutUs: null,
+    vision: null,
+    mission: null,
+    coreValuesText: null,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const result = await apiHelpers.getAboutUsData();
+      setData({
+        heroImages: result.heroImages,
+        statistics: result.statistics,
+        coreValues: result.coreValues,
+        campusImages: result.campusImages,
+        whoWeAre: result.whoWeAreContent,
+        aboutUs: result.aboutUsContent,
+        vision: result.visionContent,
+        mission: result.missionContent,
+        coreValuesText: result.coreValuesTextContent,
+      });
+    } catch (err) {
+      console.error('Failed to fetch about us data:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch about us data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return {
+    ...data,
+    loading,
+    error,
+    refetch: fetchData,
+  };
+};
+
+export const useIndustryPartners = () => {
+  const [partners, setPartners] = useState<IndustryPartner[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchPartners = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const partnersData = await apiHelpers.getIndustryPartners();
+      setPartners(partnersData);
+    } catch (err) {
+      console.error('Failed to fetch industry partners:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch industry partners');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPartners();
+  }, []);
+
+  return {
+    partners,
+    loading,
+    error,
+    refetch: fetchPartners,
+  };
 };
