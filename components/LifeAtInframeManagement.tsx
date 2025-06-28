@@ -64,7 +64,7 @@ const LifeAtInframeManagement = () => {
         apiHelpers.getLifeAtInframeSections(),
         apiHelpers.getStudentServices(),
         apiHelpers.getSportsFacilities(),
-        apiHelpers.getLifeAtInframeGalleryImages()
+        apiHelpers.getLifeAtInframeGallery()
       ]);
 
       setSections(sectionsData);

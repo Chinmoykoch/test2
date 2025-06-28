@@ -43,16 +43,21 @@ export default function FacilitiesBlogPost() {
           }
         })
       },
-      { rootMargin: "-100px 0px -80% 0px" },
+      { threshold: 0.3 }
     )
 
-    Object.values(sectionRefs.current).forEach((ref) => {
-      if (ref) observer.observe(ref)
+    const currentRefs = sectionRefs.current;
+    const refsToObserve: (Element | null)[] = [];
+    
+    Object.values(currentRefs).forEach((ref) => {
+      if (ref) {
+        observer.observe(ref)
+        refsToObserve.push(ref)
+      }
     })
 
     return () => {
-      const currentRefs = sectionRefs.current;
-      Object.values(currentRefs).forEach((ref) => {
+      refsToObserve.forEach((ref) => {
         if (ref) observer.unobserve(ref)
       })
     }

@@ -24,7 +24,7 @@ const EnquiryManagement = () => {
 
   const handleStatusUpdate = async (id: string) => {
     try {
-      await updateEnquiryStatus(id, statusData.status, statusData.notes);
+      await updateEnquiryStatus(id, statusData);
       setIsStatusDialogOpen(false);
       setSelectedEnquiry(null);
       setStatusData({ status: 'new', notes: '' });

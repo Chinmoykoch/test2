@@ -43,12 +43,17 @@ export default function BlogPost() {
     )
 
     const currentRefs = sectionRefs.current;
+    const refsToObserve: (Element | null)[] = [];
+    
     Object.values(currentRefs).forEach((ref) => {
-      if (ref) observer.observe(ref)
+      if (ref) {
+        observer.observe(ref)
+        refsToObserve.push(ref)
+      }
     })
 
     return () => {
-      Object.values(currentRefs).forEach((ref) => {
+      refsToObserve.forEach((ref) => {
         if (ref) observer.unobserve(ref)
       })
     }
