@@ -194,7 +194,7 @@ export const LifeAtCampus = () => {
         </div>
 
         {/* Welcome Section */}
-        <section className="w-full py-24">
+        <section className="w-full py-24 relative z-10 bg-white">
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid md:grid-cols-2 gap-16 items-center">
               <div>
@@ -248,7 +248,7 @@ export const LifeAtCampus = () => {
         </section>
 
         {/* Student Services Section */}
-        <section className="w-full py-24">
+        <section className="w-full py-24 relative z-10 bg-white">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-6 text-black">
@@ -333,16 +333,18 @@ export const LifeAtCampus = () => {
         <div className="bg bg1  "></div>
 
         {/* Lazy Loaded Components */}
-        <Suspense fallback={<LoadingSpinner />}>
-          <CampusLife experienceCamputLife={experienceCamputLife2} />
-          <StudentClubs />
-          <div className="bg bg2" />
-          <SportsArena />
-          <CampusTour />
-        </Suspense>
+        <div className="relative z-10 bg-white">
+          <Suspense fallback={<LoadingSpinner />}>
+            <CampusLife experienceCamputLife={experienceCamputLife2} />
+            <StudentClubs />
+            <div className="bg bg2" />
+            <SportsArena />
+            <CampusTour />
+          </Suspense>
+        </div>
 
         {/* Events & Activities Section */}
-        <section className="w-full py-10">
+        <section className="w-full py-10 relative z-10 bg-white">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-6 text-black">
@@ -412,12 +414,14 @@ export const LifeAtCampus = () => {
         <div className="bg bg3" />
 
         {/* Campus Gallery */}
-        <Suspense fallback={<LoadingSpinner />}>
-          <ModernGallery />
-        </Suspense>
+        <div className="relative z-10 bg-white">
+          <Suspense fallback={<LoadingSpinner />}>
+            <ModernGallery />
+          </Suspense>
+        </div>
 
         {/* CTA Section */}
-        <section className="w-full py-24 my-10 bg-black text-white relative z-10">
+        <section className="w-full py-24 my-10 bg-black text-white relative z-20">
           <div className="max-w-7xl mx-auto px-4 text-center">
             <h2 className="text-4xl font-bold mb-6">Begin Your Journey</h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto">

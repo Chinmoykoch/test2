@@ -52,12 +52,14 @@
   .bg {
     position: relative;
     width: 100%;
-    background-attachment: scroll;
+    background-attachment: fixed;
     background-size: cover;
     background-position: center;
     height: 300px;
-    z-index: 1;
+    z-index: 0;
     pointer-events: none;
+    margin: 0;
+    padding: 0;
   }
   
   .bg1 {
