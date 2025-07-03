@@ -1,7 +1,5 @@
 import React from "react";
-import { notFound } from "next/navigation";
-import { freeCourses } from "../../../../utils/constant";
-import FreeCourseDetailPage from "../../../../components/FreeCourses/FreeCourseDetailPage";
+import FreeCourseDetailPageWrapper from "../../../../components/FreeCourses/FreeCourseDetailPageWrapper";
 
 interface PageProps {
   params: Promise<{ courseId: string }>;
@@ -9,35 +7,17 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps) {
   const { courseId } = await params;
-  const course = freeCourses.find((c) => c.id === courseId);
-
-  if (!course) {
-    return {
-      title: "Course Not Found | Inframe School",
-      description: "The requested course could not be found.",
-    };
-  }
-
+  
+  // For now, return basic metadata - this can be enhanced with actual API call
   return {
-    title: `${course.title} - Free Course | Inframe School of Art & Design`,
-    description: course.intent,
-    keywords: `${course.title}, free course, ${course.category}, online learning, Inframe`,
+    title: `Free Course ${courseId} | Inframe School of Art & Design`,
+    description: "Explore our free course designed to help you master new skills and advance your career.",
+    keywords: "free course, online learning, design course, Inframe",
   };
-}
-
-export async function generateStaticParams() {
-  return freeCourses.map((course) => ({
-    courseId: course.id,
-  }));
 }
 
 export default async function CourseDetailPage({ params }: PageProps) {
   const { courseId } = await params;
-  const course = freeCourses.find((c) => c.id === courseId);
 
-  if (!course) {
-    notFound();
-  }
-
-  return <FreeCourseDetailPage course={course} />;
+  return <FreeCourseDetailPageWrapper courseId={courseId} />;
 }

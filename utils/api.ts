@@ -400,6 +400,49 @@ export interface SlugResponse {
   message?: string;
 }
 
+// Free Courses API Interfaces
+export interface CourseDetails {
+  duration: number;
+  mode: string;
+  certificate: string;
+  level: string;
+  _id?: string;
+}
+
+export interface FreeCourseData {
+  name: string;
+  shortDescription: string;
+  details: CourseDetails[];
+  whyLearnThisCourse: string;
+  whatYouWillLearn: string[];
+  careerOpportunities: string;
+  courseBenefits: string[];
+  imageUrl: string;
+  isActive: boolean;
+  metaTitle: string;
+  metaDescription: string;
+  metaKeywords: string;
+}
+
+export interface FreeCourse extends FreeCourseData {
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface FreeCourseResponse {
+  success: boolean;
+  data: FreeCourse;
+  message?: string;
+}
+
+export interface FreeCoursesResponse {
+  success: boolean;
+  data: FreeCourse[];
+  message?: string;
+}
+
 // Get the backend URL from environment variables
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-rakj.onrender.com';
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || BACKEND_URL;
@@ -1961,6 +2004,312 @@ export const useCourseProgramBySlug = (parentSlug: string, programSlug: string) 
     loading,
     error,
     refetch: fetchProgram,
+  };
+};
+
+// Free Courses API Functions
+const buildFreeCoursesApiUrl = (endpoint: string): string => {
+  const API_BASE_URL = 'https://backend-rakj.onrender.com/api/v1/free-courses';
+  return `${API_BASE_URL}/${endpoint}`;
+};
+
+const getApiHeaders = (): HeadersInit => ({
+  'Content-Type': 'application/json',
+});
+
+// Free Courses API Helper Functions
+export const freeCoursesApiHelpers = {
+  // Get all free courses
+  getAllFreeCourses: async (): Promise<FreeCourse[]> => {
+    try {
+      const response = await fetch(buildFreeCoursesApiUrl(''));
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch free courses: ${response.status} ${response.statusText}`);
+      }
+      
+      const result: FreeCoursesResponse = await response.json();
+      
+      if (result.success && result.data) {
+        return result.data;
+      } else {
+        throw new Error('Invalid API response format');
+      }
+    } catch (error) {
+      console.error('API Error:', error);
+      throw error;
+    }
+  },
+
+  // Get free course by ID
+  getFreeCourseById: async (id: string): Promise<FreeCourse | null> => {
+    try {
+      const response = await fetch(buildFreeCoursesApiUrl(id));
+      
+      if (!response.ok) {
+        if (response.status === 404) return null;
+        throw new Error(`Failed to fetch free course: ${response.status} ${response.statusText}`);
+      }
+      
+      const result: FreeCourseResponse = await response.json();
+      
+      if (result.success && result.data) {
+        return result.data;
+      } else {
+        throw new Error('Invalid API response format');
+      }
+    } catch (error) {
+      console.error('API Error:', error);
+      throw error;
+    }
+  },
+
+  // Get active free courses only
+  getActiveFreeCourses: async (): Promise<FreeCourse[]> => {
+    try {
+      const allCourses = await freeCoursesApiHelpers.getAllFreeCourses();
+      return allCourses.filter(course => course.isActive);
+    } catch (error) {
+      console.error('Error fetching active free courses:', error);
+      throw error;
+    }
+  },
+
+  // Search free courses
+  searchFreeCourses: async (searchTerm: string): Promise<FreeCourse[]> => {
+    try {
+      const allCourses = await freeCoursesApiHelpers.getAllFreeCourses();
+      const searchLower = searchTerm.toLowerCase();
+      
+      return allCourses.filter(course => 
+        course.name.toLowerCase().includes(searchLower) ||
+        course.shortDescription.toLowerCase().includes(searchLower) ||
+        course.metaKeywords.toLowerCase().includes(searchLower)
+      );
+    } catch (error) {
+      console.error('Error searching free courses:', error);
+      throw error;
+    }
+  }
+};
+
+// Free Courses React Hooks
+export const useFreeCourses = () => {
+  const [courses, setCourses] = useState<FreeCourse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchCourses = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await freeCoursesApiHelpers.getAllFreeCourses();
+      setCourses(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch courses');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createCourse = async (courseData: FreeCourseData) => {
+    try {
+      const response = await fetch(buildFreeCoursesApiUrl(''), {
+        method: 'POST',
+        headers: getApiHeaders(),
+        body: JSON.stringify(courseData)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to create course: ${response.status} ${response.statusText}`);
+      }
+      
+      const result: FreeCourseResponse = await response.json();
+      
+      if (result.success && result.data) {
+        setCourses(prev => [...prev, result.data]);
+        return result.data;
+      } else {
+        throw new Error('Invalid API response format');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create course');
+      throw err;
+    }
+  };
+
+  const updateCourse = async (id: string, courseData: FreeCourseData) => {
+    try {
+      const response = await fetch(buildFreeCoursesApiUrl(id), {
+        method: 'PUT',
+        headers: getApiHeaders(),
+        body: JSON.stringify(courseData)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to update course: ${response.status} ${response.statusText}`);
+      }
+      
+      const result: FreeCourseResponse = await response.json();
+      
+      if (result.success && result.data) {
+        setCourses(prev => prev.map(course => 
+          course._id === id ? result.data : course
+        ));
+        return result.data;
+      } else {
+        throw new Error('Invalid API response format');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update course');
+      throw err;
+    }
+  };
+
+  const deleteCourse = async (id: string) => {
+    try {
+      const response = await fetch(buildFreeCoursesApiUrl(id), {
+        method: 'DELETE',
+        headers: getApiHeaders()
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to delete course: ${response.status} ${response.statusText}`);
+      }
+      
+      setCourses(prev => prev.filter(course => course._id !== id));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete course');
+      throw err;
+    }
+  };
+
+  const toggleStatus = async (id: string, isActive: boolean) => {
+    try {
+      const response = await fetch(buildFreeCoursesApiUrl(`${id}/toggle-status`), {
+        method: 'PUT',
+        headers: getApiHeaders(),
+        body: JSON.stringify({ isActive })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to toggle course status: ${response.status} ${response.statusText}`);
+      }
+      
+      const result: FreeCourseResponse = await response.json();
+      
+      if (result.success && result.data) {
+        setCourses(prev => prev.map(course => 
+          course._id === id ? result.data : course
+        ));
+        return result.data;
+      } else {
+        throw new Error('Invalid API response format');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to toggle course status');
+      throw err;
+    }
+  };
+
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
+  return {
+    courses,
+    loading,
+    error,
+    fetchCourses,
+    createCourse,
+    updateCourse,
+    deleteCourse,
+    toggleStatus,
+  };
+};
+
+export const useFreeCourseById = (id: string) => {
+  const [course, setCourse] = useState<FreeCourse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchCourse = async () => {
+    if (!id) return;
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await freeCoursesApiHelpers.getFreeCourseById(id);
+      setCourse(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch course');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCourse();
+  }, [id]);
+
+  return {
+    course,
+    loading,
+    error,
+    refetch: fetchCourse,
+  };
+};
+
+export const useActiveFreeCourses = () => {
+  const [courses, setCourses] = useState<FreeCourse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchActiveCourses = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await freeCoursesApiHelpers.getActiveFreeCourses();
+      setCourses(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch active courses');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchActiveCourses();
+  }, []);
+
+  return {
+    courses,
+    loading,
+    error,
+    refetch: fetchActiveCourses,
+  };
+};
+
+// Utility function to transform backend FreeCourse to frontend format
+export const transformFreeCourseToFrontend = (backendCourse: FreeCourse) => {
+  // Get the first detail for basic info, or use defaults
+  const firstDetail = backendCourse.details[0] || {
+    duration: 0,
+    mode: 'Online',
+    certificate: 'Yes',
+    level: 'Beginner'
+  };
+
+  return {
+    id: backendCourse._id,
+    title: backendCourse.name,
+    intent: backendCourse.shortDescription,
+    duration: `${firstDetail.duration} Weeks`,
+    whyToLearn: backendCourse.whyLearnThisCourse,
+    placement: backendCourse.careerOpportunities,
+    fees: "Free",
+    mode: "Online" as const,
+    category: "Design", // Default category - can be enhanced later
+    image: backendCourse.imageUrl
   };
 };
 

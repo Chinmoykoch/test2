@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Poppins } from "next/font/google";
-import { freeCourses, freeCourseCategories } from "../../utils/constant";
+import { useActiveFreeCourses, transformFreeCourseToFrontend } from "../../utils/api";
 import FreeCourseCard from "./FreeCourseCard";
 import { BookOpen, Filter, Search } from "lucide-react";
 
@@ -15,13 +15,53 @@ const FreeCoursesPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Fetch courses from backend
+  const { courses: backendCourses, loading, error } = useActiveFreeCourses();
+
+  // Transform backend courses to frontend format
+  const transformedCourses = backendCourses.map(transformFreeCourseToFrontend);
+
+  // Get unique categories from courses
+  const categories = ["All", ...Array.from(new Set(transformedCourses.map(course => course.category)))];
+
   // Filter courses based on category and search term
-  const filteredCourses = freeCourses.filter((course) => {
+  const filteredCourses = transformedCourses.filter((course) => {
     const matchesCategory = selectedCategory === "All" || course.category === selectedCategory;
     const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          course.intent.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  if (loading) {
+    return (
+      <div className={`min-h-screen bg-gray-50 text-gray-900 ${poppins.className}`}>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-300 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading free courses...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={`min-h-screen bg-gray-50 text-gray-900 ${poppins.className}`}>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <p className="text-red-500 mb-4">Error loading courses: {error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="bg-yellow-300 text-white px-4 py-2 rounded-lg hover:bg-yellow-400 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`min-h-screen bg-gray-50 text-gray-900 ${poppins.className}`}>
@@ -72,7 +112,7 @@ const FreeCoursesPage = () => {
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:border-yellow-300 transition-colors"
               >
-                {freeCourseCategories.map((category) => (
+                {categories.map((category) => (
                   <option key={category} value={category}>
                     {category}
                   </option>
@@ -83,7 +123,7 @@ const FreeCoursesPage = () => {
 
           {/* Category Pills */}
           <div className="flex flex-wrap gap-3 mt-6 justify-center">
-            {freeCourseCategories.map((category) => (
+            {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
@@ -112,10 +152,7 @@ const FreeCoursesPage = () => {
         {filteredCourses.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredCourses.map((course) => (
-              <FreeCourseCard key={course.id} course={{
-                ...course,
-                mode: "Online" as const
-              }} />
+              <FreeCourseCard key={course.id} course={course} />
             ))}
           </div>
         ) : (

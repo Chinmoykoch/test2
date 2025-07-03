@@ -13,31 +13,28 @@ import {
   Star,
   Globe
 } from "lucide-react";
+import { FreeCourse } from "../../utils/api";
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
-interface FreeCourse {
-  id: string;
-  title: string;
-  intent: string;
-  duration: string;
-  whyToLearn: string;
-  placement: string;
-  fees: string;
-  mode: string;
-  category: string;
-  image: string;
-}
-
 interface FreeCourseDetailPageProps {
   course: FreeCourse;
 }
 
 const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) => {
-  const benefits = [
+  // Get the first detail for basic info, or use defaults
+  const firstDetail = course.details[0] || {
+    duration: 0,
+    mode: 'Online',
+    certificate: 'Yes',
+    level: 'Beginner'
+  };
+
+  // Use backend data for benefits and learning outcomes
+  const benefits = course.courseBenefits.length > 0 ? course.courseBenefits : [
     "Expert-designed curriculum",
     "Self-paced learning",
     "Industry-relevant skills",
@@ -46,8 +43,8 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
     "Community support"
   ];
 
-  const learningOutcomes = [
-    `Master the fundamentals of ${course.title}`,
+  const learningOutcomes = course.whatYouWillLearn.length > 0 ? course.whatYouWillLearn : [
+    `Master the fundamentals of ${course.name}`,
     "Apply practical skills in real-world scenarios",
     "Build a portfolio of work",
     "Understand industry best practices",
@@ -63,11 +60,11 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
           
           
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            {course.title}
+            {course.name}
           </h1>
           
           <p className="text-lg text-gray-600 leading-relaxed max-w-4xl">
-            {course.intent}
+            {course.shortDescription}
           </p>
         </div>
       </div>
@@ -81,8 +78,8 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
             <div className="bg-white rounded-xl overflow-hidden shadow-sm">
               <div className="relative h-64 md:h-80">
                 <Image
-                  src={course.image}
-                  alt={course.title}
+                  src={course.imageUrl}
+                  alt={course.name}
                   fill
                   className="object-cover"
                 />
@@ -96,7 +93,7 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
                 Why Learn This Course?
               </h2>
               <p className="text-gray-600 text-lg leading-relaxed">
-                {course.whyToLearn}
+                {course.whyLearnThisCourse}
               </p>
             </div>
 
@@ -120,7 +117,7 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
                 Career Opportunities
               </h2>
               <p className="text-gray-600 text-lg leading-relaxed">
-                {course.placement}
+                {course.careerOpportunities}
               </p>
             </div>
 
@@ -148,7 +145,7 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
                   <Clock className="text-yellow-300" size={20} />
                   <div>
                     <div className="text-sm text-gray-500">Duration</div>
-                    <div className="font-semibold text-gray-900">{course.duration}</div>
+                    <div className="font-semibold text-gray-900">{firstDetail.duration} Weeks</div>
                   </div>
                 </div>
                 
@@ -156,7 +153,7 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
                   <Globe className="text-yellow-300" size={20} />
                   <div>
                     <div className="text-sm text-gray-500">Mode</div>
-                    <div className="font-semibold text-gray-900">{course.mode}</div>
+                    <div className="font-semibold text-gray-900">{firstDetail.mode}</div>
                   </div>
                 </div>
                 
@@ -164,7 +161,7 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
                   <Award className="text-yellow-300" size={20} />
                   <div>
                     <div className="text-sm text-gray-500">Certificate</div>
-                    <div className="font-semibold text-gray-900">Yes</div>
+                    <div className="font-semibold text-gray-900">{firstDetail.certificate}</div>
                   </div>
                 </div>
                 
@@ -172,7 +169,7 @@ const FreeCourseDetailPage: React.FC<FreeCourseDetailPageProps> = ({ course }) =
                   <Users className="text-yellow-300" size={20} />
                   <div>
                     <div className="text-sm text-gray-500">Level</div>
-                    <div className="font-semibold text-gray-900">Beginner</div>
+                    <div className="font-semibold text-gray-900">{firstDetail.level}</div>
                   </div>
                 </div>
               </div>

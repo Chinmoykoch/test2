@@ -1,9 +1,13 @@
+"use client";
 import React from "react";
 import { Facebook, Youtube, Instagram, Linkedin, Twitter } from "lucide-react";
 import Link from "next/link";
-import { freeCourses } from "../utils/constant";
+import { useActiveFreeCourses } from "../utils/api";
 
 const Footer = () => {
+  // Fetch backend free courses for the footer
+  const { courses: backendCourses, loading: loadingFreeCourses } = useActiveFreeCourses();
+
   return (
     <footer className="bg-gradient-to-b from-black to-gray-900 text-white font-sans py-16 relative z-50">
       <div className="container mx-auto px-6 lg:px-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
@@ -315,17 +319,21 @@ const Footer = () => {
         <div className="container mx-auto px-6 lg:px-16 text-center text-sm">
           <p>
             <span className="font-semibold">Free Courses:</span>{" "}
-            {freeCourses.map((course, index) => (
-              <React.Fragment key={course.id}>
-                <Link 
-                  href={`/free-courses/${course.id}`} 
-                  className="hover:text-blue-400 transition duration-300"
-                >
-                  {course.title}
-                </Link>
-                {index < freeCourses.length - 1 && " · "}
-              </React.Fragment>
-            ))}
+            {loadingFreeCourses ? (
+              <span className="text-gray-400 ml-2">Loading...</span>
+            ) : (
+              backendCourses.map((course, index) => (
+                <React.Fragment key={course._id}>
+                  <Link 
+                    href={`/free-courses/${course._id}`} 
+                    className="hover:text-blue-400 transition duration-300"
+                  >
+                    {course.name}
+                  </Link>
+                  {index < backendCourses.length - 1 && " · "}
+                </React.Fragment>
+              ))
+            )}
           </p>
         </div>
       </div>
