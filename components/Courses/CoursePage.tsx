@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation"
 // import FAQSection from "./FAQSection"
 // import CategoryLandingPage from "./CategoryLandingPage"
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface CoursePageProps {
   courseType: any[]
   category: string

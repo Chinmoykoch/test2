@@ -21,6 +21,7 @@ const poppins = Poppins({
   weight: ["400", "500", "700"],
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface CourseContentProps {
   title: string;
   duration: string;
