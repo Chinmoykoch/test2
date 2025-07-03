@@ -455,7 +455,7 @@ export const config = {
 
 // Create axios instance with default configuration
 export const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: 'https://backend-rakj.onrender.com/api/v1',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -2312,4 +2312,153 @@ export const transformFreeCourseToFrontend = (backendCourse: FreeCourse) => {
     image: backendCourse.imageUrl
   };
 };
+
+// Careers API Types
+export interface Applicant {
+  _id: string;
+  name: string;
+  email: string;
+  phone: string;
+  resumeUrl: string;
+  coverLetter: string;
+  status: 'pending' | 'reviewed' | 'shortlisted' | 'rejected' | 'hired';
+  appliedAt: string;
+}
+
+export interface CareerPostData {
+  title: string;
+  place: string;
+  description: string;
+  requirements: string[];
+  partTime: boolean;
+  isActive: boolean;
+}
+
+export interface CareerPost extends CareerPostData {
+  _id: string;
+  applicants?: Applicant[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface CareerPostWithApplicants {
+  careerPostId: string;
+  careerPostTitle: string;
+  applicants: Applicant[];
+  totalApplicants: number;
+}
+
+// Careers API Functions
+const CAREERS_API_BASE_URL = 'http://localhost:5000/api';
+
+
+// const apiClient = axios.create({
+//   baseURL: 'http://localhost:5000/api', // or your main API base URL
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+// });
+
+export async function getCareerPosts(): Promise<CareerPost[]> {
+  const response = await apiClient.get('/career-posts/getallcareerposts');
+  if (response.data && Array.isArray(response.data)) {
+    return response.data;
+  } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
+    return response.data.data;
+  } else if (response.data && response.data.success && response.data.data && Array.isArray(response.data.data)) {
+    return response.data.data;
+  }
+  return [];
+}
+
+export async function getCareerPostsWithApplicants(): Promise<CareerPost[]> {
+  try {
+    const response = await apiClient.get('/career-posts/getallcareerposts?populate=applicants');
+    if (response.data && Array.isArray(response.data)) {
+      return response.data;
+    } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
+      return response.data.data;
+    } else if (response.data && response.data.success && response.data.data && Array.isArray(response.data.data)) {
+      return response.data.data;
+    }
+    return [];
+  } catch (error) {
+    return getCareerPosts();
+  }
+}
+
+export async function getActiveCareerPosts(): Promise<CareerPost[]> {
+  const response = await apiClient.get('/career-posts/getactivecareerposts');
+  if (response.data && Array.isArray(response.data)) {
+    return response.data;
+  } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
+    return response.data.data;
+  } else if (response.data && response.data.success && response.data.data && Array.isArray(response.data.data)) {
+    return response.data.data;
+  }
+  return [];
+}
+
+export async function getCareerPostById(id: string): Promise<CareerPost | null> {
+  const response = await apiClient.get(`/career-posts/getcareerpostbyid/${id}`);
+  if (response.data && response.data.success && response.data.data) {
+    return response.data.data;
+  }
+  return null;
+}
+
+export async function createCareerPost(data: CareerPostData): Promise<CareerPost> {
+  const response = await apiClient.post('/career-posts/addcareerpost', data);
+  if (response.data && response.data.success && response.data.data) {
+    return response.data.data;
+  }
+  throw new Error('Failed to create career post');
+}
+
+export async function updateCareerPost(id: string, data: CareerPostData): Promise<CareerPost> {
+  const response = await apiClient.put(`/career-posts/updatecareerpost/${id}`, data);
+  if (response.data && response.data.success && response.data.data) {
+    return response.data.data;
+  }
+  throw new Error('Failed to update career post');
+}
+
+export async function deleteCareerPost(id: string): Promise<void> {
+  await apiClient.delete(`/career-posts/deletecareerpost/${id}`);
+}
+
+export async function toggleCareerPostStatus(id: string): Promise<CareerPost> {
+  const response = await apiClient.put(`/career-posts/togglecareerpoststatus/${id}`);
+  if (response.data && response.data.success && response.data.data) {
+    return response.data.data;
+  }
+  throw new Error('Failed to toggle career post status');
+}
+
+export async function getApplicantsForCareerPost(careerId: string): Promise<Applicant[]> {
+  const response = await apiClient.get(`/career-posts/applicants/${careerId}`);
+  if (response.data && response.data.success && response.data.data) {
+    const result = response.data.data;
+    if (result.applicants && Array.isArray(result.applicants)) {
+      return result.applicants;
+    }
+  }
+  return [];
+}
+
+export async function updateApplicantStatus(
+  careerId: string,
+  applicantId: string,
+  status: Applicant['status']
+): Promise<Applicant> {
+  const response = await apiClient.put(`/career-posts/applicants/${careerId}/${applicantId}/status`, { status });
+  if (response.data && response.data.success && response.data.data) {
+    return response.data.data;
+  } else if (response.data && response.data.success) {
+    return response.data;
+  } else {
+    throw new Error('Invalid response structure from update status API');
+  }
+}
 

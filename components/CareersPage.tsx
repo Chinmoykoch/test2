@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -40,6 +40,7 @@ import {
 import { Badge } from "../components/ui/badge";
 import { AlertCircle, Check, Upload, BookOpen, Users, Target, MapPin, Briefcase } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { getActiveCareerPosts, CareerPost } from "../utils/api";
 
 
 const poppins = Poppins({
@@ -85,39 +86,33 @@ const positions = [
   { id: "placement-officer", label: "Placement Officer" },
 ];
 
-const featuredJobs = [
-  {
-    id: 1,
-    title: "Senior Faculty - Interior Design",
-    type: "Full-time",
-    location: "Chennai",
-    description: "We're looking for an experienced interior design faculty member with industry experience to join our team.",
-    requirements: ["5+ years experience", "Master's degree", "Industry connections"]
-  },
-  {
-    id: 2,
-    title: "Course Coordinator - Fashion Design",
-    type: "Full-time",
-    location: "Chennai",
-    description: "Join our fashion department to coordinate curriculum development and student activities.",
-    requirements: ["3+ years experience", "Curriculum development", "Student mentorship"]
-  },
-  {
-    id: 3,
-    title: "Student Counselor",
-    type: "Full-time",
-    location: "Chennai",
-    description: "Help prospective students understand our programs and guide them through the admission process.",
-    requirements: ["Excellent communication skills", "Understanding of design education", "Sales experience"]
-  }
-];
-
 export default function CareersPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState<{
     success: boolean;
     message: string;
   } | null>(null);
+
+  // Backend jobs state
+  const [jobs, setJobs] = useState<CareerPost[]>([]);
+  const [loadingJobs, setLoadingJobs] = useState(true);
+  const [jobsError, setJobsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      setLoadingJobs(true);
+      setJobsError(null);
+      try {
+        const data = await getActiveCareerPosts();
+        setJobs(data);
+      } catch {
+        setJobsError("Failed to load job openings.");
+      } finally {
+        setLoadingJobs(false);
+      }
+    };
+    fetchJobs();
+  }, []);
 
   const form = useForm<z.infer<typeof CareerFormSchema>>({
     resolver: zodResolver(CareerFormSchema),
@@ -235,50 +230,56 @@ export default function CareersPage() {
           </TabsList>
           
           <TabsContent value="openings" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredJobs.map(job => (
-                <Card key={job.id} className="overflow-hidden border border-gray-200 transition-all hover:shadow-md">
-                  <CardHeader className="bg-gray-50 pb-4">
-                    <div className="flex justify-between items-start">
-                      <CardTitle className="text-lg text-black">{job.title}</CardTitle>
-                      <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-200">
-                        {job.type}
-                      </Badge>
-                    </div>
-                    <CardDescription className="flex items-center mt-1 text-gray-600">
-                      <MapPin size={14} className="mr-1" /> {job.location}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-4">
-                    <p className="text-sm text-gray-600 mb-4">{job.description}</p>
-                    <div className="space-y-2">
-                      <h4 className="text-sm font-medium">Requirements:</h4>
-                      <ul className="text-sm text-gray-600 space-y-1">
-                        {job.requirements.map((req, idx) => (
-                          <li key={idx} className="flex items-start">
-                            <Check size={16} className="text-yellow-500 mr-2 mt-0.5" />
-                            <span>{req}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="mt-4 pt-4 border-t border-gray-100">
-                      <Button 
-                        onClick={() => {
-                          const applicationTab = document.querySelector('[data-value="application"]');
-                          if (applicationTab) {
-                            (applicationTab as HTMLElement).click();
-                          }
-                        }}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-black w-full"
-                      >
-                        Apply Now
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            {loadingJobs ? (
+              <div className="text-center py-12 text-gray-500">Loading job openings...</div>
+            ) : jobsError ? (
+              <div className="text-center py-12 text-red-500">{jobsError}</div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {jobs.map(job => (
+                  <Card key={job._id} className="overflow-hidden border border-gray-200 transition-all hover:shadow-md">
+                    <CardHeader className="bg-gray-50 pb-4">
+                      <div className="flex justify-between items-start">
+                        <CardTitle className="text-lg text-black">{job.title}</CardTitle>
+                        <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-200">
+                          {job.partTime ? "Part-time" : "Full-time"}
+                        </Badge>
+                      </div>
+                      <CardDescription className="flex items-center mt-1 text-gray-600">
+                        <MapPin size={14} className="mr-1" /> {job.place}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="pt-4">
+                      <p className="text-sm text-gray-600 mb-4">{job.description}</p>
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-medium">Requirements:</h4>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          {job.requirements.map((req, idx) => (
+                            <li key={idx} className="flex items-start">
+                              <Check size={16} className="text-yellow-500 mr-2 mt-0.5" />
+                              <span>{req}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-gray-100">
+                        <Button 
+                          onClick={() => {
+                            const applicationTab = document.querySelector('[data-value="application"]');
+                            if (applicationTab) {
+                              (applicationTab as HTMLElement).click();
+                            }
+                          }}
+                          className="bg-yellow-500 hover:bg-yellow-600 text-black w-full"
+                        >
+                          Apply Now
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </TabsContent>
           
           <TabsContent value="application">
