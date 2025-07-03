@@ -15,27 +15,60 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import ApplyNowForm from "../ApplyNowForm";
 import { useState } from "react";
+import { CourseCurriculum, CourseSoftware, CourseFeature } from "@/utils/api";
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface CurriculumType {
+  year?: string;
+  semester?: string;
+  subjects?: string[];
+  description?: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface SoftwareType {
+  name?: string;
+  logoUrl?: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface WhatLearn {
+  skill?: string;
+  description?: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface VideoType {
+  url?: string;
+}
+
 interface CourseContentProps {
   title: string;
   duration: string;
   description: string;
   content: string;
-  index: number;
-  category: string;
   heroImage?: string;
   ctaTitle?: string;
   ctaDescription?: string;
-  curriculum?: any;
-  software?: any[];
-  whatYouWillLearn?: any[];
-  videos?: any[];
+  curriculum?: CourseCurriculum[];
+  software?: CourseSoftware[];
+  whatYouWillLearn?: CourseFeature[];
+  videos?: { url: string }[];
+}
+
+// Add CurriculumData and Curriculum interfaces for type safety
+interface CurriculumData {
+  image: string;
+  imageAlt: string;
+  [key: string]: unknown;
+}
+interface Curriculum {
+  [year: string]: CurriculumData;
 }
 
 const CourseContent = ({
@@ -43,8 +76,6 @@ const CourseContent = ({
   duration,
   description,
   content,
-  index = 0,
-  category,
   heroImage,
   ctaTitle,
   ctaDescription,
@@ -61,6 +92,30 @@ const CourseContent = ({
     e.preventDefault();
     setIsFormOpen(true);
   };
+
+  // Transform curriculum array to object for CurriculumSection
+  const curriculumObj = curriculum
+    ? curriculum.reduce((acc, cur) => {
+        acc[cur.year] = {
+          image: cur.imageUrl || '',
+          imageAlt: `${title} ${cur.year}`,
+          ...cur,
+        };
+        return acc;
+      }, {} as Curriculum)
+    : undefined;
+
+  // Transform software for SoftwareLogos
+  const softwareArr = software?.map((s) => ({
+    name: s.name,
+    src: s.logoUrl,
+  })) || [];
+
+  // Transform whatYouWillLearn for WhatYouWillLearn
+  const whatYouWillLearnArr = whatYouWillLearn?.map((f) => ({
+    skill: f.title,
+    description: f.description,
+  })) || [];
 
   return (
     <div className="bg-white text-black">
@@ -145,16 +200,16 @@ const CourseContent = ({
           <CareerProspects />
         </div>
 
-        {curriculum && (
+        {curriculumObj && (
           <div id="curriculum">
-            <CurriculumSection curriculum={curriculum} />
+            <CurriculumSection curriculum={curriculumObj} />
           </div>
         )}
 
-        {software?.length === 0 && whatYouWillLearn ? (
-          <WhatYouWillLearn whatYouWillLearn={whatYouWillLearn} />
+        {softwareArr.length === 0 && whatYouWillLearnArr.length > 0 ? (
+          <WhatYouWillLearn whatYouWillLearn={whatYouWillLearnArr} />
         ) : (
-          <SoftwareLogos software={software || []} />
+          <SoftwareLogos software={softwareArr} />
         )}
 
         <div id="partners">

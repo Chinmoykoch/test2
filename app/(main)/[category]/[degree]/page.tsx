@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { notFound } from "next/navigation";
 import CoursePage from "../../../../components/Courses/CoursePage";
 import { useCourseProgramBySlug, useCourseBySlug } from "../../../../utils/api";
 
@@ -16,6 +15,7 @@ interface DegreePageProps {
 export default function DegreePage({ params }: DegreePageProps) {
   const [category, setCategory] = React.useState<string>("");
   const [degree, setDegree] = React.useState<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [courseData, setCourseData] = React.useState<any>(null);
 
   React.useEffect(() => {

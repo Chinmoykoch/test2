@@ -2,15 +2,19 @@
 import React, { useState } from 'react';
 import { apiHelpers, useCourseBySlug, useCourseProgramBySlug } from '../utils/api';
 
+interface TestResult {
+  success: boolean;
+  data?: unknown;
+  error?: unknown;
+}
+
 export default function TestBackend() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [testResults, setTestResults] = useState<any>({});
+  const [testResults, setTestResults] = useState<Record<string, TestResult>>({});
   const [loading, setLoading] = useState(false);
 
   const testAPIs = async () => {
     setLoading(true);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const results: any = {};
+    const results: Record<string, TestResult> = {};
 
     try {
       // Test health check
@@ -74,7 +78,7 @@ export default function TestBackend() {
         </button>
 
         <div className="space-y-6">
-          {Object.entries(testResults).map(([key, result]: [string, any]) => (
+          {Object.entries(testResults).map(([key, result]: [string, TestResult]) => (
             <div key={key} className="bg-white p-6 rounded-lg shadow">
               <h2 className="text-xl font-semibold mb-4 capitalize">{key.replace(/([A-Z])/g, ' $1')}</h2>
               
@@ -132,11 +136,11 @@ function CourseBySlugTest() {
             <p><strong>Title:</strong> {course.title}</p>
             <p><strong>Slug:</strong> {course.slug}</p>
             <p><strong>Programs:</strong> {course.programs?.length || 0}</p>
-            {course.programs && course.programs.length > 0 && (
+            {course.programs && (course.programs as { title: string }[]).length > 0 && (
               <div className="mt-2">
                 <strong>Program Titles:</strong>
                 <ul className="list-disc list-inside ml-2">
-                  {course.programs.map((program: any, index: number) => (
+                  {(course.programs as { title: string }[]).map((program, index) => (
                     <li key={index}>{program.title}</li>
                   ))}
                 </ul>

@@ -81,8 +81,9 @@ const VideoCard = ({
   </Card>
 );
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 interface TestimonialSliderProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   videos: any[];
 }
 

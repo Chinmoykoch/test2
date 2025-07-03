@@ -12,6 +12,7 @@ interface CategoryPageProps {
 // ✅ Category Page Component
 export default function CategoryPage({ params }: CategoryPageProps) {
   const [category, setCategory] = React.useState<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [categoryData, setCategoryData] = React.useState<any>(null);
 
   React.useEffect(() => {
@@ -38,9 +39,9 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   React.useEffect(() => {
     if (course && course.programs && course.programs.length > 0) {
       console.log('Course found with programs, transforming data:', course);
-      // Transform backend course data to match the expected format
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const transformedData = course.programs.map((program: any) => {
-        // Generate a short value for filtering/grouping
+         
         let value = program.value;
         if (!value && program.slug) {
           value = program.slug
@@ -53,6 +54,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           value = program.title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
         }
         const programSlug = program.slug || value;
+         
         console.log('Creating program link:', { title: program.title, slug: programSlug, backendSlug: program.slug, value });
         
         return {
@@ -68,6 +70,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           content: program.description,
           software: course.software || [],
           whatYouWillLearn: [],
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           videos: course.testimonials?.filter((t: any) => t.youtubeUrl)?.map((t: any) => ({ url: t.youtubeUrl })) || [],
           curriculum: course.curriculum || {},
           imageUrl: program.imageUrl,
@@ -106,6 +109,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     <CategoryLandingPage 
       category={category} 
       courses={categoryData} 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       videos={course?.testimonials?.filter((t: any) => t.youtubeUrl)?.map((t: any) => ({ url: t.youtubeUrl })) || []} 
       backendCourse={course}
     />

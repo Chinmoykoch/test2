@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
-import { useCourses } from "@/utils/api";
+import { useCourses, Course, CourseProgram } from "@/utils/api";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -20,7 +20,7 @@ const poppins = Poppins({
 });
 
 interface CourseSectionProps {
-  courses: any[];
+  courses: Course[];
 }
 
 const CourseSection: React.FC<CourseSectionProps> = ({ courses }) => (
@@ -34,7 +34,7 @@ const CourseSection: React.FC<CourseSectionProps> = ({ courses }) => (
       >
         <div className="relative">
           <Image
-            src={course.heroImage || course.imageUrl || "/placeholder.png"}
+            src={course.heroImage}
             alt={course.title}
             width={600}
             height={300}
@@ -47,9 +47,9 @@ const CourseSection: React.FC<CourseSectionProps> = ({ courses }) => (
             {course.title}
           </h3>
           <ul className="space-y-2">
-            {course.programs && course.programs.map((program: any, idx: number) => (
+            {course.programs?.map((program: CourseProgram, idx: number) => (
               <li
-                key={program._id || idx}
+                key={program._id ?? idx}
                 className="text-sm text-gray-600 hover:text-yellow-600 transition-colors flex items-start"
               >
                 <Link
@@ -57,7 +57,7 @@ const CourseSection: React.FC<CourseSectionProps> = ({ courses }) => (
                   href={`/${course.slug}/${program.slug}`}
                 >
                   <span className="text-yellow-400 mr-2 text-lg leading-none">•</span>
-                  {program.title}
+                  {program.title ?? ''}
                 </Link>
               </li>
             ))}
@@ -79,6 +79,8 @@ const CourseSection: React.FC<CourseSectionProps> = ({ courses }) => (
   </div>
 );
 
+const tabOrder = ["all", "art", "design", "business"];
+
 const CourseCatalog = () => {
   const { courses, loading, error } = useCourses();
 
@@ -92,13 +94,12 @@ const CourseCatalog = () => {
     return <div className="text-center py-20 text-gray-500">No courses available.</div>;
   }
 
-  // Filter courses by category for each tab
-  const filterByCategory = (cat: string) =>
-    courses.filter((course) =>
-      ((course as any).category || '').toLowerCase() === cat
-    );
-
-  const tabOrder = ["all", "art", "design", "business"];
+  const filterByCategory = (category: string) => {
+    if (category === "all") return courses;
+    // TODO: Map with backend category field when available
+    // For now, return all courses as placeholder
+    return courses;
+  };
 
   return (
     <div

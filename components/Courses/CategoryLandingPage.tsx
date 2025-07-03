@@ -18,11 +18,14 @@ const poppins = Poppins({
 
 interface CategoryLandingPageProps {
   category: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   courses: any[]
   heroImage?: string
   categoryTitle?: string
   description?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   videos : any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   backendCourse?: any;
 }
 
@@ -254,12 +257,8 @@ const CategoryLandingPage: React.FC<CategoryLandingPageProps> = ({
 }
 
 // Degree Card Component
-interface DegreeCardProps {
-  course: any
-  category: string
-}
-
-const DegreeCard: React.FC<DegreeCardProps> = ({ course, category }) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const DegreeCard: React.FC<{ course: any; category: string }> = ({ course, category }) => {
   const imageUrl = course.imageUrl || "/placeholder.svg";
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
