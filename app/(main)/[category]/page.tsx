@@ -1,41 +1,115 @@
+"use client";
 import React from "react";
-import { courseTypes } from "../../../utils/courseTypes";
-// import CoursePage from "../../../components/Courses/CoursePage";
 import CategoryLandingPage from "../../../components/Courses/CategoryLandingPage";
+import { useCourseBySlug } from "../../../utils/api";
 
-
-// ✅ Generate Metadata
-export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) {
-  const { category } = await params; // ✅ Await the promise
-  const categoryLower = category.toLowerCase();
-  const categoryData = courseTypes[categoryLower];
-
-  if (!categoryData || !Array.isArray(categoryData) || categoryData.length === 0) {
-    return {
-      title: "Courses | Inframe School of Art & Design",
-      description: "Explore our courses and find the perfect fit for you.",
-    };
-  }
-
-  const metaInfo = categoryData[0] || {}; // ✅ Prevent undefined errors
-
-  return {
-    title: metaInfo.metaTitle || `${category} Courses`,
-    description: metaInfo.metaDescription || `Browse our ${category} courses`,
-  };
+interface CategoryPageProps {
+  params: Promise<{ category: string }>;
 }
+
+// Metadata generation removed - using client-side rendering
 
 // ✅ Category Page Component
-export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
-  const { category } = await params; // ✅ Await the promise
-  const categoryLower = category.toLowerCase();
-  const categoryCourses = courseTypes[categoryLower] || [];
-  
+export default function CategoryPage({ params }: CategoryPageProps) {
+  const [category, setCategory] = React.useState<string>("");
+  const [categoryData, setCategoryData] = React.useState<any>(null);
 
-  return <CategoryLandingPage category={categoryLower} courses={categoryCourses} videos={[]} />;
+  React.useEffect(() => {
+    const getParams = async () => {
+      const { category: cat } = await params;
+      setCategory(cat.toLowerCase());
+    };
+    getParams();
+  }, [params]);
+
+  const { course, loading, error } = useCourseBySlug(category);
+
+  // Debug logging
+  React.useEffect(() => {
+    console.log('CategoryPage Debug:', {
+      category,
+      course,
+      loading,
+      error,
+      categoryData
+    });
+  }, [category, course, loading, error, categoryData]);
+
+  React.useEffect(() => {
+    if (course && course.programs && course.programs.length > 0) {
+      console.log('Course found with programs, transforming data:', course);
+      // Transform backend course data to match the expected format
+      const transformedData = course.programs.map((program: any) => {
+        // Generate a short value for filtering/grouping
+        let value = program.value;
+        if (!value && program.slug) {
+          value = program.slug
+            .replace("bachelor-of-design-in-", "bdes-in-")
+            .replace("bachelor-of-vocation-in-", "bvoc-in-")
+            .replace("bachelor-of-science-in-", "bsc-in-")
+            .replace(/[^a-z0-9-]/g, "");
+        }
+        if (!value && program.title) {
+          value = program.title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+        }
+        const programSlug = program.slug || value;
+        console.log('Creating program link:', { title: program.title, slug: programSlug, backendSlug: program.slug, value });
+        
+        return {
+          redirectUrl: `/${category}/${programSlug}`,
+          mainTitle: category,
+          metaTitle: program.title,
+          metaDescription: program.description,
+          value,
+          label: program.title,
+          title: program.title,
+          duration: program.duration,
+          description: program.description,
+          content: program.description,
+          software: course.software || [],
+          whatYouWillLearn: [],
+          videos: course.testimonials?.filter((t: any) => t.youtubeUrl)?.map((t: any) => ({ url: t.youtubeUrl })) || [],
+          curriculum: course.curriculum || {},
+          imageUrl: program.imageUrl,
+          brochurePdfUrl: program.brochurePdfUrl || course.brochurePdfUrl,
+        };
+      });
+
+      setCategoryData(transformedData);
+    }
+  }, [course, category, loading, error]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-20 font-sans bg-white text-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-yellow-400 mx-auto"></div>
+          <p className="mt-4 text-lg text-gray-600">Loading course information...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!categoryData) {
+    // Show loading or error state if needed
+    return (
+      <div className="min-h-screen pt-20 font-sans bg-white text-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-yellow-400 mx-auto"></div>
+          <p className="mt-4 text-lg text-gray-600">Loading course information...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <CategoryLandingPage 
+      category={category} 
+      courses={categoryData} 
+      videos={course?.testimonials?.filter((t: any) => t.youtubeUrl)?.map((t: any) => ({ url: t.youtubeUrl })) || []} 
+      backendCourse={course}
+    />
+  );
 }
 
-// ✅ Static Params for SSG
-export async function generateStaticParams() {
-  return Object.keys(courseTypes).map((category) => ({ category }));
-}
+// Static params generation removed - using dynamic rendering

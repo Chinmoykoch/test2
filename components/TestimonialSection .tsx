@@ -9,7 +9,7 @@ import {
 import { Card } from "../components/ui/card";
 import Image from "next/image";
 import { testimonials } from "../utils/constant";
-import { apiHelpers, type Testimonial } from "../utils/api";
+import { apiHelpers, type Testimonial } from "@/utils/api";
 import { Poppins } from "next/font/google";
 import Autoplay from "embla-carousel-autoplay";
 import { Star, Loader2 } from "lucide-react";

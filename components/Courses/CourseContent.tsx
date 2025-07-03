@@ -7,13 +7,6 @@ import CurriculumSection from "./CurriculumSection";
 import SoftwareLogos from "./SoftwareLogos";
 import TestimonialSlider from "./TestimonialSlider";
 import FAQSection from "./FAQSection";
-import {
-  categoryHeroImages,
-  type CurriculumType,
-  type SoftwareType,
-  type VideosType,
-  type WhatLearn,
-} from "../../utils/courseTypes";
 import IndustryPartners from "./Partners";
 import AdmissionProcess from "./AdmissionProcess";
 import WhatYouWillLearn from "./WhatYouWillLearn";
@@ -35,10 +28,13 @@ interface CourseContentProps {
   content: string;
   index: number;
   category: string;
-  curriculum?: CurriculumType;
-  software?: SoftwareType[];
-  whatYouWillLearn?: WhatLearn[];
-  videos?: VideosType[];
+  heroImage?: string;
+  ctaTitle?: string;
+  ctaDescription?: string;
+  curriculum?: any;
+  software?: any[];
+  whatYouWillLearn?: any[];
+  videos?: any[];
 }
 
 const CourseContent = ({
@@ -48,13 +44,14 @@ const CourseContent = ({
   content,
   index = 0,
   category,
+  heroImage,
+  ctaTitle,
+  ctaDescription,
   curriculum,
   software,
   whatYouWillLearn,
   videos = [],
 }: CourseContentProps) => {
-  const heroImagesForCategory = categoryHeroImages[category] || [];
-  const heroImage = heroImagesForCategory[index] || heroImagesForCategory[0];
   const fallbackHeroImage =
     "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?w=1600&q=80";
 
@@ -103,8 +100,11 @@ const CourseContent = ({
             <h3
               className={`text-2xl ${poppins.className} text-center py-5 font-bold text-black`}
             >
-              Step into the World of {title.split(" in ")[1] || "Design"}
+              {ctaTitle || `Step into the World of ${title.split(" in ")[1] || "Design"}`}
             </h3>
+            <p className="text-center text-black mb-4">
+              {ctaDescription || "Start your journey today"}
+            </p>
             <div className="flex items-center gap-6">
             <Button onClick={handleApplyClick} className="bg-white text-black hover:bg-yellow-500 px-4 py-2">
               Apply Now

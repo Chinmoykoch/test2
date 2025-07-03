@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Tabs,
@@ -11,153 +12,15 @@ import { Button } from "@/components/ui/button";
 import { FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
-
-const category = {
-  design: [
-    {
-      title: "Interior Design",
-      programs: [
-        "BDes In Interior Design",
-        "BVOC in Interior Design",
-        "BSC in Interior Design",
-        "One Year Diploma in Interior Design",
-        "Three Year Diploma in Interior Design",
-        "6 months Diploma in Interior Design"
-      ],
-      image:
-        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      title: "Fashion Design",
-      programs: [
-        "BDes In Fashion Design",
-        "BVOC in Fashion Design",
-        "BSC in Fashion Design",
-        "One Year Diploma in Fashion Design",
-        "Three Year Diploma in Fashion Design",
-        "6 months Diploma in Fashion Design"
-      ],
-      image: "/fashion-1.JPG",
-    },
-    {
-      title: "Graphic Design",
-      programs: [
-        "BDes In Graphic Design",
-        "BVOC in Graphic Design",
-        "BSC in Graphic Design",
-        "One Year Diploma in Graphic Design",
-        "Three Year Diploma in Graphic Design",
-        "6 months Diploma in Graphic Design"
-      ],
-      image:
-        "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      title: "UIUX-Design",
-      programs: [
-        "BDes In UI & UX Design",
-        "One Year Diploma in UI & UX Design",
-        "6 months Diploma in UIUX-Design"
-      ],
-      image:
-        "https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      title: "Animation-VFX",
-      programs: [
-        "BDes in Animation and VFX",
-        "BVOC in Animation and VFX",
-        "BSC in Animation and VFX",
-        "One Year Diploma in Animation and VFX",
-        "Two Year Diploma in Animation and VFX",
-        "Three Year Diploma in Animation and VFX",
-        "6 months Diploma in Animation-VFX"
-      ],
-      image:
-        "https://images.unsplash.com/photo-1628494391268-c9935bc384d5?q=80&w=2030&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      title: "Jewellery Design",
-      programs: [
-        "BVOC in Jewellery Design",
-        "One Year Diploma in Jewellery Design",
-        "One Year Diploma in CAD Jewellery",
-        "6 Month Certificate Course in Jewellery Design",
-        "6 Month Certificate Course in CAD Jewellery",
-        
-      ],
-      image:
-        "https://images.unsplash.com/photo-1606293926249-ed22e446d476?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-  ],
-  art: [
-    {
-      title: "Fine Arts",
-      programs: [
-        "BFA in Painting",
-        "BFA in Visual Communication",
-        "BFA in Sculpture",
-        "BFA in Applied",
-        "B.VOC in Fine Arts",
-        "One Year Diploma in Painting",
-        "Three Year Diploma in Fine Arts",
-        "6 months Diploma in Fine Arts"
-      ],
-      image:
-        "https://plus.unsplash.com/premium_photo-1673514503009-912ffc6ff956?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-  ],
-  business: [
-    {
-      title: "Digital Marketing",
-      programs: [
-        "BVOC in Digital Marketing",
-        "One Year Diploma in Digital Marketing",
-        "6 Month Certificate Course in Digital Marketing",
-      ],
-      image: "/fetchpik.com-HAfwcPu9n1.jpg",
-    },
-    {
-      title: "Entrepreneurship Skill",
-      programs: [
-        "BVOC in Entrepreneurship Skill",
-        "One Year Diploma in Entrepreneurship Skill",
-      ],
-      image:
-        "https://plus.unsplash.com/premium_photo-1726704124426-c220031548b2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      title: "Media-Entertainment",
-      programs: [
-        "BVOC in Media and Entertainment",
-        "One Year Diploma in Media and Entertainment",
-        "6 months Diploma in Media-Entertainment"
-      ],
-      image:
-        "https://plus.unsplash.com/premium_photo-1710961232986-36cead00da3c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fG1lZGlhJTIwYW5kJTIwZW50ZXJ0YWlubWVudHxlbnwwfHwwfHx8MA%3D%3D",
-    },
-    {
-      title: "Advertising Marketing",
-      programs: ["BBA Advanced Advertising And Marketing Strategies"],
-      image:
-        "https://plus.unsplash.com/premium_photo-1684341008757-3b456034e943?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-  ],
-};
+import { useCourses } from "@/utils/api";
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
 });
 
-interface Course {
-  title: string;
-  programs: string[];
-  image: string;
-}
-
 interface CourseSectionProps {
-  courses: Course[];
+  courses: any[];
 }
 
 const CourseSection: React.FC<CourseSectionProps> = ({ courses }) => (
@@ -166,12 +29,12 @@ const CourseSection: React.FC<CourseSectionProps> = ({ courses }) => (
   >
     {courses.map((course, idx) => (
       <Card
-        key={idx}
+        key={course._id || idx}
         className="overflow-hidden group hover:shadow-2xl transition-all duration-300 border-yellow-100 hover:border-yellow-300"
       >
         <div className="relative">
           <Image
-            src={course.image}
+            src={course.heroImage || course.imageUrl || "/placeholder.png"}
             alt={course.title}
             width={600}
             height={300}
@@ -184,24 +47,24 @@ const CourseSection: React.FC<CourseSectionProps> = ({ courses }) => (
             {course.title}
           </h3>
           <ul className="space-y-2">
-            {course.programs.map((program, idx) => (
+            {course.programs && course.programs.map((program: any, idx: number) => (
               <li
-                key={idx}
+                key={program._id || idx}
                 className="text-sm text-gray-600 hover:text-yellow-600 transition-colors flex items-start"
               >
                 <Link
                   className="hover:text-blue-500 hover:underline flex items-center"
-                  href={`/${course.title.replace(/\s+/g, "-").toLowerCase()}/${program.replace(/\s+/g, "-").toLowerCase()}`}
+                  href={`/${course.slug}/${program.slug}`}
                 >
                   <span className="text-yellow-400 mr-2 text-lg leading-none">•</span>
-                  {program}
+                  {program.title}
                 </Link>
               </li>
             ))}
           </ul>
 
           <Link
-            href={`/${course.title.replace(/\s+/g, "-").toLowerCase()}`}
+            href={`/${course.slug}`}
             className="block mt-6"
             scroll={false}
           >
@@ -217,11 +80,25 @@ const CourseSection: React.FC<CourseSectionProps> = ({ courses }) => (
 );
 
 const CourseCatalog = () => {
-  const allCourses = [
-    ...category.design,
-    ...category.art,
-    ...category.business,
-  ];
+  const { courses, loading, error } = useCourses();
+
+  if (loading) {
+    return <div className="text-center py-20 text-xl">Loading courses...</div>;
+  }
+  if (error) {
+    return <div className="text-center py-20 text-red-500">Failed to load courses: {error}</div>;
+  }
+  if (!courses || courses.length === 0) {
+    return <div className="text-center py-20 text-gray-500">No courses available.</div>;
+  }
+
+  // Filter courses by category for each tab
+  const filterByCategory = (cat: string) =>
+    courses.filter((course) =>
+      ((course as any).category || '').toLowerCase() === cat
+    );
+
+  const tabOrder = ["all", "art", "design", "business"];
 
   return (
     <div
@@ -237,7 +114,7 @@ const CourseCatalog = () => {
         <Tabs defaultValue="all" className="w-full">
           <div className="p-2 mb-12">
             <TabsList className="flex flex-wrap justify-center sm:justify-start my-3 rounded-lg gap-2 font-bold text-black font-sans">
-              {["all", "art","design" , "business" ].map((tab) => (
+              {tabOrder.map((tab) => (
                 <TabsTrigger
                   key={tab}
                   value={tab}
@@ -249,16 +126,16 @@ const CourseCatalog = () => {
             </TabsList>
           </div>
           <TabsContent value="all">
-            <CourseSection courses={allCourses} />
+            <CourseSection courses={courses} />
           </TabsContent>
           <TabsContent value="art">
-            <CourseSection courses={category.art} />
+            <CourseSection courses={filterByCategory("art")} />
           </TabsContent>
           <TabsContent value="business">
-            <CourseSection courses={category.business} />
+            <CourseSection courses={filterByCategory("business")} />
           </TabsContent>
           <TabsContent value="design">
-            <CourseSection courses={category.design} />
+            <CourseSection courses={filterByCategory("design")} />
           </TabsContent>
         </Tabs>
       </div>

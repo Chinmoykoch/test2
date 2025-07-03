@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { apiClient, apiHelpers, API_ENDPOINTS } from '@/utils/api';
+import { apiClient, apiHelpers, API_ENDPOINTS, useCourses } from '@/utils/api';
 
 const ExampleBackendUsage = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<unknown>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const { courses, loading: coursesLoading, error: coursesError, refetch } = useCourses();
 
   const testHealthCheck = async () => {
     setLoading(true);
@@ -196,6 +198,28 @@ const ExampleBackendUsage = () => {
         >
           {loading ? 'Testing...' : 'Test Custom API Call'}
         </button>
+
+        <button
+          onClick={refetch}
+          disabled={coursesLoading}
+          className="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50"
+        >
+          {coursesLoading ? 'Fetching Courses...' : 'Test useCourses Hook'}
+        </button>
+
+        {coursesError && <div className="text-red-500">Error: {coursesError}</div>}
+        {courses && Array.isArray(courses) && courses.length > 0 && (
+          <div className="mt-4">
+            <h3 className="font-bold mb-2">Courses from Backend:</h3>
+            <ul className="list-disc pl-6">
+              {courses.map((course) => (
+                <li key={course._id || course.slug}>
+                  <strong>{course.title}</strong> ({course.slug})
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
       {/* Results Display */}

@@ -1,6 +1,6 @@
 "use client"
 import type React from "react"
-import { type CourseType } from "../../utils/courseTypes"
+// import { type CourseType } from "../../utils/courseTypes"
 import CourseContent from "./CourseContent"
 import { usePathname } from "next/navigation"
 // import { courses } from "../../utils/constant"
@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation"
 // import CategoryLandingPage from "./CategoryLandingPage"
 
 interface CoursePageProps {
-  courseType: CourseType[]
+  courseType: any[]
   category: string
 }
 

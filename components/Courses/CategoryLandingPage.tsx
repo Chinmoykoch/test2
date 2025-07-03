@@ -2,7 +2,6 @@
 import type React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { courseTypes, type CourseType, type VideosType } from "../../utils/courseTypes"
 import { Button } from "../ui/button"
 import { FaArrowRight } from "react-icons/fa"
 import { Poppins } from "next/font/google"
@@ -19,103 +18,15 @@ const poppins = Poppins({
 
 interface CategoryLandingPageProps {
   category: string
-  courses: CourseType[]
+  courses: any[]
   heroImage?: string
   categoryTitle?: string
   description?: string
-  videos : VideosType[];
+  videos : any[];
+  backendCourse?: any;
 }
 
-interface CategoryInfo {
-  title: string
-  description: string
-  heroImage: string
- 
-}
 
-const getCategoryInfo = (category: string): CategoryInfo => {
-  const categoryMap: { [key: string]: CategoryInfo } = {
-    "interior-design": {
-      title: "Interior Design",
-      description:
-        "Transform spaces and create beautiful environments with our comprehensive interior design programs. Learn from industry experts and build a successful career in interior design.",
-      heroImage: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?q=80&w=1920&auto=format&fit=crop",
-      
-    },
-    "fashion-design": {
-      title: "Fashion Design",
-      description:
-        "Unleash your creativity in the world of fashion. Our programs prepare you for a dynamic career in fashion design, from concept to runway.",
-      heroImage: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1920&auto=format&fit=crop",
-    },
-    "graphic-design": {
-      title: "Graphic Design",
-      description:
-        "Master the art of visual communication with our graphic design programs. Create compelling designs that captivate and communicate.",
-      heroImage: "https://images.unsplash.com/photo-1626785774625-0b1c2c4efd7c?q=80&w=1920&auto=format&fit=crop",
-    },
-    "uiux-design": {
-      title: "UI/UX Design",
-      description:
-        "Design seamless digital experiences that users love. Our UI/UX design programs prepare you for the growing digital design industry.",
-      heroImage: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?q=80&w=1920&auto=format&fit=crop",
-    },
-    "animation-vfx": {
-      title: "Animation & VFX",
-      description:
-        "Bring stories to life through animation and visual effects. Our programs provide the skills needed for this exciting and evolving field.",
-      heroImage: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1920&auto=format&fit=crop",
-    },
-    "digital-marketing": {
-      title: "Digital Marketing",
-      description:
-        "Master the strategies that drive online success. Our digital marketing programs prepare you for a career in this fast-paced digital world.",
-      heroImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1920&auto=format&fit=crop",
-    },
-    "jewellery-design": {
-      title: "Jewellery Design",
-      description:
-        "Create stunning jewellery pieces that combine artistry with craftsmanship. Our programs cover traditional techniques and modern design approaches.",
-      heroImage: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1920&auto=format&fit=crop",
-    },
-    "entrepreneurship-skill": {
-      title: "Entrepreneurship Skills",
-      description:
-        "Develop the skills needed to launch and grow successful businesses. Our programs prepare you for the challenges of entrepreneurship.",
-      heroImage: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1920&auto=format&fit=crop",
-    },
-    "media-entertainment": {
-      title: "Media & Entertainment",
-      description:
-        "Prepare for a career in the dynamic world of media and entertainment. Our programs cover content creation, production, and distribution.",
-      heroImage: "https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=1920&auto=format&fit=crop",
-    },
-    "fine-arts": {
-      title: "Fine Arts",
-      description:
-        "Express yourself through various artistic mediums. Our fine arts programs nurture creativity and technical skills for aspiring artists.",
-      heroImage: "https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?q=80&w=1920&auto=format&fit=crop",
-      
-    },
-    "advertising-marketing": {
-      title: "Advertising & Marketing",
-      description:
-        "Create compelling campaigns that drive results. Our programs prepare you for a career in the exciting field of advertising and marketing.",
-      heroImage: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1920&auto=format&fit=crop",
-    },
-  }
-
-  return (
-    categoryMap[category] || {
-      title: category
-        .split("-")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" "),
-      description: "Explore our comprehensive programs and start your journey towards a successful career.",
-      heroImage: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?w=1920&q=80",
-    }
-  )
-}
 
 const CategoryLandingPage: React.FC<CategoryLandingPageProps> = ({
   category,
@@ -123,60 +34,26 @@ const CategoryLandingPage: React.FC<CategoryLandingPageProps> = ({
   heroImage: customHeroImage,
   categoryTitle: customTitle,
   description: customDescription,
-  videos = []
+  videos = [],
+  backendCourse
 }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const handleApplyClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     setIsFormOpen(true);
   };
-  const { title, description, heroImage } =
-    customTitle || customDescription || customHeroImage
-      ? {
-          title: customTitle,
-          description: customDescription,
-          heroImage: customHeroImage,
-        }
-      : getCategoryInfo(category)
 
-      const categoryCourses = courseTypes[category] || [];
-      const fallbackVideos = categoryCourses.find(course => course.videos)?.videos || [];
-    
-      const finalVideos = videos.length > 0 ? videos : fallbackVideos;
+  // Use backend data if available, otherwise fall back to custom props or default values
+  const title = backendCourse?.title || customTitle || category.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+  const description = backendCourse?.description || customDescription || "Explore our comprehensive programs and start your journey towards a successful career.";
+  const heroImage = backendCourse?.heroImage || customHeroImage || "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?w=1920&q=80";
+  const ctaTitle = backendCourse?.ctaTitle || "Ready to Start Your Journey?";
+  const ctaDescription = backendCourse?.ctaDescription || "Take the first step towards a successful career. Apply now or contact us for more information.";
 
+  // Find a brochure PDF URL from the first course that has it
+  const brochurePdfUrl = courses.find(c => c.brochurePdfUrl)?.brochurePdfUrl;
 
-      
-
-
-  // Group courses by degree type for better organization
-  const degreeGroups = {
-    bachelor: courses.filter(
-      (course) =>
-        course.value.includes("bdes") ||
-        course.value.includes("bvoc") ||
-        course.value.includes("bba") ||
-        course.value.includes("bsc") ||
-        course.value.includes("bfa")
-    ),
-    diploma: courses.filter(
-      (course) =>
-        course.value.includes("diploma") ||
-        course.value.includes("diploma1") ||
-        course.value.includes("diploma2") ||
-        course.value.includes("diploma3") ||
-        course.value.includes("cad")
-    ),
-    diploma1: courses.filter(
-      (course) =>
-        course.value.includes("diploma1") 
-    ),
-    certificate: courses.filter(
-      (course) =>
-        course.value.includes("cert") ||
-        course.value.includes("certificate")
-    ),
-  };
-  
+  const finalVideos = videos.length > 0 ? videos : courses.find(course => course.videos)?.videos || [];
 
   return (
     <div className="bg-white">
@@ -212,52 +89,13 @@ const CategoryLandingPage: React.FC<CategoryLandingPageProps> = ({
         <h2 className={`text-3xl md:text-4xl font-bold mb-12 text-center ${poppins.className}`}>
           Our {title} Programs
         </h2>
-
-        {/* Bachelor's Degrees */}
-        {degreeGroups.bachelor.length > 0 && (
-          <div className="mb-16">
-            <h3 className={`text-2xl font-bold mb-8 ${poppins.className}`}>{`Bachelor's Degrees`}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {degreeGroups.bachelor.map((course) => (
-                <DegreeCard key={course.value} course={course} category={category} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Diplomas */}
-        {/* {degreeGroups.diploma.length > 0 && (
-          <div className="mb-16">
-            <h3 className={`text-2xl font-bold mb-8 ${poppins.className}`}>Diploma Programs</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {degreeGroups.diploma.map((course) => (
-                <DegreeCard key={course.value} course={course} category={category} />
-              ))}
-            </div>
-          </div>
-        )} */}
-
-        {/* Diplomas1*/}
-        {degreeGroups.diploma1.length > 0 && (
-          <div className="mb-16">
-            <h3 className={`text-2xl font-bold mb-8 ${poppins.className}`}>Diploma Programs</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {degreeGroups.diploma1.map((course) => (
-                <DegreeCard key={course.value} course={course} category={category} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Certificates */}
-        {degreeGroups.certificate.length > 0 && (
-          <div>
-            <h3 className={`text-2xl font-bold mb-8 ${poppins.className}`}>Certificate Programs</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {degreeGroups.certificate.map((course) => (
-                <DegreeCard key={course.value} course={course} category={category} />
-              ))}
-            </div>
+        {courses.length === 0 ? (
+          <div className="text-center text-gray-500 py-12">No programs found for this category.</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {courses.map((course) => (
+              <DegreeCard key={course.value} course={course} category={category} />
+            ))}
           </div>
         )}
       </div>
@@ -345,38 +183,39 @@ const CategoryLandingPage: React.FC<CategoryLandingPageProps> = ({
       {/* Call to Action */}
       <div className="py-20 px-4 text-center">
         <div className="max-w-3xl mx-auto">
-          <h2 className={`text-3xl md:text-4xl font-bold mb-6 ${poppins.className}`}>Ready to Start Your Journey?</h2>
+          <h2 className={`text-3xl md:text-4xl font-bold mb-6 ${poppins.className}`}>{ctaTitle}</h2>
           <p className="text-lg text-gray-600 mb-8">
-            Take the first step towards a successful career in {(title || "").toLowerCase()}. Apply now or contact us for more
-            information.
+            {ctaDescription}
           </p>
-          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-
-          <Link
-            href=""
-            download="Academic-Brochure-2024.pdf"
-            style={{ textDecoration: 'none' }}
-          >
-            <Button
-              variant="outline"
-              className="border-yellow-400 text-yellow-500 hover:bg-yellow-400 hover:text-black"
-            >
-              Download Brochure
-            </Button>
-          </Link>
-
-
-            
+            {brochurePdfUrl ? (
+              <a
+                href={brochurePdfUrl}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'none' }}
+              >
+                <Button
+                  variant="outline"
+                  className="border-yellow-400 text-yellow-500 hover:bg-yellow-400 hover:text-black"
+                >
+                  Download Brochure
+                </Button>
+              </a>
+            ) : (
+              <Button variant="outline" className="border-yellow-400 text-yellow-500 opacity-50 cursor-not-allowed" disabled>
+                Brochure Not Available
+              </Button>
+            )}
             <Button onClick={handleApplyClick} className="bg-yellow-400 text-black hover:bg-yellow-500 px-4 py-2">
               Apply Now
             </Button>
-
-              <ApplyNowForm
-                  isFormOpen={isFormOpen}
-                  setIsFormOpen={setIsFormOpen}
-                  isScrolled={false}
-                />
+            <ApplyNowForm
+              isFormOpen={isFormOpen}
+              setIsFormOpen={setIsFormOpen}
+              isScrolled={false}
+            />
           </div>
         </div>
       </div>
@@ -416,191 +255,21 @@ const CategoryLandingPage: React.FC<CategoryLandingPageProps> = ({
 
 // Degree Card Component
 interface DegreeCardProps {
-  course: CourseType
+  course: any
   category: string
 }
 
 const DegreeCard: React.FC<DegreeCardProps> = ({ course, category }) => {
-  // Get appropriate image based on course type
-  // Get appropriate image based on course type
-const getCardImage = (courseValue: string, category: string) => {
-    const imageMap = {
-      bdes: "https://images.unsplash.com/photo-1616046229478-9901c5536a45?w=800&q=80",
-      bvoc: "https://images.unsplash.com/photo-1618221381711-42ca8ab6e908?w=800&q=80",
-      bsc: "https://images.unsplash.com/photo-1616048056617-93b94a339009?w=800&q=80",
-      diploma1: "https://images.unsplash.com/photo-1616046229478-9901c5536a45?w=800&q=80",
-      diploma2: "https://images.unsplash.com/photo-1615876234886-fd9a39fda97f?w=800&q=80",
-      diploma3: "https://images.unsplash.com/photo-1615876234886-fd9a39fda97f?w=800&q=80",
-      certificate6: "https://images.unsplash.com/photo-1606112216719-3c2c2cce4507?w=800&q=80",
-    }
-  
-    // Category-specific images
-    const categoryImageMap: { [key: string]: string } = {
-      "interior-design": "https://images.unsplash.com/photo-1618219944342-824e40a13285?w=800&q=80",
-      "fashion-design": "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=80",
-      "graphic-design": "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&q=80",
-      "uiux-design": "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&q=80",
-      "animation-vfx": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80",
-      "digital-marketing": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
-      "jewellery-design": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80",
-      "entrepreneurship-skill": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
-      "media-entertainment": "https://images.unsplash.com/photo-1492724441997-5dc865305da7?w=800&q=80",
-      "fine-arts": "https://images.unsplash.com/photo-1571115764595-644a1f56a55c?w=800&q=80",
-      "advertising-marketing": "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80",
-    }
-  
-    // Course-specific images for specific categories
-    if (category === "fashion-design") {
-      if (courseValue.includes("bdes")) {
-        return "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=80"
-      } 
-      else if (courseValue.includes("bvoc")) {
-        return "https://images.unsplash.com/photo-1516762689617-e1cffcef479d" 
-      }
-      else if (courseValue.includes("diploma")) {
-        return "https://images.unsplash.com/photo-1537832816519-689ad163238b?w=800&q=80"
-      } else {
-        return "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80"
-      }
-    }
-  
-    if (category === "interior-design") {
-      if (courseValue.includes("bdes")) {
-        return "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&q=80"
-      } 
-      else if (courseValue.includes("bvoc")) {
-        return "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6" 
-      }
-      else if (courseValue.includes("diploma1")) {
-        return "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=80"
-      }
-      else if (courseValue.includes("diploma")) {
-        return "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80" 
-      }
-      
-      else {
-        return "https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=800&q=80"
-      }
-    }
-  
-    if (category === "graphic-design") {
-      if (courseValue.includes("bdes") || courseValue.includes("bfa")) {
-        return "https://images.unsplash.com/photo-1626785774625-ddcddc3445e9"
-      }
-      else if (courseValue.includes("bvoc")) {
-        return "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6" 
-      }
-      else if (courseValue.includes("diploma")) {
-        return "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&q=80"
-      } else {
-        return "https://images.unsplash.com/photo-1572044162444-ad60f128bdea"
-      }
-    }
-  
-    if (category === "uiux-design") {
-      if (courseValue.includes("bdes")) {
-        return "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&q=80"
-      } else {
-        return "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=800&q=80"
-      }
-    }
-
-    if (category === "advertising-marketing") {
-      if (courseValue.includes("bba")) {
-        return "https://images.unsplash.com/photo-1519074069444-1ba4fff66d16"
-      } else {
-        return "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=800&q=80"
-      }
-    }
-
-    if (category === "entrepreneurship-skill") {
-      if (courseValue.includes("bvoc")) {
-        return "https://images.unsplash.com/photo-1519389950473-47ba0277781c"
-      } else {
-        return "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80"
-      }
-    }
-
-    if (category === "fine-arts") {
-      if (courseValue.includes("bvoc")) {
-        return "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5"
-      }
-      else if (courseValue.includes("bfa")) {
-        return "https://images.unsplash.com/photo-1518998053901-5348d3961a04" 
-      }
-      else {
-        return "https://images.unsplash.com/photo-1547891654-e66ed7ebb968"
-      }
-    }
-
-    if (category === "media-entertainment") {
-      if (courseValue.includes("bvoc")) {
-        return "https://images.unsplash.com/photo-1485846234645-a62644f84728"
-      } else {
-        return "https://images.unsplash.com/photo-1492724441997-5dc865305da7?w=800&q=80"
-      }
-    }
-  
-    if (category === "animation-vfx") {
-      if (courseValue.includes("bdes") || courseValue.includes("bsc")) {
-        return "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80"
-      } else {
-        return "https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=800&q=80"
-      }
-    }
-    
-  
-    if (category === "digital-marketing") {
-      if (courseValue.includes("diploma")) {
-        return "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=800&q=80"
-      }
-      else if (courseValue.includes("bvoc")) {
-        return "https://images.unsplash.com/photo-1533750349088-cd871a92f312" 
-      }
-      else {
-        return "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80"
-      }
-    }
-  
-    if (category === "jewellery-design") {
-      if (courseValue.includes("bvoc")) {
-        return "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80"
-      }
-      else if (courseValue.includes("diploma1")) {
-        return "https://images.unsplash.com/photo-1573408301185-9146fe634ad0" 
-      }
-      else if (courseValue.includes("certificate")) {
-        return "https://images.unsplash.com/photo-1602173574767-37ac01994b2a" 
-      }
-      else {
-        return "https://images.unsplash.com/photo-1573408301185-9146fe634ad0"
-      }
-    }
-  
-    // Check if we have a default image for the category
-    if (categoryImageMap[category]) {
-      return categoryImageMap[category]
-    }
-  
-    // Default to the general map
-    for (const [key, value] of Object.entries(imageMap)) {
-      if (courseValue.includes(key)) {
-        return value
-      }
-    }
-  
-    return "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?w=800&q=80"
-  }
-
+  const imageUrl = course.imageUrl || "/placeholder.svg";
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
       <div className="relative h-48 overflow-hidden">
         <Image
-          src={getCardImage(course.value, category) || "/placeholder.svg"}
+          src={imageUrl}
           alt={course.title}
           layout="fill"
           objectFit="cover"
-          className="transition-transform duration-500 hover:scale-110"
+          className="transition-transform duration-300 hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
           <div className="p-4">

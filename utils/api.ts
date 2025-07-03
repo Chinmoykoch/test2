@@ -1,3 +1,5 @@
+"use client";
+
 // API utility functions for backend communication
 import axios from 'axios';
 import React, { useState, useCallback, useEffect } from 'react';
@@ -275,6 +277,129 @@ export interface IndustryPartnerResponse {
   message?: string;
 }
 
+// Course-related interfaces
+export interface CourseProgram {
+  _id?: string;
+  title: string;
+  duration: string;
+  description: string;
+  imageUrl: string;
+  detailsUrl: string;
+  order: number;
+  isActive: boolean;
+  slug?: string;
+  parentCourseSlug?: string;
+  parentCourseTitle?: string;
+}
+
+export interface CourseFeature {
+  _id?: string;
+  title: string;
+  description: string;
+  imageUrl?: string;
+  order: number;
+}
+
+export interface CourseTestimonial {
+  _id?: string;
+  studentName: string;
+  studentImage?: string;
+  testimonialText: string;
+  youtubeUrl?: string;
+  course?: string;
+  batch?: string;
+  order: number;
+  isActive: boolean;
+}
+
+export interface CourseFAQ {
+  _id?: string;
+  question: string;
+  answer: string;
+  order: number;
+  isActive: boolean;
+}
+
+export interface CourseCurriculum {
+  _id?: string;
+  year: string;
+  semester: string;
+  subjects: string[];
+  description?: string;
+  imageUrl?: string;
+  order: number;
+}
+
+export interface CourseSoftware {
+  _id?: string;
+  name: string;
+  logoUrl: string;
+  description?: string;
+  order: number;
+}
+
+export interface CourseCareerProspect {
+  _id?: string;
+  title: string;
+  roles: string[];
+  description?: string;
+  order: number;
+}
+
+export interface Course {
+  _id?: string;
+  slug: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  programs: CourseProgram[];
+  features: CourseFeature[];
+  testimonials: CourseTestimonial[];
+  faqs: CourseFAQ[];
+  curriculum: CourseCurriculum[];
+  software: CourseSoftware[];
+  careerProspects: CourseCareerProspect[];
+  ctaTitle: string;
+  ctaDescription: string;
+  brochurePdfUrl?: string;
+  isActive: boolean;
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CourseResponse {
+  success: boolean;
+  data: Course;
+  message?: string;
+}
+
+export interface CoursesResponse {
+  success: boolean;
+  data: Course[];
+  message?: string;
+}
+
+export interface CourseProgramResponse {
+  success: boolean;
+  data: CourseProgram;
+  message?: string;
+}
+
+export interface CourseProgramsResponse {
+  success: boolean;
+  data: CourseProgram[];
+  message?: string;
+}
+
+export interface SlugResponse {
+  success: boolean;
+  slug: string;
+  message?: string;
+}
+
 // Get the backend URL from environment variables
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-rakj.onrender.com';
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || BACKEND_URL;
@@ -356,7 +481,20 @@ export const API_ENDPOINTS = {
 
   // Courses
   GET_COURSES: '/api/v1/courses',
-  GET_COURSE_DETAILS: '/api/v1/courses',
+  GET_COURSE_BY_SLUG: '/api/v1/courses/slug',
+  GET_COURSE_BY_ID: '/api/v1/courses',
+  CREATE_COURSE: '/api/v1/courses',
+  UPDATE_COURSE: '/api/v1/courses',
+  DELETE_COURSE: '/api/v1/courses',
+  GET_COURSE_PROGRAMS: '/api/v1/courses/programs',
+  GET_COURSE_PROGRAM_BY_SLUG: '/api/v1/courses',
+  GET_COURSE_FEATURES: '/api/v1/courses/features',
+  GET_COURSE_TESTIMONIALS: '/api/v1/courses/testimonials',
+  GET_COURSE_FAQS: '/api/v1/courses/faqs',
+  GET_COURSE_CURRICULUM: '/api/v1/courses/curriculum',
+  GET_COURSE_SOFTWARE: '/api/v1/courses/software',
+  GET_COURSE_CAREER_PROSPECTS: '/api/v1/courses/career-prospects',
+  GENERATE_SLUG: '/api/v1/courses/generate-slug',
 
   // Payments
   CREATE_PAYMENT: '/api/v1/payments/create',
@@ -526,6 +664,161 @@ export const apiHelpers = {
       return response.data;
     } catch (error) {
       console.error('Failed to fetch courses:', error);
+      throw error;
+    }
+  },
+
+  // Course-specific API helpers
+  getCourseBySlug: async (slug: string): Promise<Course> => {
+    try {
+      const response = await apiClient.get<CourseResponse>(`${API_ENDPOINTS.GET_COURSE_BY_SLUG}/${slug}`);
+      if (response.data.success && response.data.data) {
+        return response.data.data;
+      } else {
+        throw new Error('Invalid course response format');
+      }
+    } catch (error) {
+      console.error('Failed to fetch course by slug:', error);
+      // Return a fallback course structure if API fails
+      return {
+        slug: slug,
+        title: slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+        description: `Explore our ${slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} programs`,
+        heroImage: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        programs: [],
+        features: [],
+        testimonials: [],
+        faqs: [],
+        curriculum: [],
+        software: [],
+        careerProspects: [],
+        ctaTitle: "Start Your Journey",
+        ctaDescription: "Join our programs today",
+        isActive: true
+      };
+    }
+  },
+
+  getCourseById: async (id: string): Promise<Course> => {
+    try {
+      const response = await apiClient.get<CourseResponse>(`${API_ENDPOINTS.GET_COURSE_BY_ID}/${id}`);
+      if (response.data.success && response.data.data) {
+        return response.data.data;
+      } else {
+        throw new Error('Invalid course response format');
+      }
+    } catch (error) {
+      console.error('Failed to fetch course by ID:', error);
+      throw error;
+    }
+  },
+
+  getAllCourses: async (): Promise<Course[]> => {
+    try {
+      const response = await apiClient.get<CoursesResponse>(API_ENDPOINTS.GET_COURSES);
+      if (response.data.success && Array.isArray(response.data.data)) {
+        return response.data.data;
+      } else {
+        throw new Error('Invalid courses response format');
+      }
+    } catch (error) {
+      console.error('Failed to fetch all courses:', error);
+      throw error;
+    }
+  },
+
+  getCoursePrograms: async (): Promise<CourseProgram[]> => {
+    try {
+      const response = await apiClient.get<CourseProgramsResponse>(API_ENDPOINTS.GET_COURSE_PROGRAMS);
+      if (response.data.success && Array.isArray(response.data.data)) {
+        return response.data.data;
+      } else {
+        throw new Error('Invalid course programs response format');
+      }
+    } catch (error) {
+      console.error('Failed to fetch course programs:', error);
+      throw error;
+    }
+  },
+
+  getCourseProgramBySlug: async (parentSlug: string, programSlug: string): Promise<CourseProgram> => {
+    try {
+      // First get the course by slug to find the program
+      const courseResponse = await apiClient.get<CourseResponse>(`${API_ENDPOINTS.GET_COURSE_BY_SLUG}/${parentSlug}`);
+      console.log('Course API response:', courseResponse.data);
+      if (courseResponse.data.success && courseResponse.data.data) {
+        const course = courseResponse.data.data;
+        console.log('Course data:', course);
+        console.log('Course programs:', course.programs);
+        // Find the program within the course
+        const program = course.programs?.find(p => {
+          const programTitleSlug = p.title?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, "");
+          const programSlugClean = p.slug?.toLowerCase().replace(/[^a-z0-9-]/g, "");
+          const requestedSlugClean = programSlug.toLowerCase().replace(/[^a-z0-9-]/g, "");
+          
+          // Create frontend slug format from backend slug
+          const frontendSlug = programSlugClean?.replace(/bachelor-of-design-in-/g, "bdes-in-")
+            ?.replace(/bachelor-of-vocation-in-/g, "bvoc-in-")
+            ?.replace(/bachelor-of-science-in-/g, "bsc-in-");
+          
+          console.log('Program matching:', {
+            programTitle: p.title,
+            programTitleSlug,
+            programSlug: p.slug,
+            programSlugClean,
+            frontendSlug,
+            requestedSlug: programSlug,
+            requestedSlugClean,
+            matches: programTitleSlug === requestedSlugClean || 
+                     programSlugClean === requestedSlugClean || 
+                     frontendSlug === requestedSlugClean
+          });
+          
+          return programTitleSlug === requestedSlugClean || 
+                 programSlugClean === requestedSlugClean || 
+                 frontendSlug === requestedSlugClean;
+        });
+        
+        if (program) {
+          return program;
+        }
+      }
+      
+      // If not found, return fallback
+      return {
+        title: programSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+        duration: "4 Years Full-Time",
+        description: `Comprehensive ${programSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} program`,
+        imageUrl: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        detailsUrl: `/${parentSlug}/${programSlug}`,
+        order: 1,
+        isActive: true
+      };
+    } catch (error) {
+      console.error('Failed to fetch course program by slug:', error);
+      // Return a fallback program structure if API fails
+      return {
+        title: programSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+        duration: "4 Years Full-Time",
+        description: `Comprehensive ${programSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} program`,
+        imageUrl: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        detailsUrl: `/${parentSlug}/${programSlug}`,
+        order: 1,
+        isActive: true
+      };
+    }
+  },
+
+  generateSlug: async (title: string): Promise<string> => {
+    try {
+      const response = await apiClient.get<SlugResponse>(`${API_ENDPOINTS.GENERATE_SLUG}/${encodeURIComponent(title)}`);
+      if (response.data.success && response.data.slug) {
+        return response.data.slug;
+      } else {
+        throw new Error('Invalid slug response format');
+      }
+    } catch (error) {
+      console.error('Failed to generate slug:', error);
       throw error;
     }
   },
@@ -1129,21 +1422,43 @@ export const useAboutUsData = () => {
     try {
       setLoading(true);
       setError(null);
-      const result = await apiHelpers.getAboutUsData();
+      
+      // Add timeout to prevent infinite loading
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      );
+      
+      const result = await Promise.race([
+        apiHelpers.getAboutUsData(),
+        timeoutPromise
+      ]) as any;
+      
       setData({
-        heroImages: result.heroImages,
-        statistics: result.statistics,
-        coreValues: result.coreValues,
-        campusImages: result.campusImages,
-        whoWeAre: result.whoWeAreContent,
-        aboutUs: result.aboutUsContent,
-        vision: result.visionContent,
-        mission: result.missionContent,
-        coreValuesText: result.coreValuesTextContent,
+        heroImages: result?.heroImages || [],
+        statistics: result?.statistics || [],
+        coreValues: result?.coreValues || [],
+        campusImages: result?.campusImages || [],
+        whoWeAre: result?.whoWeAreContent || null,
+        aboutUs: result?.aboutUsContent || null,
+        vision: result?.visionContent || null,
+        mission: result?.missionContent || null,
+        coreValuesText: result?.coreValuesTextContent || null,
       });
     } catch (err) {
       console.error('Failed to fetch about us data:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch about us data');
+      // Set empty data on error to prevent infinite loading
+      setData({
+        heroImages: [],
+        statistics: [],
+        coreValues: [],
+        campusImages: [],
+        whoWeAre: null,
+        aboutUs: null,
+        vision: null,
+        mission: null,
+        coreValuesText: null,
+      });
     } finally {
       setLoading(false);
     }
@@ -1170,11 +1485,22 @@ export const useIndustryPartners = () => {
     try {
       setLoading(true);
       setError(null);
-      const partnersData = await apiHelpers.getIndustryPartners();
-      setPartners(partnersData);
+      
+      // Add timeout to prevent infinite loading
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      );
+      
+      const partnersData = await Promise.race([
+        apiHelpers.getIndustryPartners(),
+        timeoutPromise
+      ]) as IndustryPartner[];
+      
+      setPartners(partnersData || []);
     } catch (err) {
       console.error('Failed to fetch industry partners:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch industry partners');
+      setPartners([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
@@ -1201,11 +1527,22 @@ export const useAdvisors = () => {
     try {
       setLoading(true);
       setError(null);
-      const advisorsData = await apiHelpers.getAdvisors();
-      setAdvisors(advisorsData);
+      
+      // Add timeout to prevent infinite loading
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      );
+      
+      const advisorsData = await Promise.race([
+        apiHelpers.getAdvisors(),
+        timeoutPromise
+      ]) as Advisor[];
+      
+      setAdvisors(advisorsData || []);
     } catch (err) {
       console.error('Failed to fetch advisors:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch advisors');
+      setAdvisors([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
@@ -1268,11 +1605,22 @@ export const useEnquiries = () => {
     try {
       setLoading(true);
       setError(null);
-      const enquiriesData = await apiHelpers.getEnquiries();
-      setEnquiries(enquiriesData);
+      
+      // Add timeout to prevent infinite loading
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      );
+      
+      const enquiriesData = await Promise.race([
+        apiHelpers.getEnquiries(),
+        timeoutPromise
+      ]) as Enquiry[];
+      
+      setEnquiries(enquiriesData || []);
     } catch (err) {
       console.error('Failed to fetch enquiries:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch enquiries');
+      setEnquiries([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
@@ -1334,11 +1682,22 @@ export const useSportsFacilities = () => {
     try {
       setLoading(true);
       setError(null);
-      const facilitiesData = await apiHelpers.getSportsFacilities();
-      setFacilities(facilitiesData);
+      
+      // Add timeout to prevent infinite loading
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      );
+      
+      const facilitiesData = await Promise.race([
+        apiHelpers.getSportsFacilities(),
+        timeoutPromise
+      ]) as SportsFacility[];
+      
+      setFacilities(facilitiesData || []);
     } catch (err) {
       console.error('Failed to fetch sports facilities:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch sports facilities');
+      setFacilities([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
@@ -1365,11 +1724,22 @@ export const useLifeAtInframeGallery = () => {
     try {
       setLoading(true);
       setError(null);
-      const galleryData = await apiHelpers.getLifeAtInframeGallery();
-      setGalleryImages(galleryData);
+      
+      // Add timeout to prevent infinite loading
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      );
+      
+      const galleryData = await Promise.race([
+        apiHelpers.getLifeAtInframeGallery(),
+        timeoutPromise
+      ]) as GalleryImage[];
+      
+      setGalleryImages(galleryData || []);
     } catch (err) {
       console.error('Failed to fetch gallery images:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch gallery images');
+      setGalleryImages([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
@@ -1396,11 +1766,22 @@ export const useLifeAtInframeSections = () => {
     try {
       setLoading(true);
       setError(null);
-      const sectionsData = await apiHelpers.getLifeAtInframeSections();
-      setSections(sectionsData);
+      
+      // Add timeout to prevent infinite loading
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      );
+      
+      const sectionsData = await Promise.race([
+        apiHelpers.getLifeAtInframeSections(),
+        timeoutPromise
+      ]) as LifeAtInframeSection[];
+      
+      setSections(sectionsData || []);
     } catch (err) {
       console.error('Failed to fetch life at inframe sections:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch life at inframe sections');
+      setSections([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
@@ -1427,11 +1808,22 @@ export const useStudentServices = () => {
     try {
       setLoading(true);
       setError(null);
-      const servicesData = await apiHelpers.getStudentServices();
-      setServices(servicesData);
+      
+      // Add timeout to prevent infinite loading
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      );
+      
+      const servicesData = await Promise.race([
+        apiHelpers.getStudentServices(),
+        timeoutPromise
+      ]) as StudentService[];
+      
+      setServices(servicesData || []);
     } catch (err) {
       console.error('Failed to fetch student services:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch student services');
+      setServices([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
@@ -1448,3 +1840,127 @@ export const useStudentServices = () => {
     refetch: fetchServices,
   };
 };
+
+// Course hooks
+export const useCourses = () => {
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchCourses = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await apiHelpers.getAllCourses();
+      setCourses(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch courses');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCourses();
+  }, [fetchCourses]);
+
+  return {
+    courses,
+    loading,
+    error,
+    refetch: fetchCourses,
+  };
+};
+
+export const useCourseBySlug = (slug: string) => {
+  const [course, setCourse] = useState<Course | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchCourse = useCallback(async () => {
+    if (!slug) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await apiHelpers.getCourseBySlug(slug);
+      setCourse(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch course');
+    } finally {
+      setLoading(false);
+    }
+  }, [slug]);
+
+  useEffect(() => {
+    fetchCourse();
+  }, [fetchCourse]);
+
+  return {
+    course,
+    loading,
+    error,
+    refetch: fetchCourse,
+  };
+};
+
+export const useCoursePrograms = () => {
+  const [programs, setPrograms] = useState<CourseProgram[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchPrograms = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await apiHelpers.getCoursePrograms();
+      setPrograms(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch course programs');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPrograms();
+  }, [fetchPrograms]);
+
+  return {
+    programs,
+    loading,
+    error,
+    refetch: fetchPrograms,
+  };
+};
+
+export const useCourseProgramBySlug = (parentSlug: string, programSlug: string) => {
+  const [program, setProgram] = useState<CourseProgram | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchProgram = useCallback(async () => {
+    if (!parentSlug || !programSlug) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await apiHelpers.getCourseProgramBySlug(parentSlug, programSlug);
+      setProgram(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch course program');
+    } finally {
+      setLoading(false);
+    }
+  }, [parentSlug, programSlug]);
+
+  useEffect(() => {
+    fetchProgram();
+  }, [fetchProgram]);
+
+  return {
+    program,
+    loading,
+    error,
+    refetch: fetchProgram,
+  };
+};
+

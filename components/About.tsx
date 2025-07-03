@@ -7,7 +7,7 @@ import Image from "next/image";
 import "aos/dist/aos.css";
 import CampusLife from "./CampusLife";
 import Aos from "aos";
-import { useAboutUsData, useIndustryPartners } from "../utils/api";
+import { useAboutUsData, useIndustryPartners } from "@/utils/api";
 
 const poppins = Poppins({
   subsets: ["latin"],

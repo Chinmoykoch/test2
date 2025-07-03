@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { ChevronLeft, Loader2 } from 'lucide-react';
-import { apiHelpers } from '../utils/api';
+import { apiHelpers } from "@/utils/api";
 import { blogPostsData } from '../utils/constant';
 
 // Category colors mapping

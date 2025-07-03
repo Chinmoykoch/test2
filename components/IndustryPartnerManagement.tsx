@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "./ui/dialog";
-import { apiHelpers, IndustryPartner } from "../utils/api";
+import { apiHelpers, IndustryPartner } from "@/utils/api";
 import { Poppins } from "next/font/google";
 import Image from "next/image";
 import { Plus, Edit, Trash2, Loader2 } from "lucide-react";

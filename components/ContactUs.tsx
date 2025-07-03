@@ -13,7 +13,7 @@ import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { apiHelpers } from "../utils/api";
+import { apiHelpers } from "@/utils/api";
 
 // Using the Poppins font
 const poppins = Poppins({

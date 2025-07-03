@@ -8,7 +8,6 @@ import {
   TooltipTrigger,
   TooltipProvider,
 } from "../../components/ui/tooltip";
-import { VideosType } from "../../utils/courseTypes";
 import { Poppins } from "next/font/google";
 
 const poppins = Poppins({
@@ -82,7 +81,11 @@ const VideoCard = ({
   </Card>
 );
 
-const TestimonialShorts = ({ videos }: { videos: VideosType[] }) => {
+interface TestimonialSliderProps {
+  videos: any[];
+}
+
+const TestimonialShorts = ({ videos }: TestimonialSliderProps) => {
   return (
     <TooltipProvider>
       <div className="min-h-screen  py-10">

@@ -3,7 +3,7 @@
 import React from "react";
 import { Poppins } from "next/font/google";
 import Image from "next/image";
-import { useIndustryPartners } from "../../utils/api";
+import { useIndustryPartners } from "@/utils/api";
 
 // Using the Poppins font
 const poppins = Poppins({

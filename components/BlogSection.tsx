@@ -7,7 +7,7 @@ import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { ChevronRight, Loader2, Calendar, Clock } from 'lucide-react';
-import { apiHelpers, type BlogPost, type BlogAuthor } from '../utils/api';
+import { apiHelpers, type BlogPost, type BlogAuthor } from "@/utils/api";
 
 // Category colors mapping
 const categoryColors: Record<string, string> = {
