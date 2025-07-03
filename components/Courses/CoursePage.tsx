@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface CoursePageProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   courseType: any[]
   category: string
 }

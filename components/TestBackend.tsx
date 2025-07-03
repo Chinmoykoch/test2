@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 import { apiHelpers, useCourseBySlug, useCourseProgramBySlug } from '../utils/api';
 
 export default function TestBackend() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [testResults, setTestResults] = useState<any>({});
   const [loading, setLoading] = useState(false);
 
   const testAPIs = async () => {
     setLoading(true);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const results: any = {};
 
     try {
