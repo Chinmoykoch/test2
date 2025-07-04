@@ -5,12 +5,18 @@ import "./globals.css";
 import Head from "next/head"; // Import Next.js Head component
 import Script from "next/script";
 import { headers } from "next/headers";
+import { Metadata } from "next";
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
 });
 
+export const metadata: Metadata = {
+  metadataBase: new URL('https://www.inframeschool.com'),
+  title: 'Inframe School: Best Art, Design & Business School in Jodhpur',
+  description: 'Inframe School of Art, Design & Business is a Leading Institution in Jodhpur with Over 15 Years of Excellence.',
+};
 
 const breadcrumbPages: Record<string, { name: string; url: string }> = {
   "/about": { name: "About Us", url: "https://www.inframeschool.com/about" },
