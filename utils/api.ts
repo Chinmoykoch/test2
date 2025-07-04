@@ -660,13 +660,13 @@ export const API_ENDPOINTS = {
   DELETE_SPORTS_FACILITY: '/api/v1/sportsfacility/deletesportsfacility',
 
   // Life at Inframe Gallery Images
-  GET_LIFE_AT_INFRAME_GALLERY: '/galleryimage/getgalleryimages',
+  GET_LIFE_AT_INFRAME_GALLERY: '/api/v1/galleryimage/getgalleryimages',
   ADD_LIFE_AT_INFRAME_GALLERY_IMAGE: '/galleryimage/addgalleryimage',
   UPDATE_LIFE_AT_INFRAME_GALLERY_IMAGE: '/galleryimage/updategalleryimage',
   DELETE_LIFE_AT_INFRAME_GALLERY_IMAGE: '/galleryimage/deletegalleryimage',
 
   // Downloads
-  GET_DOWNLOADS: '/download/getdownloads',
+  GET_DOWNLOADS: '/api/v1/download/getdownloads',
   GET_DOWNLOAD_BY_ID: '/download/getdownloadbyid',
   CREATE_DOWNLOAD: '/download/adddownload',
   UPDATE_DOWNLOAD: '/download/updatedownload',
@@ -2681,7 +2681,7 @@ export async function getCareerPostsWithApplicants(): Promise<CareerPost[]> {
 }
 
 export async function getActiveCareerPosts(): Promise<CareerPost[]> {
-  const response = await apiClient.get('/career-posts/getactivecareerposts');
+  const response = await apiClient.get('/api/v1/career-posts/getactivecareerposts');
   if (response.data && Array.isArray(response.data)) {
     return response.data;
   } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
