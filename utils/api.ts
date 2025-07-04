@@ -445,7 +445,7 @@ export interface FreeCoursesResponse {
 
 // Get the backend URL from environment variables
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-rakj.onrender.com';
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || `${BACKEND_URL}/api/v1`;
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://backend-rakj.onrender.com/api/v1';
 
 // Export config for BackendStatus component
 export const config = {
