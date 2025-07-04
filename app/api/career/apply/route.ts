@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
           backendFormData.append(key, String(value));
         }
       }
-      const response = await fetch(`http://localhost:5500/api/v1/career-posts/apply/${careerid}`, {
+      const response = await fetch(`https://backend-rakj.onrender.com/api/v1/career-posts/apply/${careerid}`, {
         method: 'POST',
         body: backendFormData,
       });
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     } else {
       // Handle JSON data (no file uploads)
       const body = await request.json();
-      const response = await fetch(`http://localhost:5500/api/v1/career-posts/apply/${careerid}`, {
+      const response = await fetch(`https://backend-rakj.onrender.com/api/v1/career-posts/apply/${careerid}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),

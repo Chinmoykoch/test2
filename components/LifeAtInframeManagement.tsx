@@ -11,7 +11,8 @@ import {
   SportsFacility, 
   GalleryImage,
   apiHelpers,
-  API_ENDPOINTS 
+  API_ENDPOINTS,
+  apiClient
 } from '@/utils/api';
 
 const LifeAtInframeManagement = () => {
@@ -83,13 +84,9 @@ const LifeAtInframeManagement = () => {
   const handleSectionSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${API_ENDPOINTS.ADD_LIFE_AT_INFRAME_SECTION}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(sectionForm)
-      });
+      const response = await apiClient.post(API_ENDPOINTS.ADD_LIFE_AT_INFRAME_SECTION, sectionForm);
       
-      if (response.ok) {
+      if (response.status === 200 || response.status === 201) {
         await fetchAllData();
         setSectionForm({
           sectionType: 'hero',
@@ -108,13 +105,9 @@ const LifeAtInframeManagement = () => {
   const handleServiceSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${API_ENDPOINTS.ADD_STUDENT_SERVICE}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(serviceForm)
-      });
+      const response = await apiClient.post(API_ENDPOINTS.ADD_STUDENT_SERVICE, serviceForm);
       
-      if (response.ok) {
+      if (response.status === 200 || response.status === 201) {
         await fetchAllData();
         setServiceForm({
           title: '',
@@ -131,13 +124,9 @@ const LifeAtInframeManagement = () => {
   const handleFacilitySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${API_ENDPOINTS.ADD_SPORTS_FACILITY}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(facilityForm)
-      });
+      const response = await apiClient.post(API_ENDPOINTS.ADD_SPORTS_FACILITY, facilityForm);
       
-      if (response.ok) {
+      if (response.status === 200 || response.status === 201) {
         await fetchAllData();
         setFacilityForm({
           name: '',
@@ -154,13 +143,9 @@ const LifeAtInframeManagement = () => {
   const handleGallerySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${API_ENDPOINTS.ADD_LIFE_AT_INFRAME_GALLERY_IMAGE}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(galleryForm)
-      });
+      const response = await apiClient.post(API_ENDPOINTS.ADD_LIFE_AT_INFRAME_GALLERY_IMAGE, galleryForm);
       
-      if (response.ok) {
+      if (response.status === 200 || response.status === 201) {
         await fetchAllData();
         setGalleryForm({
           title: '',
