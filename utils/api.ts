@@ -671,7 +671,7 @@ export const API_ENDPOINTS = {
   CREATE_DOWNLOAD: '/download/adddownload',
   UPDATE_DOWNLOAD: '/download/updatedownload',
   DELETE_DOWNLOAD: '/download/deletedownload',
-  GET_DOWNLOAD_CATEGORIES: '/download/getcategories',
+  GET_DOWNLOAD_CATEGORIES: '/api/v1/download/getcategories',
   DELETE_DOWNLOAD_CATEGORY: '/download/deletecategory',
 
   // General
