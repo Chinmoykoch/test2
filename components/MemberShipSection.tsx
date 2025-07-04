@@ -39,11 +39,30 @@ const MembershipPartnership = () => {
           </div>
         )}
 
-        {/* Error State */}
+        {/* Error State with Fallback */}
         {error && (
           <div className="text-center py-12">
-            <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
-              <p className="text-red-600">{error}</p>
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 max-w-md mx-auto mb-8">
+              <p className="text-yellow-700">⚠️ {error}. Showing cached memberships.</p>
+            </div>
+            
+            {/* Fallback static memberships */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 items-center justify-center">
+              {[
+                { _id: 'fallback-1', src: '/company logo/logo.png', name: 'Design Association' },
+                { _id: 'fallback-2', src: '/company logo/logo.png', name: 'Creative Alliance' },
+                { _id: 'fallback-3', src: '/company logo/logo.png', name: 'Art Foundation' },
+              ].map((membership) => (
+                <div key={membership._id} className="flex justify-center items-center">
+                  <Image
+                    src={membership.src}
+                    alt={membership.name}
+                    width={230}
+                    height={220}
+                    className="transition-transform transform hover:scale-110 shadow-lg rounded-lg bg-white p-4 object-contain"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         )}

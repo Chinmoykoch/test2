@@ -445,7 +445,7 @@ export interface FreeCoursesResponse {
 
 // Get the backend URL from environment variables
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-rakj.onrender.com';
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || BACKEND_URL;
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || `${BACKEND_URL}/api/v1`;
 
 // Export config for BackendStatus component
 export const config = {
@@ -455,10 +455,11 @@ export const config = {
 
 // Create axios instance with default configuration
 export const apiClient = axios.create({
-  baseURL: 'https://backend-rakj.onrender.com/api/v1',
-  timeout: 10000,
+  baseURL: API_BASE_URL,
+  timeout: 30000, // Increased timeout to 30 seconds
   headers: {
     'Content-Type': 'application/json',
+    'Accept': 'application/json',
   },
 });
 
@@ -503,6 +504,17 @@ apiClient.interceptors.response.use(
         // window.location.href = '/login';
       }
     }
+    
+    // Log detailed error information for debugging
+    console.error('API Error:', {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      url: error.config?.url,
+      method: error.config?.method,
+      data: error.response?.data
+    });
+    
     return Promise.reject(error);
   }
 );
@@ -510,148 +522,160 @@ apiClient.interceptors.response.use(
 // API endpoints
 export const API_ENDPOINTS = {
   // Authentication
-  LOGIN: '/api/v1/auth/login',
-  REGISTER: '/api/v1/auth/register',
-  LOGOUT: '/api/v1/auth/logout',
+  LOGIN: '/auth/login',
+  REGISTER: '/auth/register',
+  LOGOUT: '/auth/logout',
 
   // User management
-  PROFILE: '/api/v1/user/profile',
-  UPDATE_PROFILE: '/api/v1/user/profile',
+  PROFILE: '/user/profile',
+  UPDATE_PROFILE: '/user/profile',
 
   // Admissions
-  SUBMIT_APPLICATION: '/api/v1/admissions/apply',
-  GET_APPLICATION_STATUS: '/api/v1/admissions/status',
+  SUBMIT_APPLICATION: '/admissions/apply',
+  GET_APPLICATION_STATUS: '/admissions/status',
 
   // Courses
-  GET_COURSES: '/api/v1/courses',
-  GET_COURSE_BY_SLUG: '/api/v1/courses/slug',
-  GET_COURSE_BY_ID: '/api/v1/courses',
-  CREATE_COURSE: '/api/v1/courses',
-  UPDATE_COURSE: '/api/v1/courses',
-  DELETE_COURSE: '/api/v1/courses',
-  GET_COURSE_PROGRAMS: '/api/v1/courses/programs',
-  GET_COURSE_PROGRAM_BY_SLUG: '/api/v1/courses',
-  GET_COURSE_FEATURES: '/api/v1/courses/features',
-  GET_COURSE_TESTIMONIALS: '/api/v1/courses/testimonials',
-  GET_COURSE_FAQS: '/api/v1/courses/faqs',
-  GET_COURSE_CURRICULUM: '/api/v1/courses/curriculum',
-  GET_COURSE_SOFTWARE: '/api/v1/courses/software',
-  GET_COURSE_CAREER_PROSPECTS: '/api/v1/courses/career-prospects',
-  GENERATE_SLUG: '/api/v1/courses/generate-slug',
+  GET_COURSES: '/courses',
+  GET_COURSE_BY_SLUG: '/courses/slug',
+  GET_COURSE_BY_ID: '/courses',
+  CREATE_COURSE: '/courses',
+  UPDATE_COURSE: '/courses',
+  DELETE_COURSE: '/courses',
+  GET_COURSE_PROGRAMS: '/courses/programs',
+  GET_COURSE_PROGRAM_BY_SLUG: '/courses',
+  GET_COURSE_FEATURES: '/courses/features',
+  GET_COURSE_TESTIMONIALS: '/courses/testimonials',
+  GET_COURSE_FAQS: '/courses/faqs',
+  GET_COURSE_CURRICULUM: '/courses/curriculum',
+  GET_COURSE_SOFTWARE: '/courses/software',
+  GET_COURSE_CAREER_PROSPECTS: '/courses/career-prospects',
+  GENERATE_SLUG: '/courses/generate-slug',
 
   // Payments
-  CREATE_PAYMENT: '/api/v1/payments/create',
-  VERIFY_PAYMENT: '/api/v1/payments/verify',
+  CREATE_PAYMENT: '/payments/create',
+  VERIFY_PAYMENT: '/payments/verify',
 
   // Contact/Enquiry
-  SUBMIT_ENQUIRY: '/api/v1/contact/enquiry',
-  SUBMIT_COUNSELING_REQUEST: '/api/v1/contact/counseling',
-  ADD_CONTACT: '/api/v1/contact/addcontact',
+  SUBMIT_ENQUIRY: '/enquiries',
+  SUBMIT_COUNSELING_REQUEST: '/contact/counseling',
+  ADD_CONTACT: '/contact/addcontact',
 
   // News/Blog
-  GET_NEWS: '/api/v1/news',
-  GET_BLOG_POSTS: '/api/v1/blog',
+  GET_NEWS: '/news',
+  GET_BLOG_POSTS: '/blog',
 
   // Gallery
-  GET_GALLERY_IMAGES: '/api/v1/gallery',
+  GET_GALLERY_IMAGES: '/gallery',
 
   // Testimonials
-  GET_TESTIMONIALS: '/api/v1/testimonials/gettestimonials',
+  GET_TESTIMONIALS: '/testimonials/gettestimonials',
 
   // Blog
-  GET_BLOGS: '/api/v1/blog/getblogs',
-  GET_ALL_BLOGS: '/api/v1/blog/getallblogs',
-  GET_PUBLISHED_BLOGS: '/api/v1/blog/getpublishedblogs',
-  GET_POPULAR_BLOGS: '/api/v1/blog/getpopularblogs',
-  GET_BLOG_BY_ID: '/api/v1/blog/getblogbyid',
-  GET_BLOG_BY_SLUG: '/api/v1/blog/getblogbyslug',
-  GET_BLOGS_BY_CATEGORY: '/api/v1/blog/getblogsbycategory',
+  GET_BLOGS: '/blog/getblogs',
+  GET_ALL_BLOGS: '/blog/getallblogs',
+  GET_PUBLISHED_BLOGS: '/blog/getpublishedblogs',
+  GET_POPULAR_BLOGS: '/blog/getpopularblogs',
+  GET_BLOG_BY_ID: '/blog/getblogbyid',
+  GET_BLOG_BY_SLUG: '/blog/getblogbyslug',
+  GET_BLOGS_BY_CATEGORY: '/blog/getblogsbycategory',
 
   // Student Clubs
-  GET_STUDENT_CLUBS: '/api/v1/studentclub/getstudentclubs',
+  GET_STUDENT_CLUBS: '/studentclub/getstudentclubs',
 
   // Campus Events
-  GET_CAMPUS_EVENTS: '/api/v1/campusevent/getcampusevents',
+  GET_CAMPUS_EVENTS: '/campusevent/getcampusevents',
 
   // Membership
-  GET_MEMBERSHIP: '/api/v1/membership/getMembership',
+  GET_MEMBERSHIP: '/membership/getMembership',
 
   // Advisors
-  GET_ADVISORS: '/api/v1/advisor/getadvisors',
-  GET_ADVISOR_BY_ID: '/api/v1/advisor/getadvisorsbyid',
-  CREATE_ADVISOR: '/api/v1/advisor/addadvisor',
-  UPDATE_ADVISOR: '/api/v1/advisor/updateadvisor',
-  DELETE_ADVISOR: '/api/v1/advisor/deleteadvisor',
+  GET_ADVISORS: '/advisor/getadvisors',
+  GET_ADVISOR_BY_ID: '/advisor/getadvisorsbyid',
+  CREATE_ADVISOR: '/advisor/addadvisor',
+  UPDATE_ADVISOR: '/advisor/updateadvisor',
+  DELETE_ADVISOR: '/advisor/deleteadvisor',
 
   // Enquiries
-  GET_ENQUIRIES: '/api/v1/enquiries',
-  GET_ENQUIRY_BY_ID: '/api/v1/enquiries',
-  UPDATE_ENQUIRY_STATUS: '/api/v1/enquiries',
-  DELETE_ENQUIRY: '/api/v1/enquiries',
-  GET_ENQUIRY_STATS: '/api/v1/enquiries/stats',
+  GET_ENQUIRIES: '/enquiries',
+  GET_ENQUIRY_BY_ID: '/enquiries',
+  UPDATE_ENQUIRY_STATUS: '/enquiries',
+  DELETE_ENQUIRY: '/enquiries',
+  GET_ENQUIRY_STATS: '/enquiries/stats',
 
   // Industry Partners
-  GET_INDUSTRY_PARTNERS: '/api/v1/logo/getlogo',
-  GET_INDUSTRY_PARTNER_BY_ID: '/api/v1/logo/getlogoById',
-  CREATE_INDUSTRY_PARTNER: '/api/v1/logo/addlogo',
-  UPDATE_INDUSTRY_PARTNER: '/api/v1/logo/updatelogo',
-  DELETE_INDUSTRY_PARTNER: '/api/v1/logo/deletelogo',
+  GET_INDUSTRY_PARTNERS: '/logo/getlogo',
+  GET_INDUSTRY_PARTNER_BY_ID: '/logo/getlogoById',
+  CREATE_INDUSTRY_PARTNER: '/logo/addlogo',
+  UPDATE_INDUSTRY_PARTNER: '/logo/updatelogo',
+  DELETE_INDUSTRY_PARTNER: '/logo/deletelogo',
+
+  // Career Applications
+  SUBMIT_JOB_APPLICATION: '/career-posts/apply',
 
   // About Us
   // Hero Gallery
-  GET_HERO_IMAGES: '/api/v1/about-us/hero-images/getheroimages',
-  ADD_HERO_IMAGE: '/api/v1/about-us/hero-images/addheroimage',
-  UPDATE_HERO_IMAGE: '/api/v1/about-us/hero-images/updateheroimage',
-  DELETE_HERO_IMAGE: '/api/v1/about-us/hero-images/deleteheroimage',
+  GET_HERO_IMAGES: '/about-us/hero-images/getheroimages',
+  ADD_HERO_IMAGE: '/about-us/hero-images/addheroimage',
+  UPDATE_HERO_IMAGE: '/about-us/hero-images/updateheroimage',
+  DELETE_HERO_IMAGE: '/about-us/hero-images/deleteheroimage',
   
   // Content Sections
-  GET_CONTENT_BY_TYPE: '/api/v1/about-us/content/getcontentbytype',
-  ADD_OR_UPDATE_CONTENT: '/api/v1/about-us/content/addorupdatecontent',
+  GET_CONTENT_BY_TYPE: '/about-us/content/getcontentbytype',
+  ADD_OR_UPDATE_CONTENT: '/about-us/content/addorupdatecontent',
   
   // Statistics
-  GET_STATISTICS: '/api/v1/about-us/statistics/getstatistics',
-  ADD_STATISTIC: '/api/v1/about-us/statistics/addstatistic',
-  UPDATE_STATISTIC: '/api/v1/about-us/statistics/updatestatistic',
-  DELETE_STATISTIC: '/api/v1/about-us/statistics/deletestatistic',
+  GET_STATISTICS: '/about-us/statistics/getstatistics',
+  ADD_STATISTIC: '/about-us/statistics/addstatistic',
+  UPDATE_STATISTIC: '/about-us/statistics/updatestatistic',
+  DELETE_STATISTIC: '/about-us/statistics/deletestatistic',
   
   // Core Values
-  GET_CORE_VALUES: '/api/v1/about-us/core-values/getcorevalues',
-  ADD_CORE_VALUE: '/api/v1/about-us/core-values/addcorevalue',
-  UPDATE_CORE_VALUE: '/api/v1/about-us/core-values/updatecorevalue',
-  DELETE_CORE_VALUE: '/api/v1/about-us/core-values/deletecorevalue',
+  GET_CORE_VALUES: '/about-us/core-values/getcorevalues',
+  ADD_CORE_VALUE: '/about-us/core-values/addcorevalue',
+  UPDATE_CORE_VALUE: '/about-us/core-values/updatecorevalue',
+  DELETE_CORE_VALUE: '/about-us/core-values/deletecorevalue',
   
   // Campus Images
-  GET_CAMPUS_IMAGES: '/api/v1/about-us/campus-images/getcampusimages',
-  ADD_CAMPUS_IMAGE: '/api/v1/about-us/campus-images/addcampusimage',
-  UPDATE_CAMPUS_IMAGE: '/api/v1/about-us/campus-images/updatecampusimage',
-  DELETE_CAMPUS_IMAGE: '/api/v1/about-us/campus-images/deletecampusimage',
+  GET_CAMPUS_IMAGES: '/about-us/campus-images/getcampusimages',
+  ADD_CAMPUS_IMAGE: '/about-us/campus-images/addcampusimage',
+  UPDATE_CAMPUS_IMAGE: '/about-us/campus-images/updatecampusimage',
+  DELETE_CAMPUS_IMAGE: '/about-us/campus-images/deletecampusimage',
 
   // Life at Inframe Sections
-  GET_LIFE_AT_INFRAME_SECTIONS: '/api/v1/lifeatinframesection/getlifeatinframesections',
-  ADD_LIFE_AT_INFRAME_SECTION: '/api/v1/lifeatinframesection/addlifeatinframesection',
-  UPDATE_LIFE_AT_INFRAME_SECTION: '/api/v1/lifeatinframesection/updatelifeatinframesection',
-  DELETE_LIFE_AT_INFRAME_SECTION: '/api/v1/lifeatinframesection/deletelifeatinframesection',
+  GET_LIFE_AT_INFRAME_SECTIONS: '/lifeatinframesection/getlifeatinframesections',
+  ADD_LIFE_AT_INFRAME_SECTION: '/lifeatinframesection/addlifeatinframesection',
+  UPDATE_LIFE_AT_INFRAME_SECTION: '/lifeatinframesection/updatelifeatinframesection',
+  DELETE_LIFE_AT_INFRAME_SECTION: '/lifeatinframesection/deletelifeatinframesection',
 
   // Student Services
-  GET_STUDENT_SERVICES: '/api/v1/studentservice/getstudentservices',
-  ADD_STUDENT_SERVICE: '/api/v1/studentservice/addstudentservice',
-  UPDATE_STUDENT_SERVICE: '/api/v1/studentservice/updatestudentservice',
-  DELETE_STUDENT_SERVICE: '/api/v1/studentservice/deletestudentservice',
+  GET_STUDENT_SERVICES: '/studentservice/getstudentservices',
+  ADD_STUDENT_SERVICE: '/studentservice/addstudentservice',
+  UPDATE_STUDENT_SERVICE: '/studentservice/updatestudentservice',
+  DELETE_STUDENT_SERVICE: '/studentservice/deletestudentservice',
 
   // Sports Facilities
-  GET_SPORTS_FACILITIES: '/api/v1/sportsfacility/getsportsfacilities',
-  ADD_SPORTS_FACILITY: '/api/v1/sportsfacility/addsportsfacility',
-  UPDATE_SPORTS_FACILITY: '/api/v1/sportsfacility/updatesportsfacility',
-  DELETE_SPORTS_FACILITY: '/api/v1/sportsfacility/deletesportsfacility',
+  GET_SPORTS_FACILITIES: '/sportsfacility/getsportsfacilities',
+  ADD_SPORTS_FACILITY: '/sportsfacility/addsportsfacility',
+  UPDATE_SPORTS_FACILITY: '/sportsfacility/updatesportsfacility',
+  DELETE_SPORTS_FACILITY: '/sportsfacility/deletesportsfacility',
 
   // Life at Inframe Gallery Images
-  GET_LIFE_AT_INFRAME_GALLERY: '/api/v1/galleryimage/getgalleryimages',
-  ADD_LIFE_AT_INFRAME_GALLERY_IMAGE: '/api/v1/galleryimage/addgalleryimage',
-  UPDATE_LIFE_AT_INFRAME_GALLERY_IMAGE: '/api/v1/galleryimage/updategalleryimage',
-  DELETE_LIFE_AT_INFRAME_GALLERY_IMAGE: '/api/v1/galleryimage/deletegalleryimage',
+  GET_LIFE_AT_INFRAME_GALLERY: '/galleryimage/getgalleryimages',
+  ADD_LIFE_AT_INFRAME_GALLERY_IMAGE: '/galleryimage/addgalleryimage',
+  UPDATE_LIFE_AT_INFRAME_GALLERY_IMAGE: '/galleryimage/updategalleryimage',
+  DELETE_LIFE_AT_INFRAME_GALLERY_IMAGE: '/galleryimage/deletegalleryimage',
+
+  // Downloads
+  GET_DOWNLOADS: '/download/getdownloads',
+  GET_DOWNLOAD_BY_ID: '/download/getdownloadbyid',
+  CREATE_DOWNLOAD: '/download/adddownload',
+  UPDATE_DOWNLOAD: '/download/updatedownload',
+  DELETE_DOWNLOAD: '/download/deletedownload',
+  GET_DOWNLOAD_CATEGORIES: '/download/getcategories',
+  DELETE_DOWNLOAD_CATEGORY: '/download/deletecategory',
 
   // General
-  HEALTH_CHECK: '/api/v1/health',
+  HEALTH_CHECK: '/health',
 };
 
 // Helper functions for common API calls
@@ -681,10 +705,17 @@ export const apiHelpers = {
   // Submit enquiry
   submitEnquiry: async (enquiryData: any) => {
     try {
-      const response = await apiClient.post(API_ENDPOINTS.GET_ENQUIRIES, enquiryData);
+      console.log('Submitting enquiry to:', API_ENDPOINTS.SUBMIT_ENQUIRY);
+      console.log('Enquiry data:', enquiryData);
+      const response = await apiClient.post(API_ENDPOINTS.SUBMIT_ENQUIRY, enquiryData);
+      console.log('Enquiry submission response:', response.data);
       return response.data;
     } catch (error: any) {
       console.error('Enquiry submission failed:', error);
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+        console.error('Error status:', error.response.status);
+      }
       throw error;
     }
   },
@@ -697,6 +728,119 @@ export const apiHelpers = {
     } catch (error) {
       console.error('Contact submission failed:', error);
       throw error;
+    }
+  },
+
+  // Submit job application
+  submitJobApplication: async (applicationData: any, careerid: string) => {
+    try {
+      if (!careerid) {
+        throw new Error('Career ID is required');
+      }
+      
+      // Log the JSON data for debugging
+      console.log('JSON application data:', applicationData);
+      
+      // Use the correct endpoint with career ID as URL parameter
+      // Send JSON data with proper headers
+      const response = await apiClient.post(`/career-posts/apply/${careerid}`, applicationData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      console.error('Job application submission failed:', error);
+      // Log detailed error information
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+      }
+      throw error;
+    }
+  },
+
+  // Download management functions
+  getDownloads: async (): Promise<DownloadItem[]> => {
+    try {
+      const response = await apiClient.get<DownloadsResponse>(API_ENDPOINTS.GET_DOWNLOADS);
+      if (response.data.success) {
+        return response.data.data;
+      } else {
+        throw new Error(response.data.message || 'Failed to fetch downloads');
+      }
+    } catch (error) {
+      console.error('Failed to fetch downloads:', error);
+      return [];
+    }
+  },
+
+  getDownloadById: async (id: string): Promise<DownloadItem | null> => {
+    try {
+      const response = await apiClient.get<DownloadResponse>(`${API_ENDPOINTS.GET_DOWNLOAD_BY_ID}/${id}`);
+      if (response.data.success) {
+        return response.data.data;
+      } else {
+        throw new Error(response.data.message || 'Failed to fetch download');
+      }
+    } catch (error) {
+      console.error('Failed to fetch download by ID:', error);
+      return null;
+    }
+  },
+
+  createDownload: async (data: DownloadItemData): Promise<DownloadItem> => {
+    try {
+      const response = await apiClient.post<DownloadResponse>(API_ENDPOINTS.CREATE_DOWNLOAD, data);
+      if (response.data.success) {
+        return response.data.data;
+      } else {
+        throw new Error(response.data.message || 'Failed to create download');
+      }
+    } catch (error) {
+      console.error('Failed to create download:', error);
+      throw error;
+    }
+  },
+
+  updateDownload: async (id: string, data: DownloadItemData): Promise<DownloadItem> => {
+    try {
+      const response = await apiClient.put<DownloadResponse>(`${API_ENDPOINTS.UPDATE_DOWNLOAD}/${id}`, data);
+      if (response.data.success) {
+        return response.data.data;
+      } else {
+        throw new Error(response.data.message || 'Failed to update download');
+      }
+    } catch (error) {
+      console.error('Failed to update download:', error);
+      throw error;
+    }
+  },
+
+  deleteDownload: async (id: string): Promise<void> => {
+    try {
+      const response = await apiClient.delete(`${API_ENDPOINTS.DELETE_DOWNLOAD}/${id}`);
+      if (!response.data.success) {
+        throw new Error(response.data.message || 'Failed to delete download');
+      }
+    } catch (error) {
+      console.error('Failed to delete download:', error);
+      throw error;
+    }
+  },
+
+  getDownloadCategories: async (): Promise<DownloadCategory[]> => {
+    try {
+      const response = await apiClient.get<DownloadCategoriesResponse>(API_ENDPOINTS.GET_DOWNLOAD_CATEGORIES);
+      if (response.data.success) {
+        return response.data.data;
+      } else {
+        throw new Error(response.data.message || 'Failed to fetch download categories');
+      }
+    } catch (error) {
+      console.error('Failed to fetch download categories:', error);
+      return [];
     }
   },
 
@@ -869,7 +1013,9 @@ export const apiHelpers = {
   // Get testimonials
   getTestimonials: async (): Promise<Testimonial[]> => {
     try {
+      console.log('Making API request to:', API_ENDPOINTS.GET_TESTIMONIALS);
       const response = await apiClient.get<TestimonialsResponse>(API_ENDPOINTS.GET_TESTIMONIALS);
+      console.log('Testimonials API response:', response.data);
 
       // Check if response has the expected structure
       if (response.data && response.data.success && Array.isArray(response.data.data)) {
@@ -878,8 +1024,16 @@ export const apiHelpers = {
         console.warn('Unexpected testimonials response structure:', response.data);
         return [];
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to fetch testimonials:', error);
+      if (error.response) {
+        console.error('Response status:', error.response.status);
+        console.error('Response data:', error.response.data);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+      } else {
+        console.error('Error setting up request:', error.message);
+      }
       throw error;
     }
   },
@@ -1010,15 +1164,26 @@ export const apiHelpers = {
   // Get memberships
   getMemberships: async (): Promise<Membership[]> => {
     try {
+      console.log('Making API request to:', API_ENDPOINTS.GET_MEMBERSHIP);
       const response = await apiClient.get<MembershipResponse>(API_ENDPOINTS.GET_MEMBERSHIP);
+      console.log('Memberships API response:', response.data);
+      
       if (response.data && response.data.success && Array.isArray(response.data.data)) {
         return response.data.data;
       } else {
         console.warn('Unexpected membership response structure:', response.data);
         return [];
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to fetch memberships:', error);
+      if (error.response) {
+        console.error('Response status:', error.response.status);
+        console.error('Response data:', error.response.data);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+      } else {
+        console.error('Error setting up request:', error.message);
+      }
       throw error;
     }
   },
@@ -1296,15 +1461,26 @@ export const apiHelpers = {
   // Industry Partners
   getIndustryPartners: async (): Promise<IndustryPartner[]> => {
     try {
+      console.log('Making API request to:', API_ENDPOINTS.GET_INDUSTRY_PARTNERS);
       const response = await apiClient.get<IndustryPartnersResponse>(API_ENDPOINTS.GET_INDUSTRY_PARTNERS);
+      console.log('Industry partners API response:', response.data);
+      
       if (response.data && response.data.success && Array.isArray(response.data.data)) {
         return response.data.data;
       } else {
         console.warn('Unexpected industry partners response structure:', response.data);
         return [];
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to fetch industry partners:', error);
+      if (error.response) {
+        console.error('Response status:', error.response.status);
+        console.error('Response data:', error.response.data);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+      } else {
+        console.error('Error setting up request:', error.message);
+      }
       throw error;
     }
   },
@@ -1524,25 +1700,31 @@ export const useIndustryPartners = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchPartners = async () => {
+  const fetchPartners = async (retryCount = 0) => {
     try {
       setLoading(true);
       setError(null);
       
-      // Add timeout to prevent infinite loading
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Request timeout')), 10000)
-      );
-      
-      const partnersData = await Promise.race([
-        apiHelpers.getIndustryPartners(),
-        timeoutPromise
-      ]) as IndustryPartner[];
+      console.log(`Fetching industry partners... (attempt ${retryCount + 1})`);
+      const startTime = Date.now();
+      const partnersData = await apiHelpers.getIndustryPartners();
+      const endTime = Date.now();
+      console.log(`Industry partners fetched in ${endTime - startTime}ms:`, partnersData);
       
       setPartners(partnersData || []);
     } catch (err) {
-      console.error('Failed to fetch industry partners:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch industry partners');
+      console.error(`Failed to fetch industry partners (attempt ${retryCount + 1}):`, err);
+      
+      // Retry up to 2 times with exponential backoff
+      if (retryCount < 2) {
+        const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s
+        console.log(`Retrying in ${delay}ms...`);
+        setTimeout(() => fetchPartners(retryCount + 1), delay);
+        return;
+      }
+      
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch industry partners';
+      setError(errorMessage);
       setPartners([]); // Set empty array on error
     } finally {
       setLoading(false);
@@ -2009,8 +2191,8 @@ export const useCourseProgramBySlug = (parentSlug: string, programSlug: string) 
 
 // Free Courses API Functions
 const buildFreeCoursesApiUrl = (endpoint: string): string => {
-  const API_BASE_URL = 'https://backend-rakj.onrender.com/api/v1/free-courses';
-  return `${API_BASE_URL}/${endpoint}`;
+  const FREE_COURSES_API_URL = 'https://backend-rakj.onrender.com/api/v1/free-courses';
+  return `${FREE_COURSES_API_URL}/${endpoint}`;
 };
 
 const getApiHeaders = (): HeadersInit => ({
@@ -2289,6 +2471,59 @@ export const useActiveFreeCourses = () => {
   };
 };
 
+// Download hooks
+export const useDownloads = () => {
+  const [downloads, setDownloads] = useState<DownloadItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchDownloads = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await apiHelpers.getDownloads();
+      setDownloads(data);
+    } catch (err) {
+      console.error('Error fetching downloads:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch downloads');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDownloads();
+  }, []);
+
+  return { downloads, loading, error, refetch: fetchDownloads };
+};
+
+export const useDownloadCategories = () => {
+  const [categories, setCategories] = useState<DownloadCategory[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await apiHelpers.getDownloadCategories();
+      setCategories(data);
+    } catch (err) {
+      console.error('Error fetching download categories:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch download categories');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  return { categories, loading, error, refetch: fetchCategories };
+};
+
 // Utility function to transform backend FreeCourse to frontend format
 export const transformFreeCourseToFrontend = (backendCourse: FreeCourse) => {
   // Get the first detail for basic info, or use defaults
@@ -2314,6 +2549,64 @@ export const transformFreeCourseToFrontend = (backendCourse: FreeCourse) => {
 };
 
 // Careers API Types
+export interface DownloadItem {
+  _id: string;
+  title: string;
+  description: string;
+  category: string;
+  fileUrl: string;
+  fileName: string;
+  fileSize: string;
+  uploadDate: string;
+  downloadCount: number;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
+}
+
+export interface DownloadItemData {
+  title: string;
+  description: string;
+  category: string;
+  fileUrl: string;
+  fileName: string;
+  fileSize: string;
+  uploadDate: string;
+  downloadCount: number;
+  isActive: boolean;
+}
+
+export interface DownloadCategory {
+  _id: string;
+  name: string;
+  description?: string;
+  isActive: boolean;
+  createdDate: string;
+  downloadCount: number;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
+}
+
+export interface DownloadsResponse {
+  success: boolean;
+  data: DownloadItem[];
+  message?: string;
+}
+
+export interface DownloadResponse {
+  success: boolean;
+  data: DownloadItem;
+  message?: string;
+}
+
+export interface DownloadCategoriesResponse {
+  success: boolean;
+  data: DownloadCategory[];
+  message?: string;
+}
+
 export interface Applicant {
   _id: string;
   name: string;
@@ -2350,7 +2643,6 @@ export interface CareerPostWithApplicants {
 }
 
 // Careers API Functions
-const CAREERS_API_BASE_URL = 'http://localhost:5000/api';
 
 
 // const apiClient = axios.create({

@@ -104,6 +104,8 @@ const ApplyNowForm = ({
     setSubmissionMessage(null);
     
     try {
+      console.log("Form values:", values);
+      
       // Transform form data to match enquiry API structure
       const enquiryData = {
         name: values.name,
@@ -115,19 +117,41 @@ const ApplyNowForm = ({
         message: `State: ${values.state}, Level: ${values.level}`, // Include additional info in message
       };
 
+      console.log("Enquiry data to submit:", enquiryData);
+
       // Submit to backend API
       const response = await apiHelpers.submitEnquiry(enquiryData);
 
+      console.log("API response:", response);
+
       if (response && response.success) {
-        router.push("/thank-you");
+        setSubmissionMessage("Thank you! Your application has been submitted successfully.");
+        setTimeout(() => {
+          router.push("/thank-you");
+        }, 2000);
       } else {
         setSubmissionMessage(
           "Failed to submit the form. Please try again later."
         );
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error submitting the form:", error);
-      setSubmissionMessage("An error occurred. Please try again later.");
+      
+      // Provide more specific error messages
+      if (error && typeof error === 'object' && 'response' in error) {
+        const apiError = error as { response?: { status?: number } };
+        if (apiError.response?.status === 400) {
+          setSubmissionMessage("Please check your form data and try again.");
+        } else if (apiError.response?.status === 404) {
+          setSubmissionMessage("Service temporarily unavailable. Please try again later.");
+        } else if (apiError.response?.status && apiError.response.status >= 500) {
+          setSubmissionMessage("Server error. Please try again later.");
+        } else {
+          setSubmissionMessage("An error occurred. Please try again later.");
+        }
+      } else {
+        setSubmissionMessage("An error occurred. Please try again later.");
+      }
     } finally {
       setIsSubmitting(false);
     }

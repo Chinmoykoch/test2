@@ -4,7 +4,7 @@
 export const env = {
   // Backend Configuration
   BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-rakj.onrender.com',
-  API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-rakj.onrender.com',
+  API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || `${process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-rakj.onrender.com'}/api/v1`,
   
   // App Configuration
   APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',

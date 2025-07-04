@@ -40,7 +40,7 @@ import {
 import { Badge } from "../components/ui/badge";
 import { AlertCircle, Check, Upload, BookOpen, Users, Target, MapPin, Briefcase } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { getActiveCareerPosts, CareerPost } from "../utils/api";
+import { getActiveCareerPosts, CareerPost, apiHelpers } from "../utils/api";
 
 
 const poppins = Poppins({
@@ -76,22 +76,14 @@ const CareerFormSchema = z.object({
   coverLetter: z.string().optional(),
 });
 
-const positions = [
-  { id: "faculty-design", label: "Faculty - Design" },
-  { id: "faculty-animation", label: "Faculty - Animation" },
-  { id: "faculty-fashion", label: "Faculty - Fashion" },
-  { id: "admin-officer", label: "Administrative Officer" },
-  { id: "marketing-manager", label: "Marketing Manager" },
-  { id: "student-counselor", label: "Student Counselor" },
-  { id: "placement-officer", label: "Placement Officer" },
-];
-
 export default function CareersPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState<{
     success: boolean;
     message: string;
   } | null>(null);
+  const [selectedCareerId, setSelectedCareerId] = useState<string | null>(null);
+  const [selectedTab, setSelectedTab] = useState<string>('openings');
 
   // Backend jobs state
   const [jobs, setJobs] = useState<CareerPost[]>([]);
@@ -124,50 +116,57 @@ export default function CareersPage() {
     },
   });
 
+  // Sync form field with selectedCareerId
+  useEffect(() => {
+    if (selectedCareerId) {
+      form.setValue("position", selectedCareerId);
+    }
+  }, [selectedCareerId, form]);
+
   const onSubmit = async (data: z.infer<typeof CareerFormSchema>) => {
     setIsSubmitting(true);
     try {
-      // Create FormData object for file upload
-      const formData = new FormData();
-      formData.append("name", data.name);
-      formData.append("email", data.email);
-      formData.append("phone", data.phone);
-      formData.append("position", data.position);
-      
-      // Add the file with the correct field name expected by Formspree
-      if (data.resume && data.resume[0]) {
-        formData.append("resume", data.resume[0], data.resume[0].name);
+      const careerid = data.position; // Now position is the job's _id
+      if (!careerid) {
+        setFormStatus({ success: false, message: "Please select a job to apply for." });
+        setIsSubmitting(false);
+        return;
       }
       
-      if (data.coverLetter) {
-        formData.append("coverLetter", data.coverLetter);
-      }
-
-      // Make sure we're not including any headers that would conflict with FormData's multipart/form-data
-      const response = await fetch("https://formspree.io/f/mqaerebq", {
-        method: "POST",
-        body: formData,
-        // Do not set Content-Type header, it will be set automatically with the boundary
-      });
-
-      if (response.ok) {
+      // Create JSON payload matching backend expectations
+      const applicationData = {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        coverLetter: data.coverLetter || '',
+        resumeUrl: data.resume && data.resume[0] ? `Resume uploaded: ${data.resume[0].name}` : 'No resume uploaded'
+      };
+      
+      // Debug: Log what we're sending
+      console.log('Submitting job application with data:', applicationData);
+      
+      // Use the existing API helper function with JSON data
+      const response = await apiHelpers.submitJobApplication(applicationData, careerid);
+      
+      if (response && response.success) {
         setFormStatus({
           success: true,
-          message: "Your application has been submitted successfully! We will be in touch soon.",
+          message: "Your job application has been submitted successfully! We will review your application and get back to you soon.",
         });
         form.reset();
+        setSelectedCareerId(null);
       } else {
-        const errorText = await response.text();
-        console.error("Form submission error:", errorText);
-        
         setFormStatus({
           success: false,
-          message: "There was an error submitting your application. Please try again.",
+          message: response?.message || "There was an error submitting your application. Please try again.",
         });
       }
-    } catch (error) {
-      console.error("Form submission error:", error);
-      
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Form submission error:", error.message);
+      } else {
+        console.error("Form submission error:", error);
+      }
       setFormStatus({
         success: false,
         message: "There was an error submitting your application. Please try again.",
@@ -192,7 +191,7 @@ export default function CareersPage() {
             sizes="100vw"
             quality={85}
             placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx0fHRsdHSIfIR0jIyUkJSMiIiMlKy4wLisqMx8hJzQnKi46PT4+JSZHSUFQLTc6Tj7/2wBDARUXFx4bHt0dHT4qIio+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj7/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx0fHRsdHSIfIR0jIyUkJSMiIiMlKy4wLisqMx8hJzQnKi46PT4+JSZHSUFQLTc6Tj7/2wBDARUXFx4bHt0dHT4qIio+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj7/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
           />
           <div className="absolute inset-0 z-20 flex items-center">
             <div className="max-w-7xl mx-auto px-4 w-full">
@@ -213,7 +212,7 @@ export default function CareersPage() {
       </div>
 
       <div className="container mx-auto px-4 py-12">
-        <Tabs defaultValue="openings" className="w-full">
+        <Tabs defaultValue={selectedTab} value={selectedTab} onValueChange={setSelectedTab} className="w-full">
           <TabsList className="grid w-full md:w-[400px] gap-3 grid-cols-2 mb-8 mx-auto">
             <TabsTrigger 
               value="openings" 
@@ -265,10 +264,8 @@ export default function CareersPage() {
                       <div className="mt-4 pt-4 border-t border-gray-100">
                         <Button 
                           onClick={() => {
-                            const applicationTab = document.querySelector('[data-value="application"]');
-                            if (applicationTab) {
-                              (applicationTab as HTMLElement).click();
-                            }
+                            setSelectedCareerId(job._id);
+                            setSelectedTab('application');
                           }}
                           className="bg-yellow-500 hover:bg-yellow-600 text-black w-full"
                         >
@@ -367,8 +364,12 @@ export default function CareersPage() {
                           <FormItem>
                             <FormLabel>Position</FormLabel>
                             <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
+                              onValueChange={value => {
+                                field.onChange(value);
+                                setSelectedCareerId(value);
+                              }}
+                              value={selectedCareerId || field.value}
+                              defaultValue={selectedCareerId || field.value}
                             >
                               <FormControl>
                                 <SelectTrigger className="focus-visible:ring-yellow-500">
@@ -376,12 +377,12 @@ export default function CareersPage() {
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                {positions.map((position) => (
+                                {jobs.map((job) => (
                                   <SelectItem
-                                    key={position.id}
-                                    value={position.id}
+                                    key={job._id}
+                                    value={job._id}
                                   >
-                                    {position.label}
+                                    {job.title}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
@@ -441,11 +442,11 @@ export default function CareersPage() {
                       name="coverLetter"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Cover Letter (Optional)</FormLabel>
+                          <FormLabel>Cover Letter & Resume Details</FormLabel>
                           <FormControl>
                             <textarea
-                              placeholder="Tell us why you're interested in this position"
-                              className="flex min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              placeholder="Tell us why you're interested in this position, your relevant experience, and include key details from your resume"
+                              className="flex min-h-32 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                               {...field}
                             />
                           </FormControl>

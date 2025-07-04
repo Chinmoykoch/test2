@@ -25,9 +25,7 @@ const AboutPage = () => {
     vision,
     mission,
     coreValuesText,
-    loading,
-    error,
-    refetch
+    loading
   } = useAboutUsData();
 
   // Get industry partners data
@@ -96,34 +94,6 @@ const AboutPage = () => {
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-yellow-400 mx-auto"></div>
           <p className="mt-4 text-lg text-gray-600">Loading About Us content...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto px-4">
-          <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Unable to Load Content</h2>
-          <p className="text-gray-600 mb-6">
-            {error.includes('Failed to fetch') 
-              ? "We're having trouble connecting to our servers. This might be a temporary issue."
-              : error
-            }
-          </p>
-          <div className="space-y-3">
-            <button 
-              onClick={refetch}
-              className="bg-yellow-400 text-black px-6 py-3 rounded-lg hover:bg-yellow-500 transition-colors font-semibold"
-            >
-              Try Again
-            </button>
-            <div className="text-sm text-gray-500">
-              <p>If the problem persists, please check your internet connection or try again later.</p>
-            </div>
-          </div>
         </div>
       </div>
     );

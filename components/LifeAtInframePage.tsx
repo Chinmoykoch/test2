@@ -45,10 +45,10 @@ export const LifeAtCampus = () => {
     const [eventsError, setEventsError] = useState<string | null>(null);
 
     // Custom hooks for API data
-    const { sections: lifeAtInframeSections, loading: sectionsLoading, error: sectionsError } = useLifeAtInframeSections();
-    const { services: studentServices, loading: servicesLoading, error: servicesError } = useStudentServices();
-    const { loading: sportsLoading, error: sportsError } = useSportsFacilities();
-    const { loading: galleryLoading, error: galleryError } = useLifeAtInframeGallery();
+    const { sections: lifeAtInframeSections, loading: sectionsLoading } = useLifeAtInframeSections();
+    const { services: studentServices, loading: servicesLoading } = useStudentServices();
+    const { loading: sportsLoading } = useSportsFacilities();
+    const { loading: galleryLoading } = useLifeAtInframeGallery();
 
     const handleApplyClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
         e.preventDefault();
@@ -129,23 +129,6 @@ export const LifeAtCampus = () => {
           <div className="text-center">
             <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-yellow-400 mx-auto"></div>
             <p className="mt-4 text-lg text-gray-600">Loading Life at Inframe content...</p>
-          </div>
-        </div>
-      );
-    }
-    if (sectionsError || servicesError || sportsError || galleryError) {
-      return (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <p className="text-red-600 text-lg mb-4">
-              {sectionsError || servicesError || sportsError || galleryError}
-            </p>
-            <button 
-              onClick={() => window.location.reload()}
-              className="bg-yellow-400 text-black px-6 py-3 rounded-lg hover:bg-yellow-500 transition-colors"
-            >
-              Retry
-            </button>
           </div>
         </div>
       );
@@ -266,17 +249,8 @@ export const LifeAtCampus = () => {
               </div>
             )}
 
-            {/* Error State */}
-            {servicesError && (
-              <div className="text-center py-12">
-                <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
-                  <p className="text-red-600">{servicesError}</p>
-                </div>
-              </div>
-            )}
-
             {/* Services Grid */}
-            {!servicesLoading && !servicesError && (
+            {!servicesLoading && (
               <div className="grid md:grid-cols-3 gap-8">
                 {displayServices.map((service, index) => {
                   // Handle both API service and fallback service types
