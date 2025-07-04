@@ -522,142 +522,142 @@ apiClient.interceptors.response.use(
 // API endpoints
 export const API_ENDPOINTS = {
   // Authentication
-  LOGIN: '/auth/login',
-  REGISTER: '/auth/register',
-  LOGOUT: '/auth/logout',
+  LOGIN: '/api/v1/auth/login',
+  REGISTER: '/api/v1/auth/register',
+  LOGOUT: '/api/v1/auth/logout',
 
   // User management
-  PROFILE: '/user/profile',
-  UPDATE_PROFILE: '/user/profile',
+  PROFILE: '/api/v1/user/profile',
+  UPDATE_PROFILE: '/api/v1/user/profile',
 
   // Admissions
-  SUBMIT_APPLICATION: '/admissions/apply',
-  GET_APPLICATION_STATUS: '/admissions/status',
+  SUBMIT_APPLICATION: '/api/v1/admissions/apply',
+  GET_APPLICATION_STATUS: '/api/v1/admissions/status',
 
   // Courses
-  GET_COURSES: '/courses',
-  GET_COURSE_BY_SLUG: '/courses/slug',
-  GET_COURSE_BY_ID: '/courses',
-  CREATE_COURSE: '/courses',
-  UPDATE_COURSE: '/courses',
-  DELETE_COURSE: '/courses',
-  GET_COURSE_PROGRAMS: '/courses/programs',
-  GET_COURSE_PROGRAM_BY_SLUG: '/courses',
-  GET_COURSE_FEATURES: '/courses/features',
-  GET_COURSE_TESTIMONIALS: '/courses/testimonials',
-  GET_COURSE_FAQS: '/courses/faqs',
-  GET_COURSE_CURRICULUM: '/courses/curriculum',
-  GET_COURSE_SOFTWARE: '/courses/software',
-  GET_COURSE_CAREER_PROSPECTS: '/courses/career-prospects',
-  GENERATE_SLUG: '/courses/generate-slug',
+  GET_COURSES: '/api/v1/courses',
+  GET_COURSE_BY_SLUG: '/api/v1/courses/slug',
+  GET_COURSE_BY_ID: '/api/v1/courses',
+  CREATE_COURSE: '/api/v1/courses',
+  UPDATE_COURSE: '/api/v1/courses',
+  DELETE_COURSE: '/api/v1/courses',
+  GET_COURSE_PROGRAMS: '/api/v1/courses/programs',
+  GET_COURSE_PROGRAM_BY_SLUG: '/api/v1/courses',
+  GET_COURSE_FEATURES: '/api/v1/courses/features',
+  GET_COURSE_TESTIMONIALS: '/api/v1/courses/testimonials',
+  GET_COURSE_FAQS: '/api/v1/courses/faqs',
+  GET_COURSE_CURRICULUM: '/api/v1/courses/curriculum',
+  GET_COURSE_SOFTWARE: '/api/v1/courses/software',
+  GET_COURSE_CAREER_PROSPECTS: '/api/v1/courses/career-prospects',
+  GENERATE_SLUG: '/api/v1/courses/generate-slug',
 
   // Payments
-  CREATE_PAYMENT: '/payments/create',
-  VERIFY_PAYMENT: '/payments/verify',
+  CREATE_PAYMENT: '/api/v1/payments/create',
+  VERIFY_PAYMENT: '/api/v1/payments/verify',
 
   // Contact/Enquiry
-  SUBMIT_ENQUIRY: '/enquiries',
-  SUBMIT_COUNSELING_REQUEST: '/contact/counseling',
-  ADD_CONTACT: '/contact/addcontact',
+  SUBMIT_ENQUIRY: '/api/v1/enquiries',
+  SUBMIT_COUNSELING_REQUEST: '/api/v1/contact/counseling',
+  ADD_CONTACT: '/api/v1/contact/addcontact',
 
   // News/Blog
-  GET_NEWS: '/news',
-  GET_BLOG_POSTS: '/blog',
+  GET_NEWS: '/api/v1/news',
+  GET_BLOG_POSTS: '/api/v1/blog',
 
   // Gallery
-  GET_GALLERY_IMAGES: '/gallery',
+  GET_GALLERY_IMAGES: '/api/v1/gallery',
 
   // Testimonials
-  GET_TESTIMONIALS: '/testimonials/gettestimonials',
+  GET_TESTIMONIALS: '/api/v1/testimonials/gettestimonials',
 
   // Blog
-  GET_BLOGS: '/blog/getblogs',
-  GET_ALL_BLOGS: '/blog/getallblogs',
-  GET_PUBLISHED_BLOGS: '/blog/getpublishedblogs',
-  GET_POPULAR_BLOGS: '/blog/getpopularblogs',
-  GET_BLOG_BY_ID: '/blog/getblogbyid',
-  GET_BLOG_BY_SLUG: '/blog/getblogbyslug',
-  GET_BLOGS_BY_CATEGORY: '/blog/getblogsbycategory',
+  GET_BLOGS: '/api/v1/blog/getblogs',
+  GET_ALL_BLOGS: '/api/v1/blog/getallblogs',
+  GET_PUBLISHED_BLOGS: '/api/v1/blog/getpublishedblogs',
+  GET_POPULAR_BLOGS: '/api/v1/blog/getpopularblogs',
+  GET_BLOG_BY_ID: '/api/v1/blog/getblogbyid',
+  GET_BLOG_BY_SLUG: '/api/v1/blog/getblogbyslug',
+  GET_BLOGS_BY_CATEGORY: '/api/v1/blog/getblogsbycategory',
 
   // Student Clubs
-  GET_STUDENT_CLUBS: '/studentclub/getstudentclubs',
+  GET_STUDENT_CLUBS: '/api/v1/studentclub/getstudentclubs',
 
   // Campus Events
-  GET_CAMPUS_EVENTS: '/campusevent/getcampusevents',
+  GET_CAMPUS_EVENTS: '/api/v1/campusevent/getcampusevents',
 
   // Membership
-  GET_MEMBERSHIP: '/membership/getMembership',
+  GET_MEMBERSHIP: '/api/v1/membership/getMembership',
 
   // Advisors
-  GET_ADVISORS: '/advisor/getadvisors',
-  GET_ADVISOR_BY_ID: '/advisor/getadvisorsbyid',
-  CREATE_ADVISOR: '/advisor/addadvisor',
-  UPDATE_ADVISOR: '/advisor/updateadvisor',
-  DELETE_ADVISOR: '/advisor/deleteadvisor',
+  GET_ADVISORS: '/api/v1/advisor/getadvisors',
+  GET_ADVISOR_BY_ID: '/api/v1/advisor/getadvisorsbyid',
+  CREATE_ADVISOR: '/api/v1/advisor/addadvisor',
+  UPDATE_ADVISOR: '/api/v1/advisor/updateadvisor',
+  DELETE_ADVISOR: '/api/v1/advisor/deleteadvisor',
 
   // Enquiries
-  GET_ENQUIRIES: '/enquiries',
-  GET_ENQUIRY_BY_ID: '/enquiries',
-  UPDATE_ENQUIRY_STATUS: '/enquiries',
-  DELETE_ENQUIRY: '/enquiries',
-  GET_ENQUIRY_STATS: '/enquiries/stats',
+  GET_ENQUIRIES: '/api/v1/enquiries',
+  GET_ENQUIRY_BY_ID: '/api/v1/enquiries',
+  UPDATE_ENQUIRY_STATUS: '/api/v1/enquiries',
+  DELETE_ENQUIRY: '/api/v1/enquiries',
+  GET_ENQUIRY_STATS: '/api/v1/enquiries/stats',
 
   // Industry Partners
-  GET_INDUSTRY_PARTNERS: '/logo/getlogo',
-  GET_INDUSTRY_PARTNER_BY_ID: '/logo/getlogoById',
-  CREATE_INDUSTRY_PARTNER: '/logo/addlogo',
-  UPDATE_INDUSTRY_PARTNER: '/logo/updatelogo',
-  DELETE_INDUSTRY_PARTNER: '/logo/deletelogo',
+  GET_INDUSTRY_PARTNERS: '/api/v1/logo/getlogo',
+  GET_INDUSTRY_PARTNER_BY_ID: '/api/v1/logo/getlogoById',
+  CREATE_INDUSTRY_PARTNER: '/api/v1/logo/addlogo',
+  UPDATE_INDUSTRY_PARTNER: '/api/v1/logo/updatelogo',
+  DELETE_INDUSTRY_PARTNER: '/api/v1/logo/deletelogo',
 
   // Career Applications
-  SUBMIT_JOB_APPLICATION: '/career-posts/apply',
+  SUBMIT_JOB_APPLICATION: '/api/v1/career-posts/apply',
 
   // About Us
   // Hero Gallery
-  GET_HERO_IMAGES: '/about-us/hero-images/getheroimages',
-  ADD_HERO_IMAGE: '/about-us/hero-images/addheroimage',
-  UPDATE_HERO_IMAGE: '/about-us/hero-images/updateheroimage',
-  DELETE_HERO_IMAGE: '/about-us/hero-images/deleteheroimage',
+  GET_HERO_IMAGES: '/api/v1/about-us/hero-images/getheroimages',
+  ADD_HERO_IMAGE: '/api/v1/about-us/hero-images/addheroimage',
+  UPDATE_HERO_IMAGE: '/api/v1/about-us/hero-images/updateheroimage',
+  DELETE_HERO_IMAGE: '/api/v1/about-us/hero-images/deleteheroimage',
   
   // Content Sections
-  GET_CONTENT_BY_TYPE: '/about-us/content/getcontentbytype',
-  ADD_OR_UPDATE_CONTENT: '/about-us/content/addorupdatecontent',
+  GET_CONTENT_BY_TYPE: '/api/v1/about-us/content/getcontentbytype',
+  ADD_OR_UPDATE_CONTENT: '/api/v1/about-us/content/addorupdatecontent',
   
   // Statistics
-  GET_STATISTICS: '/about-us/statistics/getstatistics',
-  ADD_STATISTIC: '/about-us/statistics/addstatistic',
-  UPDATE_STATISTIC: '/about-us/statistics/updatestatistic',
-  DELETE_STATISTIC: '/about-us/statistics/deletestatistic',
+  GET_STATISTICS: '/api/v1/about-us/statistics/getstatistics',
+  ADD_STATISTIC: '/api/v1/about-us/statistics/addstatistic',
+  UPDATE_STATISTIC: '/api/v1/about-us/statistics/updatestatistic',
+  DELETE_STATISTIC: '/api/v1/about-us/statistics/deletestatistic',
   
   // Core Values
-  GET_CORE_VALUES: '/about-us/core-values/getcorevalues',
-  ADD_CORE_VALUE: '/about-us/core-values/addcorevalue',
-  UPDATE_CORE_VALUE: '/about-us/core-values/updatecorevalue',
-  DELETE_CORE_VALUE: '/about-us/core-values/deletecorevalue',
+  GET_CORE_VALUES: '/api/v1/about-us/core-values/getcorevalues',
+  ADD_CORE_VALUE: '/api/v1/about-us/core-values/addcorevalue',
+  UPDATE_CORE_VALUE: '/api/v1/about-us/core-values/updatecorevalue',
+  DELETE_CORE_VALUE: '/api/v1/about-us/core-values/deletecorevalue',
   
   // Campus Images
-  GET_CAMPUS_IMAGES: '/about-us/campus-images/getcampusimages',
-  ADD_CAMPUS_IMAGE: '/about-us/campus-images/addcampusimage',
-  UPDATE_CAMPUS_IMAGE: '/about-us/campus-images/updatecampusimage',
-  DELETE_CAMPUS_IMAGE: '/about-us/campus-images/deletecampusimage',
+  GET_CAMPUS_IMAGES: '/api/v1/about-us/campus-images/getcampusimages',
+  ADD_CAMPUS_IMAGE: '/api/v1/about-us/campus-images/addcampusimage',
+  UPDATE_CAMPUS_IMAGE: '/api/v1/about-us/campus-images/updatecampusimage',
+  DELETE_CAMPUS_IMAGE: '/api/v1/about-us/campus-images/deletecampusimage',
 
   // Life at Inframe Sections
-  GET_LIFE_AT_INFRAME_SECTIONS: '/lifeatinframesection/getlifeatinframesections',
-  ADD_LIFE_AT_INFRAME_SECTION: '/lifeatinframesection/addlifeatinframesection',
-  UPDATE_LIFE_AT_INFRAME_SECTION: '/lifeatinframesection/updatelifeatinframesection',
-  DELETE_LIFE_AT_INFRAME_SECTION: '/lifeatinframesection/deletelifeatinframesection',
+  GET_LIFE_AT_INFRAME_SECTIONS: '/api/v1/lifeatinframesection/getlifeatinframesections',
+  ADD_LIFE_AT_INFRAME_SECTION: '/api/v1/lifeatinframesection/addlifeatinframesection',
+  UPDATE_LIFE_AT_INFRAME_SECTION: '/api/v1/lifeatinframesection/updatelifeatinframesection',
+  DELETE_LIFE_AT_INFRAME_SECTION: '/api/v1/lifeatinframesection/deletelifeatinframesection',
 
   // Student Services
-  GET_STUDENT_SERVICES: '/studentservice/getstudentservices',
-  ADD_STUDENT_SERVICE: '/studentservice/addstudentservice',
-  UPDATE_STUDENT_SERVICE: '/studentservice/updatestudentservice',
-  DELETE_STUDENT_SERVICE: '/studentservice/deletestudentservice',
+  GET_STUDENT_SERVICES: '/api/v1/studentservice/getstudentservices',
+  ADD_STUDENT_SERVICE: '/api/v1/studentservice/addstudentservice',
+  UPDATE_STUDENT_SERVICE: '/api/v1/studentservice/updatestudentservice',
+  DELETE_STUDENT_SERVICE: '/api/v1/studentservice/deletestudentservice',
 
   // Sports Facilities
-  GET_SPORTS_FACILITIES: '/sportsfacility/getsportsfacilities',
-  ADD_SPORTS_FACILITY: '/sportsfacility/addsportsfacility',
-  UPDATE_SPORTS_FACILITY: '/sportsfacility/updatesportsfacility',
-  DELETE_SPORTS_FACILITY: '/sportsfacility/deletesportsfacility',
+  GET_SPORTS_FACILITIES: '/api/v1/sportsfacility/getsportsfacilities',
+  ADD_SPORTS_FACILITY: '/api/v1/sportsfacility/addsportsfacility',
+  UPDATE_SPORTS_FACILITY: '/api/v1/sportsfacility/updatesportsfacility',
+  DELETE_SPORTS_FACILITY: '/api/v1/sportsfacility/deletesportsfacility',
 
   // Life at Inframe Gallery Images
   GET_LIFE_AT_INFRAME_GALLERY: '/galleryimage/getgalleryimages',
