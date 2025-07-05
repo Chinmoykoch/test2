@@ -698,6 +698,16 @@ export const API_ENDPOINTS = {
 
   // Career Applications
   SUBMIT_JOB_APPLICATION: '/career-posts/apply',
+  GET_CAREER_POSTS: '/career-posts/getallcareerposts',
+  GET_CAREER_POSTS_WITH_APPLICANTS: '/career-posts/getallcareerposts',
+  GET_ACTIVE_CAREER_POSTS: '/career-posts/getactivecareerposts',
+  GET_CAREER_POST_BY_ID: '/career-posts/getcareerpostbyid',
+  CREATE_CAREER_POST: '/career-posts/addcareerpost',
+  UPDATE_CAREER_POST: '/career-posts/updatecareerpost',
+  DELETE_CAREER_POST: '/career-posts/deletecareerpost',
+  TOGGLE_CAREER_POST_STATUS: '/career-posts/togglecareerpoststatus',
+  GET_CAREER_POST_APPLICANTS: '/career-posts/applicants',
+  UPDATE_CAREER_POST_APPLICANT_STATUS: '/career-posts/applicants',
 
   // About Us
   // Hero Gallery
@@ -788,6 +798,14 @@ export const API_ENDPOINTS = {
   CREATE_SESSION_LOGIN: '/session/addsessionlogin',
   UPDATE_SESSION_LOGIN: '/session/updatesessionlogin',
   DELETE_SESSION_LOGIN: '/session/deletesessionlogin',
+
+  // Free Courses
+  GET_FREE_COURSES: '/free-courses',
+  GET_FREE_COURSE_BY_ID: '/free-courses',
+  CREATE_FREE_COURSE: '/free-courses',
+  UPDATE_FREE_COURSE: '/free-courses',
+  DELETE_FREE_COURSE: '/free-courses',
+  TOGGLE_FREE_COURSE_STATUS: '/free-courses',
 
   // General
   HEALTH_CHECK: '/health',
@@ -912,7 +930,7 @@ export const apiHelpers = {
       
       // Use the correct endpoint with career ID as URL parameter
       // Send JSON data with proper headers
-      const response = await apiClient.post(`/career-posts/apply/${careerid}`, applicationData, {
+      const response = await apiClient.post(`${API_ENDPOINTS.SUBMIT_JOB_APPLICATION}/${careerid}`, applicationData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -2358,31 +2376,15 @@ export const useCourseProgramBySlug = (parentSlug: string, programSlug: string) 
   };
 };
 
-// Free Courses API Functions
-const buildFreeCoursesApiUrl = (endpoint: string): string => {
-  const FREE_COURSES_API_URL = `${API_BASE_URL}/free-courses`;
-  return `${FREE_COURSES_API_URL}/${endpoint}`;
-};
-
-const getApiHeaders = (): HeadersInit => ({
-  'Content-Type': 'application/json',
-});
-
 // Free Courses API Helper Functions
 export const freeCoursesApiHelpers = {
   // Get all free courses
   getAllFreeCourses: async (): Promise<FreeCourse[]> => {
     try {
-      const response = await fetch(buildFreeCoursesApiUrl(''));
+      const response = await apiClient.get<FreeCoursesResponse>(API_ENDPOINTS.GET_FREE_COURSES);
       
-      if (!response.ok) {
-        throw new Error(`Failed to fetch free courses: ${response.status} ${response.statusText}`);
-      }
-      
-      const result: FreeCoursesResponse = await response.json();
-      
-      if (result.success && result.data) {
-        return result.data;
+      if (response.data.success && response.data.data) {
+        return response.data.data;
       } else {
         throw new Error('Invalid API response format');
       }
@@ -2395,21 +2397,15 @@ export const freeCoursesApiHelpers = {
   // Get free course by ID
   getFreeCourseById: async (id: string): Promise<FreeCourse | null> => {
     try {
-      const response = await fetch(buildFreeCoursesApiUrl(id));
+      const response = await apiClient.get<FreeCourseResponse>(`${API_ENDPOINTS.GET_FREE_COURSE_BY_ID}/${id}`);
       
-      if (!response.ok) {
-        if (response.status === 404) return null;
-        throw new Error(`Failed to fetch free course: ${response.status} ${response.statusText}`);
-      }
-      
-      const result: FreeCourseResponse = await response.json();
-      
-      if (result.success && result.data) {
-        return result.data;
+      if (response.data.success && response.data.data) {
+        return response.data.data;
       } else {
         throw new Error('Invalid API response format');
       }
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response?.status === 404) return null;
       console.error('API Error:', error);
       throw error;
     }
@@ -2465,21 +2461,11 @@ export const useFreeCourses = () => {
 
   const createCourse = async (courseData: FreeCourseData) => {
     try {
-      const response = await fetch(buildFreeCoursesApiUrl(''), {
-        method: 'POST',
-        headers: getApiHeaders(),
-        body: JSON.stringify(courseData)
-      });
+      const response = await apiClient.post<FreeCourseResponse>(API_ENDPOINTS.CREATE_FREE_COURSE, courseData);
       
-      if (!response.ok) {
-        throw new Error(`Failed to create course: ${response.status} ${response.statusText}`);
-      }
-      
-      const result: FreeCourseResponse = await response.json();
-      
-      if (result.success && result.data) {
-        setCourses(prev => [...prev, result.data]);
-        return result.data;
+      if (response.data.success && response.data.data) {
+        setCourses(prev => [...prev, response.data.data]);
+        return response.data.data;
       } else {
         throw new Error('Invalid API response format');
       }
@@ -2491,23 +2477,13 @@ export const useFreeCourses = () => {
 
   const updateCourse = async (id: string, courseData: FreeCourseData) => {
     try {
-      const response = await fetch(buildFreeCoursesApiUrl(id), {
-        method: 'PUT',
-        headers: getApiHeaders(),
-        body: JSON.stringify(courseData)
-      });
+      const response = await apiClient.put<FreeCourseResponse>(`${API_ENDPOINTS.UPDATE_FREE_COURSE}/${id}`, courseData);
       
-      if (!response.ok) {
-        throw new Error(`Failed to update course: ${response.status} ${response.statusText}`);
-      }
-      
-      const result: FreeCourseResponse = await response.json();
-      
-      if (result.success && result.data) {
+      if (response.data.success && response.data.data) {
         setCourses(prev => prev.map(course => 
-          course._id === id ? result.data : course
+          course._id === id ? response.data.data : course
         ));
-        return result.data;
+        return response.data.data;
       } else {
         throw new Error('Invalid API response format');
       }
@@ -2519,15 +2495,7 @@ export const useFreeCourses = () => {
 
   const deleteCourse = async (id: string) => {
     try {
-      const response = await fetch(buildFreeCoursesApiUrl(id), {
-        method: 'DELETE',
-        headers: getApiHeaders()
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Failed to delete course: ${response.status} ${response.statusText}`);
-      }
-      
+      await apiClient.delete(`${API_ENDPOINTS.DELETE_FREE_COURSE}/${id}`);
       setCourses(prev => prev.filter(course => course._id !== id));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete course');
@@ -2537,23 +2505,13 @@ export const useFreeCourses = () => {
 
   const toggleStatus = async (id: string, isActive: boolean) => {
     try {
-      const response = await fetch(buildFreeCoursesApiUrl(`${id}/toggle-status`), {
-        method: 'PUT',
-        headers: getApiHeaders(),
-        body: JSON.stringify({ isActive })
-      });
+      const response = await apiClient.put<FreeCourseResponse>(`${API_ENDPOINTS.TOGGLE_FREE_COURSE_STATUS}/${id}/toggle-status`, { isActive });
       
-      if (!response.ok) {
-        throw new Error(`Failed to toggle course status: ${response.status} ${response.statusText}`);
-      }
-      
-      const result: FreeCourseResponse = await response.json();
-      
-      if (result.success && result.data) {
+      if (response.data.success && response.data.data) {
         setCourses(prev => prev.map(course => 
-          course._id === id ? result.data : course
+          course._id === id ? response.data.data : course
         ));
-        return result.data;
+        return response.data.data;
       } else {
         throw new Error('Invalid API response format');
       }
@@ -2854,7 +2812,7 @@ export interface SessionLoginsResponse {
 // });
 
 export async function getCareerPosts(): Promise<CareerPost[]> {
-  const response = await apiClient.get(`${API_BASE_URL}/career-posts/getallcareerposts`);
+  const response = await apiClient.get(API_ENDPOINTS.GET_CAREER_POSTS);
   if (response.data && Array.isArray(response.data)) {
     return response.data;
   } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
@@ -2867,7 +2825,7 @@ export async function getCareerPosts(): Promise<CareerPost[]> {
 
 export async function getCareerPostsWithApplicants(): Promise<CareerPost[]> {
   try {
-    const response = await apiClient.get(`${API_BASE_URL}/career-posts/getallcareerposts?populate=applicants`);
+    const response = await apiClient.get(`${API_ENDPOINTS.GET_CAREER_POSTS_WITH_APPLICANTS}?populate=applicants`);
     if (response.data && Array.isArray(response.data)) {
       return response.data;
     } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
@@ -2882,7 +2840,7 @@ export async function getCareerPostsWithApplicants(): Promise<CareerPost[]> {
 }
 
 export async function getActiveCareerPosts(): Promise<CareerPost[]> {
-  const response = await apiClient.get(`${API_BASE_URL}/career-posts/getactivecareerposts`);
+  const response = await apiClient.get(API_ENDPOINTS.GET_ACTIVE_CAREER_POSTS);
   if (response.data && Array.isArray(response.data)) {
     return response.data;
   } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
@@ -2894,7 +2852,7 @@ export async function getActiveCareerPosts(): Promise<CareerPost[]> {
 }
 
 export async function getCareerPostById(id: string): Promise<CareerPost | null> {
-  const response = await apiClient.get(`${API_BASE_URL}/career-posts/getcareerpostbyid/${id}`);
+  const response = await apiClient.get(`${API_ENDPOINTS.GET_CAREER_POST_BY_ID}/${id}`);
   if (response.data && response.data.success && response.data.data) {
     return response.data.data;
   }
@@ -2902,7 +2860,7 @@ export async function getCareerPostById(id: string): Promise<CareerPost | null> 
 }
 
 export async function createCareerPost(data: CareerPostData): Promise<CareerPost> {
-  const response = await apiClient.post(`${API_BASE_URL}/career-posts/addcareerpost`, data);
+  const response = await apiClient.post(API_ENDPOINTS.CREATE_CAREER_POST, data);
   if (response.data && response.data.success && response.data.data) {
     return response.data.data;
   }
@@ -2910,7 +2868,7 @@ export async function createCareerPost(data: CareerPostData): Promise<CareerPost
 }
 
 export async function updateCareerPost(id: string, data: CareerPostData): Promise<CareerPost> {
-  const response = await apiClient.put(`${API_BASE_URL}/career-posts/updatecareerpost/${id}`, data);
+  const response = await apiClient.put(`${API_ENDPOINTS.UPDATE_CAREER_POST}/${id}`, data);
   if (response.data && response.data.success && response.data.data) {
     return response.data.data;
   }
@@ -2918,11 +2876,11 @@ export async function updateCareerPost(id: string, data: CareerPostData): Promis
 }
 
 export async function deleteCareerPost(id: string): Promise<void> {
-  await apiClient.delete(`${API_BASE_URL}/career-posts/deletecareerpost/${id}`);
+  await apiClient.delete(`${API_ENDPOINTS.DELETE_CAREER_POST}/${id}`);
 }
 
 export async function toggleCareerPostStatus(id: string): Promise<CareerPost> {
-  const response = await apiClient.put(`${API_BASE_URL}/career-posts/togglecareerpoststatus/${id}`);
+  const response = await apiClient.put(`${API_ENDPOINTS.TOGGLE_CAREER_POST_STATUS}/${id}`);
   if (response.data && response.data.success && response.data.data) {
     return response.data.data;
   }
@@ -2930,7 +2888,7 @@ export async function toggleCareerPostStatus(id: string): Promise<CareerPost> {
 }
 
 export async function getApplicantsForCareerPost(careerId: string): Promise<Applicant[]> {
-  const response = await apiClient.get(`${API_BASE_URL}/career-posts/applicants/${careerId}`);
+  const response = await apiClient.get(`${API_ENDPOINTS.GET_CAREER_POST_APPLICANTS}/${careerId}`);
   if (response.data && response.data.success && response.data.data) {
     const result = response.data.data;
     if (result.applicants && Array.isArray(result.applicants)) {
@@ -2945,7 +2903,7 @@ export async function updateApplicantStatus(
   applicantId: string,
   status: Applicant['status']
 ): Promise<Applicant> {
-  const response = await apiClient.put(`${API_BASE_URL}/career-posts/applicants/${careerId}/${applicantId}/status`, { status });
+  const response = await apiClient.put(`${API_ENDPOINTS.UPDATE_CAREER_POST_APPLICANT_STATUS}/${careerId}/${applicantId}/status`, { status });
   if (response.data && response.data.success && response.data.data) {
     return response.data.data;
   } else if (response.data && response.data.success) {
