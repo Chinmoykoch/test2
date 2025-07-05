@@ -13,6 +13,7 @@ import {
 interface ApiTestResult {
   name: string;
   status: 'loading' | 'success' | 'error';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any;
   error?: string;
   url?: string;
