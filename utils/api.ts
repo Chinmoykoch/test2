@@ -524,8 +524,9 @@ export interface FreeCoursesResponse {
 }
 
 // Get the backend URL from environment variables
-export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-rakj.onrender.com';
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://backend-rakj.onrender.com/api/v1';
+// Hardcode the URLs to ensure they work in production
+export const BACKEND_URL = 'https://backend-rakj.onrender.com';
+export const API_BASE_URL = 'https://backend-rakj.onrender.com';
 
 // Export config for BackendStatus component
 export const config = {
@@ -543,14 +544,14 @@ export const apiClient = axios.create({
   },
 });
 
-// Debug logging only in development
-if (process.env.NODE_ENV === 'development') {
-  console.log('API Client Configuration:', {
-    baseURL: API_BASE_URL,
-    backendURL: BACKEND_URL,
-    apiBaseURL: API_BASE_URL
-  });
-}
+// Debug logging for both development and production to help troubleshoot
+console.log('API Client Configuration:', {
+  baseURL: API_BASE_URL,
+  backendURL: BACKEND_URL,
+  apiBaseURL: API_BASE_URL,
+  nodeEnv: process.env.NODE_ENV,
+  note: 'Using hardcoded URLs for production stability'
+});
 
 // Request interceptor to add auth token if available
 apiClient.interceptors.request.use(
@@ -602,213 +603,213 @@ apiClient.interceptors.response.use(
 // API endpoints
 export const API_ENDPOINTS = {
   // Authentication
-  LOGIN: '/auth/login',
-  REGISTER: '/auth/register',
-  LOGOUT: '/auth/logout',
+  LOGIN: '/api/v1/auth/login',
+  REGISTER: '/api/v1/auth/register',
+  LOGOUT: '/api/v1/auth/logout',
 
   // User management
-  PROFILE: '/user/profile',
-  UPDATE_PROFILE: '/user/profile',
+  PROFILE: '/api/v1/user/profile',
+  UPDATE_PROFILE: '/api/v1/user/profile',
 
   // Admissions
-  SUBMIT_APPLICATION: '/admissions/apply',
-  GET_APPLICATION_STATUS: '/admissions/status',
+  SUBMIT_APPLICATION: '/api/v1/admissions/apply',
+  GET_APPLICATION_STATUS: '/api/v1/admissions/status',
 
   // Courses
-  GET_COURSES: '/courses',
-  GET_COURSE_BY_SLUG: '/courses/slug',
-  GET_COURSE_BY_ID: '/courses',
-  CREATE_COURSE: '/courses',
-  UPDATE_COURSE: '/courses',
-  DELETE_COURSE: '/courses',
-  GET_COURSE_PROGRAMS: '/courses/programs',
-  GET_COURSE_PROGRAM_BY_SLUG: '/courses',
-  GET_COURSE_FEATURES: '/courses/features',
-  GET_COURSE_TESTIMONIALS: '/courses/testimonials',
-  GET_COURSE_FAQS: '/courses/faqs',
-  GET_COURSE_CURRICULUM: '/courses/curriculum',
-  GET_COURSE_SOFTWARE: '/courses/software',
-  GET_COURSE_CAREER_PROSPECTS: '/courses/career-prospects',
-  GENERATE_SLUG: '/courses/generate-slug',
+  GET_COURSES: '/api/v1/courses',
+  GET_COURSE_BY_SLUG: '/api/v1/courses/slug',
+  GET_COURSE_BY_ID: '/api/v1/courses',
+  CREATE_COURSE: '/api/v1/courses',
+  UPDATE_COURSE: '/api/v1/courses',
+  DELETE_COURSE: '/api/v1/courses',
+  GET_COURSE_PROGRAMS: '/api/v1/courses/programs',
+  GET_COURSE_PROGRAM_BY_SLUG: '/api/v1/courses',
+  GET_COURSE_FEATURES: '/api/v1/courses/features',
+  GET_COURSE_TESTIMONIALS: '/api/v1/courses/testimonials',
+  GET_COURSE_FAQS: '/api/v1/courses/faqs',
+  GET_COURSE_CURRICULUM: '/api/v1/courses/curriculum',
+  GET_COURSE_SOFTWARE: '/api/v1/courses/software',
+  GET_COURSE_CAREER_PROSPECTS: '/api/v1/courses/career-prospects',
+  GENERATE_SLUG: '/api/v1/courses/generate-slug',
 
   // Payments
-  CREATE_PAYMENT: '/payments/create',
-  VERIFY_PAYMENT: '/payments/verify',
+  CREATE_PAYMENT: '/api/v1/payments/create',
+  VERIFY_PAYMENT: '/api/v1/payments/verify',
 
   // Contact/Enquiry
-  SUBMIT_ENQUIRY: '/enquiries',
-  SUBMIT_COUNSELING_REQUEST: '/contact/counseling',
-  ADD_CONTACT: '/contact/addcontact',
+  SUBMIT_ENQUIRY: '/api/v1/enquiries',
+  SUBMIT_COUNSELING_REQUEST: '/api/v1/contact/counseling',
+  ADD_CONTACT: '/api/v1/contact/addcontact',
 
   // News/Blog
-  GET_NEWS: '/news',
-  GET_BLOG_POSTS: '/blog',
+  GET_NEWS: '/api/v1/news',
+  GET_BLOG_POSTS: '/api/v1/blog',
 
   // Gallery
-  GET_GALLERY_IMAGES: '/gallery',
+  GET_GALLERY_IMAGES: '/api/v1/gallery',
 
   // Testimonials
-  GET_TESTIMONIALS: '/testimonials/gettestimonials',
+  GET_TESTIMONIALS: '/api/v1/testimonials/gettestimonials',
 
   // Blog
-  GET_BLOGS: '/blog/getblogs',
-  GET_ALL_BLOGS: '/blog/getallblogs',
-  GET_PUBLISHED_BLOGS: '/blog/getpublishedblogs',
-  GET_POPULAR_BLOGS: '/blog/getpopularblogs',
-  GET_BLOG_BY_ID: '/blog/getblogbyid',
-  GET_BLOG_BY_SLUG: '/blog/getblogbyslug',
-  GET_BLOGS_BY_CATEGORY: '/blog/getblogsbycategory',
+  GET_BLOGS: '/api/v1/blog/getblogs',
+  GET_ALL_BLOGS: '/api/v1/blog/getallblogs',
+  GET_PUBLISHED_BLOGS: '/api/v1/blog/getpublishedblogs',
+  GET_POPULAR_BLOGS: '/api/v1/blog/getpopularblogs',
+  GET_BLOG_BY_ID: '/api/v1/blog/getblogbyid',
+  GET_BLOG_BY_SLUG: '/api/v1/blog/getblogbyslug',
+  GET_BLOGS_BY_CATEGORY: '/api/v1/blog/getblogsbycategory',
 
   // Student Clubs
-  GET_STUDENT_CLUBS: '/studentclub/getstudentclubs',
+  GET_STUDENT_CLUBS: '/api/v1/studentclub/getstudentclubs',
 
   // Campus Events
-  GET_CAMPUS_EVENTS: '/campusevent/getcampusevents',
+  GET_CAMPUS_EVENTS: '/api/v1/campusevent/getcampusevents',
 
   // Membership
-  GET_MEMBERSHIP: '/membership/getMembership',
+  GET_MEMBERSHIP: '/api/v1/membership/getMembership',
 
   // Advisors
-  GET_ADVISORS: '/advisor/getadvisors',
-  GET_ADVISOR_BY_ID: '/advisor/getadvisorsbyid',
-  CREATE_ADVISOR: '/advisor/addadvisor',
-  UPDATE_ADVISOR: '/advisor/updateadvisor',
-  DELETE_ADVISOR: '/advisor/deleteadvisor',
+  GET_ADVISORS: '/api/v1/advisor/getadvisors',
+  GET_ADVISOR_BY_ID: '/api/v1/advisor/getadvisorsbyid',
+  CREATE_ADVISOR: '/api/v1/advisor/addadvisor',
+  UPDATE_ADVISOR: '/api/v1/advisor/updateadvisor',
+  DELETE_ADVISOR: '/api/v1/advisor/deleteadvisor',
 
   // Mentors
-  GET_MENTORS: '/mentor/all',
-  GET_MENTOR_BY_ID: '/mentor',
-  CREATE_MENTOR: '/mentor/create',
-  UPDATE_MENTOR: '/mentor',
-  DELETE_MENTOR: '/mentor',
+  GET_MENTORS: '/api/v1/mentor/all',
+  GET_MENTOR_BY_ID: '/api/v1/mentor',
+  CREATE_MENTOR: '/api/v1/mentor/create',
+  UPDATE_MENTOR: '/api/v1/mentor',
+  DELETE_MENTOR: '/api/v1/mentor',
 
   // Enquiries
-  GET_ENQUIRIES: '/enquiries',
-  GET_ENQUIRY_BY_ID: '/enquiries',
-  UPDATE_ENQUIRY_STATUS: '/enquiries',
-  DELETE_ENQUIRY: '/enquiries',
-  GET_ENQUIRY_STATS: '/enquiries/stats',
+  GET_ENQUIRIES: '/api/v1/enquiries',
+  GET_ENQUIRY_BY_ID: '/api/v1/enquiries',
+  UPDATE_ENQUIRY_STATUS: '/api/v1/enquiries',
+  DELETE_ENQUIRY: '/api/v1/enquiries',
+  GET_ENQUIRY_STATS: '/api/v1/enquiries/stats',
 
   // Industry Partners
-  GET_INDUSTRY_PARTNERS: '/logo/getlogo',
-  GET_INDUSTRY_PARTNER_BY_ID: '/logo/getlogoById',
-  CREATE_INDUSTRY_PARTNER: '/logo/addlogo',
-  UPDATE_INDUSTRY_PARTNER: '/logo/updatelogo',
-  DELETE_INDUSTRY_PARTNER: '/logo/deletelogo',
+  GET_INDUSTRY_PARTNERS: '/api/v1/logo/getlogo',
+  GET_INDUSTRY_PARTNER_BY_ID: '/api/v1/logo/getlogoById',
+  CREATE_INDUSTRY_PARTNER: '/api/v1/logo/addlogo',
+  UPDATE_INDUSTRY_PARTNER: '/api/v1/logo/updatelogo',
+  DELETE_INDUSTRY_PARTNER: '/api/v1/logo/deletelogo',
 
   // Career Applications
-  SUBMIT_JOB_APPLICATION: '/career-posts/apply',
-  GET_CAREER_POSTS: '/career-posts/getallcareerposts',
-  GET_CAREER_POSTS_WITH_APPLICANTS: '/career-posts/getallcareerposts',
-  GET_ACTIVE_CAREER_POSTS: '/career-posts/getactivecareerposts',
-  GET_CAREER_POST_BY_ID: '/career-posts/getcareerpostbyid',
-  CREATE_CAREER_POST: '/career-posts/addcareerpost',
-  UPDATE_CAREER_POST: '/career-posts/updatecareerpost',
-  DELETE_CAREER_POST: '/career-posts/deletecareerpost',
-  TOGGLE_CAREER_POST_STATUS: '/career-posts/togglecareerpoststatus',
-  GET_CAREER_POST_APPLICANTS: '/career-posts/applicants',
-  UPDATE_CAREER_POST_APPLICANT_STATUS: '/career-posts/applicants',
+  SUBMIT_JOB_APPLICATION: '/api/v1/career-posts/apply',
+  GET_CAREER_POSTS: '/api/v1/career-posts/getallcareerposts',
+  GET_CAREER_POSTS_WITH_APPLICANTS: '/api/v1/career-posts/getallcareerposts',
+  GET_ACTIVE_CAREER_POSTS: '/api/v1/career-posts/getactivecareerposts',
+  GET_CAREER_POST_BY_ID: '/api/v1/career-posts/getcareerpostbyid',
+  CREATE_CAREER_POST: '/api/v1/career-posts/addcareerpost',
+  UPDATE_CAREER_POST: '/api/v1/career-posts/updatecareerpost',
+  DELETE_CAREER_POST: '/api/v1/career-posts/deletecareerpost',
+  TOGGLE_CAREER_POST_STATUS: '/api/v1/career-posts/togglecareerpoststatus',
+  GET_CAREER_POST_APPLICANTS: '/api/v1/career-posts/applicants',
+  UPDATE_CAREER_POST_APPLICANT_STATUS: '/api/v1/career-posts/applicants',
 
   // About Us
   // Hero Gallery
-  GET_HERO_IMAGES: '/about-us/hero-images/getheroimages',
-  ADD_HERO_IMAGE: '/about-us/hero-images/addheroimage',
-  UPDATE_HERO_IMAGE: '/about-us/hero-images/updateheroimage',
-  DELETE_HERO_IMAGE: '/about-us/hero-images/deleteheroimage',
+  GET_HERO_IMAGES: '/api/v1/about-us/hero-images/getheroimages',
+  ADD_HERO_IMAGE: '/api/v1/about-us/hero-images/addheroimage',
+  UPDATE_HERO_IMAGE: '/api/v1/about-us/hero-images/updateheroimage',
+  DELETE_HERO_IMAGE: '/api/v1/about-us/hero-images/deleteheroimage',
   
   // Content Sections
-  GET_CONTENT_BY_TYPE: '/about-us/content/getcontentbytype',
-  ADD_OR_UPDATE_CONTENT: '/about-us/content/addorupdatecontent',
+  GET_CONTENT_BY_TYPE: '/api/v1/about-us/content/getcontentbytype',
+  ADD_OR_UPDATE_CONTENT: '/api/v1/about-us/content/addorupdatecontent',
   
   // Statistics
-  GET_STATISTICS: '/about-us/statistics/getstatistics',
-  ADD_STATISTIC: '/about-us/statistics/addstatistic',
-  UPDATE_STATISTIC: '/about-us/statistics/updatestatistic',
-  DELETE_STATISTIC: '/about-us/statistics/deletestatistic',
+  GET_STATISTICS: '/api/v1/about-us/statistics/getstatistics',
+  ADD_STATISTIC: '/api/v1/about-us/statistics/addstatistic',
+  UPDATE_STATISTIC: '/api/v1/about-us/statistics/updatestatistic',
+  DELETE_STATISTIC: '/api/v1/about-us/statistics/deletestatistic',
   
   // Core Values
-  GET_CORE_VALUES: '/about-us/core-values/getcorevalues',
-  ADD_CORE_VALUE: '/about-us/core-values/addcorevalue',
-  UPDATE_CORE_VALUE: '/about-us/core-values/updatecorevalue',
-  DELETE_CORE_VALUE: '/about-us/core-values/deletecorevalue',
+  GET_CORE_VALUES: '/api/v1/about-us/core-values/getcorevalues',
+  ADD_CORE_VALUE: '/api/v1/about-us/core-values/addcorevalue',
+  UPDATE_CORE_VALUE: '/api/v1/about-us/core-values/updatecorevalue',
+  DELETE_CORE_VALUE: '/api/v1/about-us/core-values/deletecorevalue',
   
   // Campus Images
-  GET_CAMPUS_IMAGES: '/about-us/campus-images/getcampusimages',
-  ADD_CAMPUS_IMAGE: '/about-us/campus-images/addcampusimage',
-  UPDATE_CAMPUS_IMAGE: '/about-us/campus-images/updatecampusimage',
-  DELETE_CAMPUS_IMAGE: '/about-us/campus-images/deletecampusimage',
+  GET_CAMPUS_IMAGES: '/api/v1/about-us/campus-images/getcampusimages',
+  ADD_CAMPUS_IMAGE: '/api/v1/about-us/campus-images/addcampusimage',
+  UPDATE_CAMPUS_IMAGE: '/api/v1/about-us/campus-images/updatecampusimage',
+  DELETE_CAMPUS_IMAGE: '/api/v1/about-us/campus-images/deletecampusimage',
 
   // Life at Inframe Sections
-  GET_LIFE_AT_INFRAME_SECTIONS: '/lifeatinframesection/getlifeatinframesections',
-  ADD_LIFE_AT_INFRAME_SECTION: '/lifeatinframesection/addlifeatinframesection',
-  UPDATE_LIFE_AT_INFRAME_SECTION: '/lifeatinframesection/updatelifeatinframesection',
-  DELETE_LIFE_AT_INFRAME_SECTION: '/lifeatinframesection/deletelifeatinframesection',
+  GET_LIFE_AT_INFRAME_SECTIONS: '/api/v1/lifeatinframesection/getlifeatinframesections',
+  ADD_LIFE_AT_INFRAME_SECTION: '/api/v1/lifeatinframesection/addlifeatinframesection',
+  UPDATE_LIFE_AT_INFRAME_SECTION: '/api/v1/lifeatinframesection/updatelifeatinframesection',
+  DELETE_LIFE_AT_INFRAME_SECTION: '/api/v1/lifeatinframesection/deletelifeatinframesection',
 
   // Student Services
-  GET_STUDENT_SERVICES: '/studentservice/getstudentservices',
-  ADD_STUDENT_SERVICE: '/studentservice/addstudentservice',
-  UPDATE_STUDENT_SERVICE: '/studentservice/updatestudentservice',
-  DELETE_STUDENT_SERVICE: '/studentservice/deletestudentservice',
+  GET_STUDENT_SERVICES: '/api/v1/studentservice/getstudentservices',
+  ADD_STUDENT_SERVICE: '/api/v1/studentservice/addstudentservice',
+  UPDATE_STUDENT_SERVICE: '/api/v1/studentservice/updatestudentservice',
+  DELETE_STUDENT_SERVICE: '/api/v1/studentservice/deletestudentservice',
 
   // Sports Facilities
-  GET_SPORTS_FACILITIES: '/sportsfacility/getsportsfacilities',
-  ADD_SPORTS_FACILITY: '/sportsfacility/addsportsfacility',
-  UPDATE_SPORTS_FACILITY: '/sportsfacility/updatesportsfacility',
-  DELETE_SPORTS_FACILITY: '/sportsfacility/deletesportsfacility',
+  GET_SPORTS_FACILITIES: '/api/v1/sportsfacility/getsportsfacilities',
+  ADD_SPORTS_FACILITY: '/api/v1/sportsfacility/addsportsfacility',
+  UPDATE_SPORTS_FACILITY: '/api/v1/sportsfacility/updatesportsfacility',
+  DELETE_SPORTS_FACILITY: '/api/v1/sportsfacility/deletesportsfacility',
 
   // Life at Inframe Gallery Images
-  GET_LIFE_AT_INFRAME_GALLERY: '/galleryimage/getgalleryimages',
-  ADD_LIFE_AT_INFRAME_GALLERY_IMAGE: '/galleryimage/addgalleryimage',
-  UPDATE_LIFE_AT_INFRAME_GALLERY_IMAGE: '/galleryimage/updategalleryimage',
-  DELETE_LIFE_AT_INFRAME_GALLERY_IMAGE: '/galleryimage/deletegalleryimage',
+  GET_LIFE_AT_INFRAME_GALLERY: '/api/v1/galleryimage/getgalleryimages',
+  ADD_LIFE_AT_INFRAME_GALLERY_IMAGE: '/api/v1/galleryimage/addgalleryimage',
+  UPDATE_LIFE_AT_INFRAME_GALLERY_IMAGE: '/api/v1/galleryimage/updategalleryimage',
+  DELETE_LIFE_AT_INFRAME_GALLERY_IMAGE: '/api/v1/galleryimage/deletegalleryimage',
 
   // Downloads
-  GET_DOWNLOADS: '/download/getdownloads',
-  GET_DOWNLOAD_BY_ID: '/download/getdownloadbyid',
-  CREATE_DOWNLOAD: '/download/adddownload',
-  UPDATE_DOWNLOAD: '/download/updatedownload',
-  DELETE_DOWNLOAD: '/download/deletedownload',
-  GET_DOWNLOAD_CATEGORIES: '/download/getcategories',
-  DELETE_DOWNLOAD_CATEGORY: '/download/deletecategory',
+  GET_DOWNLOADS: '/api/v1/download/getdownloads',
+  GET_DOWNLOAD_BY_ID: '/api/v1/download/getdownloadbyid',
+  CREATE_DOWNLOAD: '/api/v1/download/adddownload',
+  UPDATE_DOWNLOAD: '/api/v1/download/updatedownload',
+  DELETE_DOWNLOAD: '/api/v1/download/deletedownload',
+  GET_DOWNLOAD_CATEGORIES: '/api/v1/download/getcategories',
+  DELETE_DOWNLOAD_CATEGORY: '/api/v1/download/deletecategory',
 
   // News & Events
-  GET_NEWS_ALL: '/news/all',
-  GET_NEWS_BY_ID: '/news',
-  CREATE_NEWS: '/news/create',
-  UPDATE_NEWS: '/news',
-  DELETE_NEWS: '/news',
-  GET_NEWS_BY_TYPE: '/news/type',
-  GET_NEWS_BY_SUBTYPE: '/news/subtype',
-  SEARCH_NEWS: '/news/search',
-  GET_LATEST_NEWS: '/news/latest',
-  GET_ACTIVE_NEWS: '/news/active',
-  GET_NEWS_TYPES: '/news/types/all',
-  GET_NEWS_SUBTYPES: '/news/subtypes/all',
-  GET_NEWS_TAGS: '/news/tags/all',
-  TOGGLE_NEWS_STATUS: '/news/toggle-status',
+  GET_NEWS_ALL: '/api/v1/news/all',
+  GET_NEWS_BY_ID: '/api/v1/news',
+  CREATE_NEWS: '/api/v1/news/create',
+  UPDATE_NEWS: '/api/v1/news',
+  DELETE_NEWS: '/api/v1/news',
+  GET_NEWS_BY_TYPE: '/api/v1/news/type',
+  GET_NEWS_BY_SUBTYPE: '/api/v1/news/subtype',
+  SEARCH_NEWS: '/api/v1/news/search',
+  GET_LATEST_NEWS: '/api/v1/news/latest',
+  GET_ACTIVE_NEWS: '/api/v1/news/active',
+  GET_NEWS_TYPES: '/api/v1/news/types/all',
+  GET_NEWS_SUBTYPES: '/api/v1/news/subtypes/all',
+  GET_NEWS_TAGS: '/api/v1/news/tags/all',
+  TOGGLE_NEWS_STATUS: '/api/v1/news/toggle-status',
 
   // Campus Events (Additional endpoints)
-  CREATE_CAMPUS_EVENT: '/campusevent/addcampusevent',
-  UPDATE_CAMPUS_EVENT: '/campusevent/updatecampusevent',
-  DELETE_CAMPUS_EVENT: '/campusevent/deletecampusevent',
+  CREATE_CAMPUS_EVENT: '/api/v1/campusevent/addcampusevent',
+  UPDATE_CAMPUS_EVENT: '/api/v1/campusevent/updatecampusevent',
+  DELETE_CAMPUS_EVENT: '/api/v1/campusevent/deletecampusevent',
 
   // Session Login Details
-  GET_SESSION_LOGINS: '/session/getsessionlogins',
-  GET_SESSION_LOGIN_BY_ID: '/session/getsessionloginbyid',
-  CREATE_SESSION_LOGIN: '/session/addsessionlogin',
-  UPDATE_SESSION_LOGIN: '/session/updatesessionlogin',
-  DELETE_SESSION_LOGIN: '/session/deletesessionlogin',
+  GET_SESSION_LOGINS: '/api/v1/session/getsessionlogins',
+  GET_SESSION_LOGIN_BY_ID: '/api/v1/session/getsessionloginbyid',
+  CREATE_SESSION_LOGIN: '/api/v1/session/addsessionlogin',
+  UPDATE_SESSION_LOGIN: '/api/v1/session/updatesessionlogin',
+  DELETE_SESSION_LOGIN: '/api/v1/session/deletesessionlogin',
 
   // Free Courses
-  GET_FREE_COURSES: '/free-courses',
-  GET_FREE_COURSE_BY_ID: '/free-courses',
-  CREATE_FREE_COURSE: '/free-courses',
-  UPDATE_FREE_COURSE: '/free-courses',
-  DELETE_FREE_COURSE: '/free-courses',
-  TOGGLE_FREE_COURSE_STATUS: '/free-courses',
+  GET_FREE_COURSES: '/api/v1/free-courses',
+  GET_FREE_COURSE_BY_ID: '/api/v1/free-courses',
+  CREATE_FREE_COURSE: '/api/v1/free-courses',
+  UPDATE_FREE_COURSE: '/api/v1/free-courses',
+  DELETE_FREE_COURSE: '/api/v1/free-courses',
+  TOGGLE_FREE_COURSE_STATUS: '/api/v1/free-courses',
 
   // General
-  HEALTH_CHECK: '/health',
+  HEALTH_CHECK: '/api/v1/health',
 };
 
 // Helper functions for common API calls

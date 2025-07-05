@@ -108,10 +108,10 @@ export default function TestApiFix() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            API Base URL Fix Test Results
+            API Routes Fix Test Results
           </h1>
           <p className="text-gray-600 mb-6">
-            This page tests all backend API integrations to verify the base URL fix is working correctly.
+            This page tests all backend API integrations to verify the hardcoded URL fix is working correctly.
           </p>
 
           {/* Summary Stats */}
@@ -184,8 +184,8 @@ export default function TestApiFix() {
           <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <h3 className="text-lg font-semibold text-blue-900 mb-2">What This Test Verifies</h3>
             <ul className="text-sm text-blue-800 space-y-1">
-              <li>• All API endpoints are accessible with the correct base URL</li>
-              <li>• No more 404 errors due to double URL construction</li>
+              <li>• All API endpoints are accessible with the correct hardcoded URLs</li>
+              <li>• No more 404 errors due to environment variable issues</li>
               <li>• Data is being fetched successfully from the backend</li>
               <li>• Components will load data correctly in production</li>
             </ul>
@@ -201,7 +201,7 @@ export default function TestApiFix() {
                     All APIs Working Successfully!
                   </h3>
                   <p className="text-sm text-green-700">
-                    The API base URL fix has been successfully implemented. All mapped components should now load data correctly in production.
+                    The API routes fix has been successfully implemented. All mapped components should now load data correctly in production.
                   </p>
                 </div>
               </div>
