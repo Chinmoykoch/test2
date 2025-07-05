@@ -2854,7 +2854,7 @@ export interface SessionLoginsResponse {
 // });
 
 export async function getCareerPosts(): Promise<CareerPost[]> {
-  const response = await apiClient.get('/career-posts/getallcareerposts');
+  const response = await apiClient.get(`${API_BASE_URL}/career-posts/getallcareerposts`);
   if (response.data && Array.isArray(response.data)) {
     return response.data;
   } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
@@ -2867,7 +2867,7 @@ export async function getCareerPosts(): Promise<CareerPost[]> {
 
 export async function getCareerPostsWithApplicants(): Promise<CareerPost[]> {
   try {
-    const response = await apiClient.get('/career-posts/getallcareerposts?populate=applicants');
+    const response = await apiClient.get(`${API_BASE_URL}/career-posts/getallcareerposts?populate=applicants`);
     if (response.data && Array.isArray(response.data)) {
       return response.data;
     } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
@@ -2882,7 +2882,7 @@ export async function getCareerPostsWithApplicants(): Promise<CareerPost[]> {
 }
 
 export async function getActiveCareerPosts(): Promise<CareerPost[]> {
-  const response = await apiClient.get('/career-posts/getactivecareerposts');
+  const response = await apiClient.get(`${API_BASE_URL}/career-posts/getactivecareerposts`);
   if (response.data && Array.isArray(response.data)) {
     return response.data;
   } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
@@ -2894,7 +2894,7 @@ export async function getActiveCareerPosts(): Promise<CareerPost[]> {
 }
 
 export async function getCareerPostById(id: string): Promise<CareerPost | null> {
-  const response = await apiClient.get(`/career-posts/getcareerpostbyid/${id}`);
+  const response = await apiClient.get(`${API_BASE_URL}/career-posts/getcareerpostbyid/${id}`);
   if (response.data && response.data.success && response.data.data) {
     return response.data.data;
   }
@@ -2902,7 +2902,7 @@ export async function getCareerPostById(id: string): Promise<CareerPost | null> 
 }
 
 export async function createCareerPost(data: CareerPostData): Promise<CareerPost> {
-  const response = await apiClient.post('/career-posts/addcareerpost', data);
+  const response = await apiClient.post(`${API_BASE_URL}/career-posts/addcareerpost`, data);
   if (response.data && response.data.success && response.data.data) {
     return response.data.data;
   }
@@ -2910,7 +2910,7 @@ export async function createCareerPost(data: CareerPostData): Promise<CareerPost
 }
 
 export async function updateCareerPost(id: string, data: CareerPostData): Promise<CareerPost> {
-  const response = await apiClient.put(`/career-posts/updatecareerpost/${id}`, data);
+  const response = await apiClient.put(`${API_BASE_URL}/career-posts/updatecareerpost/${id}`, data);
   if (response.data && response.data.success && response.data.data) {
     return response.data.data;
   }
@@ -2918,11 +2918,11 @@ export async function updateCareerPost(id: string, data: CareerPostData): Promis
 }
 
 export async function deleteCareerPost(id: string): Promise<void> {
-  await apiClient.delete(`/career-posts/deletecareerpost/${id}`);
+  await apiClient.delete(`${API_BASE_URL}/career-posts/deletecareerpost/${id}`);
 }
 
 export async function toggleCareerPostStatus(id: string): Promise<CareerPost> {
-  const response = await apiClient.put(`/career-posts/togglecareerpoststatus/${id}`);
+  const response = await apiClient.put(`${API_BASE_URL}/career-posts/togglecareerpoststatus/${id}`);
   if (response.data && response.data.success && response.data.data) {
     return response.data.data;
   }
@@ -2930,7 +2930,7 @@ export async function toggleCareerPostStatus(id: string): Promise<CareerPost> {
 }
 
 export async function getApplicantsForCareerPost(careerId: string): Promise<Applicant[]> {
-  const response = await apiClient.get(`/career-posts/applicants/${careerId}`);
+  const response = await apiClient.get(`${API_BASE_URL}/career-posts/applicants/${careerId}`);
   if (response.data && response.data.success && response.data.data) {
     const result = response.data.data;
     if (result.applicants && Array.isArray(result.applicants)) {
@@ -2945,7 +2945,7 @@ export async function updateApplicantStatus(
   applicantId: string,
   status: Applicant['status']
 ): Promise<Applicant> {
-  const response = await apiClient.put(`/career-posts/applicants/${careerId}/${applicantId}/status`, { status });
+  const response = await apiClient.put(`${API_BASE_URL}/career-posts/applicants/${careerId}/${applicantId}/status`, { status });
   if (response.data && response.data.success && response.data.data) {
     return response.data.data;
   } else if (response.data && response.data.success) {
