@@ -256,11 +256,22 @@ export const LifeAtCampus = () => {
                   // Handle both API service and fallback service types
                   const isApiService = '_id' in service;
                   const serviceKey = isApiService ? service._id : index;
-                  const serviceColor = isApiService
-                    ? 'bg-blue-600'
-                    : (typeof service === 'object' && 'color' in service && typeof service.color === 'string'
-                        ? service.color
-                        : 'bg-gray-600');
+                  // Set specific colors for first three cards regardless of API or fallback
+                  let serviceColor;
+                  if (index === 0) {
+                    serviceColor = 'bg-red-500'; // First card - red
+                  } else if (index === 1) {
+                    serviceColor = 'bg-blue-600'; // Second card - blue
+                  } else if (index === 2) {
+                    serviceColor = 'bg-green-600'; // Third card - green
+                  } else {
+                    // For additional cards, use API color or fallback
+                    serviceColor = isApiService
+                      ? 'bg-blue-600'
+                      : (typeof service === 'object' && 'color' in service && typeof service.color === 'string'
+                          ? service.color
+                          : 'bg-gray-600');
+                  }
                   const serviceIcon = isApiService
                     ? service.icon
                     : (typeof service === 'object' && 'icon' in service ? service.icon : undefined);

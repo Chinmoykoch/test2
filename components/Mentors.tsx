@@ -3,77 +3,18 @@ import { Poppins } from "next/font/google";
 import React from "react";
 import Image from "next/image";
 import { FaCalendarAlt } from "react-icons/fa";
+import { useActiveMentors, Mentor } from "../utils/api";
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
 });
 
-interface Mentor {
-  name: string;
-  title: string;
-  expertise: string[];
-  description: string;
-  image: string;
-}
+
 
 const MentorsPage = () => {
-  const mentors: Mentor[] = [
-    {
-      name: "Sarah Chen",
-      title: "SENIOR UX RESEARCHER",
-      expertise: ["User Experience", "Product Strategy", "Design Thinking"],
-      description:
-        "Sarah Chen brings over 15 years of expertise in user-centered design practices. With a background in cognitive psychology and human-computer interaction, she has led research initiatives at major tech companies including Google and Microsoft. Sarah specializes in transforming complex user data into actionable design insights, helping students bridge the gap between theoretical concepts and practical application.",
-      image:
-        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&h=500&fit=crop",
-    },
-    {
-      name: "Michael Rodriguez",
-      title: "CREATIVE DIRECTOR",
-      expertise: ["Brand Identity", "Visual Design", "Art Direction"],
-      description:
-        "Michael Rodriguez has spent two decades shaping visual identities for Fortune 500 companies and cultural institutions alike. After serving as lead designer at Pentagram, he founded his own studio focusing on sustainable design practices. Michael's mentorship emphasizes the importance of conceptual thinking and craftsmanship in creating impactful visual communications that stand the test of time.",
-      image:
-        "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&h=500&fit=crop",
-    },
-    {
-      name: "Aisha Johnson",
-      title: "MOTION DESIGN SPECIALIST",
-      expertise: ["Animation", "Interaction Design", "Visual Storytelling"],
-      description:
-        "Aisha Johnson is an award-winning motion designer whose work spans film, interactive media, and digital platforms. Having contributed to projects for Netflix, Apple, and Pixar, she brings industry-standard techniques and creative approaches to her mentorship. Aisha focuses on helping students develop their unique visual voice while mastering technical skills in animation and interactive storytelling.",
-      image:
-        "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=500&h=500&fit=crop",
-    },
-    {
-      name: "David Park",
-      title: "FRONT-END DEVELOPMENT LEAD",
-      expertise: ["Responsive Design", "Web Animation", "Design Systems"],
-      description:
-        "David Park bridges the worlds of design and development with his expertise in creating seamless digital experiences. Formerly a senior developer at AirbnB and Spotify, he specializes in translating complex design concepts into elegant, efficient code. David's mentorship focuses on technical implementation while maintaining design integrity, helping students understand the full product development lifecycle.",
-      image:
-        "https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=500&h=500&fit=crop",
-    },
-    {
-      name: "Elena Martinez",
-      title: "SERVICE DESIGN STRATEGIST",
-      expertise: ["Design Research", "Systems Thinking", "Strategic Innovation"],
-      description:
-        "Elena Martinez brings a holistic approach to design challenges through her background in service design and strategic innovation. Having worked with organizations ranging from healthcare providers to government agencies, she specializes in designing complex service ecosystems. Elena helps students develop critical thinking skills necessary for addressing multifaceted problems in today's interconnected world.",
-      image:
-        "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=500&h=500&fit=crop",
-    },
-    {
-      name: "Thomas Williams",
-      title: "AR/VR EXPERIENCE DESIGNER",
-      expertise: ["Immersive Environments", "Spatial Computing", "3D Modeling"],
-      description:
-        "Thomas Williams is at the forefront of immersive technology design, having pioneered AR/VR experiences for education, healthcare, and entertainment. With patents in spatial interaction design and background at Magic Leap, he brings cutting-edge knowledge to emerging designers. Thomas mentors students in creating meaningful interactions in three-dimensional spaces, preparing them for the future of digital experience design.",
-      image:
-        "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=500&h=500&fit=crop",
-    },
-  ];
+  // Fetch mentors from backend
+  const { mentors, loading, error } = useActiveMentors();
 
   return (
     <div className={`w-full min-h-screen bg-white ${poppins.className}`}>
@@ -108,8 +49,30 @@ const MentorsPage = () => {
 
       {/* Mentors Section */}
       <div className="container mx-auto px-6 py-16 -mt-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {mentors.map((mentor, index) => (
+        {loading && (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading mentors...</p>
+          </div>
+        )}
+        
+        {error && (
+          <div className="text-center py-12">
+            <p className="text-red-600 mb-4">Error loading mentors: {error}</p>
+            <p className="text-gray-600">Please try again later</p>
+          </div>
+        )}
+        
+        {!loading && !error && mentors.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-600 mb-4">No mentors available at the moment</p>
+            <p className="text-gray-500">Please check back later for updates</p>
+          </div>
+        )}
+        
+        {!loading && !error && mentors.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {mentors.map((mentor: Mentor, index: number) => (
             <div
               key={index}
               className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:border-yellow-400 shadow-sm hover:shadow-xl transition-all duration-300 relative flex flex-col h-full"
@@ -129,7 +92,7 @@ const MentorsPage = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <h2 className="text-xl font-bold text-white">{mentor.name}</h2>
-                  <h3 className="text-sm font-medium text-yellow-300">{mentor.title}</h3>
+                  <h3 className="text-sm font-medium text-yellow-300">{mentor.role}</h3>
                 </div>
               </div>
               
@@ -137,7 +100,7 @@ const MentorsPage = () => {
               <div className="p-6 flex flex-col flex-grow">
                 {/* Expertise tags */}
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {mentor.expertise.map((skill, i) => (
+                  {mentor.tags.map((skill: string, i: number) => (
                     <span 
                       key={i}
                       className="text-xs font-medium bg-yellow-100 text-black py-1 px-2 rounded-full"
@@ -159,7 +122,8 @@ const MentorsPage = () => {
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        )}
       </div>
       
       {/* Call to Action Section */}

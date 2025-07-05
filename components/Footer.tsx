@@ -2,11 +2,20 @@
 import React from "react";
 import { Facebook, Youtube, Instagram, Linkedin, Twitter } from "lucide-react";
 import Link from "next/link";
-import { useActiveFreeCourses } from "../utils/api";
+import { useActiveFreeCourses, useActiveMentors, useLatestNews, useCampusEvents } from "../utils/api";
 
 const Footer = () => {
   // Fetch backend free courses for the footer
   const { courses: backendCourses, loading: loadingFreeCourses } = useActiveFreeCourses();
+  
+  // Fetch backend mentors for the footer
+  const { mentors: backendMentors, loading: loadingMentors } = useActiveMentors();
+  
+  // Fetch backend news for the footer
+  const { news: backendNews, loading: loadingNews } = useLatestNews();
+  
+  // Fetch backend events for the footer
+  const { events: backendEvents, loading: loadingEvents } = useCampusEvents();
 
   return (
     <footer className="bg-gradient-to-b from-black to-gray-900 text-white font-sans py-16 relative z-50">
@@ -333,6 +342,102 @@ const Footer = () => {
                   {index < backendCourses.length - 1 && " · "}
                 </React.Fragment>
               ))
+            )}
+          </p>
+        </div>
+      </div>
+
+      {/* News Section */}
+      <div className="mt-8 border-t border-gray-700 pt-8">
+        <div className="container mx-auto px-6 lg:px-16 text-center text-sm">
+          <p>
+            <span className="font-semibold">Latest News:</span>{" "}
+            {loadingNews ? (
+              <span className="text-gray-400 ml-2">Loading...</span>
+            ) : backendNews.length > 0 ? (
+              backendNews.slice(0, 3).map((newsItem, index) => (
+                <React.Fragment key={newsItem._id}>
+                  <Link 
+                    href="/news-events" 
+                    className="hover:text-blue-400 transition duration-300"
+                    title={newsItem.title}
+                  >
+                    {newsItem.title.length > 30 ? `${newsItem.title.substring(0, 30)}...` : newsItem.title}
+                  </Link>
+                  {index < Math.min(backendNews.length, 3) - 1 && " · "}
+                </React.Fragment>
+              ))
+            ) : (
+              <span className="text-gray-400">Stay updated with our latest news</span>
+            )}
+            {backendNews.length > 3 && (
+              <span className="text-gray-400 ml-2">
+                · <Link href="/news-events" className="hover:text-blue-400 transition duration-300">and more</Link>
+              </span>
+            )}
+          </p>
+        </div>
+      </div>
+
+      {/* Events Section */}
+      <div className="mt-8 border-t border-gray-700 pt-8">
+        <div className="container mx-auto px-6 lg:px-16 text-center text-sm">
+          <p>
+            <span className="font-semibold">Upcoming Events:</span>{" "}
+            {loadingEvents ? (
+              <span className="text-gray-400 ml-2">Loading...</span>
+            ) : backendEvents.length > 0 ? (
+              backendEvents.slice(0, 3).map((event, index) => (
+                <React.Fragment key={event._id}>
+                  <Link 
+                    href="/news-events" 
+                    className="hover:text-blue-400 transition duration-300"
+                    title={event.title}
+                  >
+                    {event.title.length > 30 ? `${event.title.substring(0, 30)}...` : event.title}
+                  </Link>
+                  {index < Math.min(backendEvents.length, 3) - 1 && " · "}
+                </React.Fragment>
+              ))
+            ) : (
+              <span className="text-gray-400">Join our exciting campus events</span>
+            )}
+            {backendEvents.length > 3 && (
+              <span className="text-gray-400 ml-2">
+                · <Link href="/news-events" className="hover:text-blue-400 transition duration-300">and more</Link>
+              </span>
+            )}
+          </p>
+        </div>
+      </div>
+
+      {/* Mentors Section */}
+      <div className="mt-8 border-t border-gray-700 pt-8">
+        <div className="container mx-auto px-6 lg:px-16 text-center text-sm">
+          <p>
+            <span className="font-semibold">Our Expert Mentors:</span>{" "}
+            {loadingMentors ? (
+              <span className="text-gray-400 ml-2">Loading...</span>
+            ) : backendMentors.length > 0 ? (
+              backendMentors.slice(0, 5).map((mentor, index) => (
+                <React.Fragment key={mentor._id}>
+                  <Link 
+                    href="/mentors" 
+                    className="hover:text-blue-400 transition duration-300"
+                    title={`${mentor.name} - ${mentor.role}`}
+                  >
+                    {mentor.name}
+                  </Link>
+                  {index < Math.min(backendMentors.length, 5) - 1 && " · "}
+                </React.Fragment>
+              ))
+            ) : (
+              <span className="text-gray-400">Meet our industry experts</span>
+            )}
+            {backendMentors.length > 5 && (
+              <span className="text-gray-400 ml-2">
+                · <Link href="/mentors" className="hover:text-blue-400 transition duration-300">and more</Link>
+              </span>
             )}
           </p>
         </div>

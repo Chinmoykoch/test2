@@ -4,10 +4,11 @@ import { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Tab } from "@headlessui/react";
-import { Search, Calendar, Clock, ArrowRight } from "lucide-react";
+import { Search, Calendar, Clock, ArrowRight, FileText, CalendarDays, AlertCircle } from "lucide-react";
 import { Button } from "./ui/button";
 import { Poppins } from "next/font/google";
 import ApplyNowForm from "./ApplyNowForm";
+import { useNews, useCampusEvents, NewsItem, CampusEvent } from "../utils/api";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -18,104 +19,17 @@ const NewsAndEventsPage = () => {
   // State management
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Categories for filtering
-  // const categories = [
-  //   { id: "all", name: "All" },
-  //   { id: "art", name: "Art" },
-  //   { id: "design", name: "Design" },
-  //   { id: "business", name: "Business" },
-  //   { id: "general", name: "General" }
-  // ];
+  // Fetch data from backend
+  const { news, loading: newsLoading, error: newsError } = useNews();
+  const { events, loading: eventsLoading, error: eventsError } = useCampusEvents();
 
-  // Sample data - wrapped in useMemo to prevent unnecessary re-renders
-  const events = useMemo(() => [
-    {
-      id: 1,
-      title: "Annual Design Exhibition",
-      category: "design" as const,
-      description: "Showcase of student and faculty work featuring innovative design solutions across various disciplines.",
-      date: "2024-03-15",
-      time: "6:00 PM",
-      location: "Main Gallery",
-      image: "/images/gallery/1721738128651.jpg",
-      featured: true,
-    },
-    {
-      id: 2,
-      title: "Business Innovation Workshop",
-      category: "business" as const,
-      description: "Interactive workshop on entrepreneurship and business model innovation for creative professionals.",
-      date: "2024-03-20",
-      time: "2:00 PM",
-      location: "Conference Hall",
-      image: "/images/gallery/1721737896096.jpg",
-    },
-    {
-      id: 3,
-      title: "Art History Lecture Series",
-      category: "art" as const,
-      description: "Exploring contemporary art movements and their influence on modern creative practices.",
-      date: "2024-03-25",
-      time: "4:00 PM",
-      location: "Lecture Theater",
-      image: "/images/gallery/1721738128651.jpg",
-    },
-    {
-      id: 4,
-      title: "Student Portfolio Review",
-      category: "general" as const,
-      description: "Industry professionals provide feedback on student portfolios and career guidance.",
-      date: "2024-03-30",
-      time: "10:00 AM",
-      location: "Studio A",
-      image: "/images/gallery/1721737896096.jpg",
-    },
-  ], []);
-
-  const news = useMemo(() => [
-    {
-      id: 1,
-      title: "New Digital Arts Program Launches",
-      category: "art" as const,
-      summary: "Inframe School introduces cutting-edge digital arts curriculum integrating traditional techniques with modern technology.",
-      date: "2024-03-10",
-      author: "Dr. Sarah Johnson",
-      image: "/images/gallery/1721738128651.jpg",
-      featured: true,
-    },
-    {
-      id: 2,
-      title: "Student Wins National Design Award",
-      category: "design" as const,
-      summary: "Third-year student recognized for innovative sustainable design project at national competition.",
-      date: "2024-03-08",
-      author: "Prof. Michael Chen",
-      image: "/images/gallery/1721737896096.jpg",
-    },
-    {
-      id: 3,
-      title: "Partnership with Tech Startup",
-      category: "business" as const,
-      summary: "Strategic collaboration announced with leading tech startup to provide real-world project opportunities.",
-      date: "2024-03-05",
-      author: "Dean Williams",
-      image: "/images/gallery/1721738128651.jpg",
-    },
-    {
-      id: 4,
-      title: "Campus Sustainability Initiative",
-      category: "general" as const,
-      summary: "New green campus initiatives include solar panels, recycling programs, and sustainable building practices.",
-      date: "2024-03-01",
-      author: "Environmental Committee",
-      image: "/images/gallery/1721737896096.jpg",
-    },
-  ], []);
+  // Loading and error states
+  const isLoading = newsLoading || eventsLoading;
+  const hasError = newsError || eventsError;
 
   // Filter logic using useMemo instead of useEffect
   const filteredEvents = useMemo(() => {
     return events.filter((event) => {
-      // const matchesCategory = selectedCategory === "all" || event.category === selectedCategory;
       const matchesSearch =
         event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -125,10 +39,9 @@ const NewsAndEventsPage = () => {
 
   const filteredNews = useMemo(() => {
     return news.filter((item) => {
-      // const matchesCategory = selectedCategory === "all" || item.category === selectedCategory;
       const matchesSearch =
         item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.summary.toLowerCase().includes(searchTerm.toLowerCase());
+        item.description.toLowerCase().includes(searchTerm.toLowerCase());
       return matchesSearch;
     });
   }, [searchTerm, news]);
@@ -138,6 +51,41 @@ const NewsAndEventsPage = () => {
     e.preventDefault();
     setIsFormOpen(true);
   };
+
+  // Empty state component
+  const EmptyState = ({ type, searchTerm }: { type: 'news' | 'events' | 'all', searchTerm: string }) => (
+    <div className="col-span-full py-16 text-center">
+      <div className="max-w-md mx-auto">
+        <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+          {type === 'news' ? (
+            <FileText className="w-8 h-8 text-gray-400" />
+          ) : type === 'events' ? (
+            <CalendarDays className="w-8 h-8 text-gray-400" />
+          ) : (
+            <AlertCircle className="w-8 h-8 text-gray-400" />
+          )}
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          {searchTerm ? 'No results found' : `No ${type === 'all' ? 'content' : type} available`}
+        </h3>
+        <p className="text-gray-500 mb-4">
+          {searchTerm 
+            ? `No ${type === 'all' ? 'news or events' : type} found matching "${searchTerm}". Try adjusting your search terms.`
+            : `There are currently no ${type === 'all' ? 'news articles or events' : type} to display. Check back soon for updates!`
+          }
+        </p>
+        {searchTerm && (
+          <button
+            onClick={() => setSearchTerm("")}
+            className="inline-flex items-center text-sm font-medium text-yellow-600 hover:text-yellow-700"
+          >
+            Clear search
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <div className={`min-h-screen bg-white ${poppins.className}`}>
       {/* Hero Section */}
@@ -212,27 +160,10 @@ const NewsAndEventsPage = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-
-            {/* <div className="flex items-center space-x-2 overflow-x-auto pb-2 md:pb-0">
-              <Filter className="text-gray-500 h-4 w-4" />
-              <span className="text-sm font-medium text-gray-700">Filter:</span>
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`px-3 py-1 text-sm rounded-full whitespace-nowrap transition-colors ${
-                    selectedCategory === category.id
-                      ? "bg-yellow-400 text-black font-medium"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  {category.name}
-                </button>
-              ))}
-            </div> */}
           </div>
         </div>
       </div>
+
       <div className="text-black-300 text-lg leading-relaxed max-w-8xl mt-10 mx-8 text-justify font-light">
         The Inframe School of Art, Design, and Business is a vibrant hub of
         creativity and innovation, hosting a diverse array of events throughout
@@ -249,6 +180,7 @@ const NewsAndEventsPage = () => {
         exhibition dates, workshop registration, guest speaker announcements,
         and student showcases.
       </div>
+
       <div className="relative w-full mt-5 h-[300px] overflow-hidden">
         <Image
           src="/images/gallery/1721738128651.jpg"
@@ -262,455 +194,337 @@ const NewsAndEventsPage = () => {
         </div>
       </div>
 
-      {/* Tabs Section */}
-      <div className="container mx-auto px-4 py-12">
-        <Tab.Group>
-          <Tab.List className="flex space-x-4 border-b border-gray-200 mb-8">
-            <Tab
-              className={({ selected }) =>
-                `px-6 py-3 text-sm font-medium border-b-2 outline-none transition-colors ${
-                  selected
-                    ? "text-black border-yellow-400"
-                    : "text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-                }`
-              }
-            >
-              All
-            </Tab>
-            <Tab
-              className={({ selected }) =>
-                `px-6 py-3 text-sm font-medium border-b-2 outline-none transition-colors ${
-                  selected
-                    ? "text-black border-yellow-400"
-                    : "text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-                }`
-              }
-            >
-              Upcoming
-            </Tab>
-            <Tab
-              className={({ selected }) =>
-                `px-6 py-3 text-sm font-medium border-b-2 outline-none transition-colors ${
-                  selected
-                    ? "text-black border-yellow-400"
-                    : "text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-                }`
-              }
-            >
-              Recent
-            </Tab>
-            <Tab
-              className={({ selected }) =>
-                `px-6 py-3 text-sm font-medium border-b-2 outline-none transition-colors ${
-                  selected
-                    ? "text-black border-yellow-400"
-                    : "text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-                }`
-              }
-            >
-              Featured
-            </Tab>
-          </Tab.List>
+      {/* Loading State */}
+      {isLoading && (
+        <div className="container mx-auto px-4 py-12">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading news and events...</p>
+          </div>
+        </div>
+      )}
 
-          <Tab.Panels>
-            {/* All Tab - Combined Events and News */}
-            <Tab.Panel>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredEvents.length > 0 ? (
-                  filteredEvents.map((event) => (
-                    <div
-                      key={event.id}
-                      className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
-                    >
-                      <div className="relative h-48">
-                        <Image
-                          src={event.image}
-                          alt={event.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                        <div className="absolute top-4 left-4 flex space-x-2">
-                          <span className="bg-yellow-400 text-black text-xs font-medium px-2 py-1 rounded">
-                            EVENT
-                          </span>
-                          <span
-                            className={`text-xs font-medium px-2 py-1 rounded capitalize ${
-                              event.category === "art"
-                                ? "bg-pink-100 text-pink-800"
-                                : event.category === "design"
-                                  ? "bg-blue-100 text-blue-800"
-                                  : event.category === "business"
-                                    ? "bg-green-100 text-green-800"
-                                    : "bg-gray-100 text-gray-800"
-                            }`}
-                          >
-                            {event.category}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="p-6">
-                        <div className="flex flex-wrap gap-y-1 gap-x-4 text-gray-500 text-sm mb-3">
-                          <div className="flex items-center">
-                            <Calendar className="h-4 w-4 mr-1" />
-                            <span>{event.date}</span>
-                          </div>
-                          <div className="flex items-center">
-                            <Clock className="h-4 w-4 mr-1" />
-                            <span>{event.time}</span>
-                          </div>
-                        </div>
-                        <h3 className="text-lg font-semibold mb-2 line-clamp-2">
-                          {event.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                          {event.description}
-                        </p>
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs text-gray-500">
-                            {event.location}
-                          </span>
-                          <Link
-                            href={""}
-                            className="inline-flex items-center text-sm font-medium text-black bg-transparent hover:bg-yellow-400 border border-yellow-400 py-2 px-4 rounded-md transition-all duration-300 group"
-                          >
-                            View Details
-                            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="col-span-3 py-16 text-center">
-                    <p className="text-gray-500">
-                      No events found matching your criteria.
-                    </p>
-                  </div>
-                )}
+      {/* Error State */}
+      {hasError && (
+        <div className="container mx-auto px-4 py-12">
+          <div className="text-center py-12">
+            <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+              <AlertCircle className="w-8 h-8 text-red-500" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Error loading content</h3>
+            <p className="text-red-600 mb-4">{newsError || eventsError}</p>
+            <p className="text-gray-600">Please try again later</p>
+          </div>
+        </div>
+      )}
 
-                {filteredNews.length > 0 ? (
-                  filteredNews.map((item) => (
-                    <div
-                      key={item.id}
-                      className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
-                    >
-                      <div className="relative h-48">
-                        <Image
-                          src={item.image}
-                          alt={item.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                        <div className="absolute top-4 left-4 flex space-x-2">
-                          <span className="bg-black text-yellow-400 text-xs font-medium px-2 py-1 rounded">
-                            NEWS
-                          </span>
-                          <span
-                            className={`text-xs font-medium px-2 py-1 rounded capitalize ${
-                              item.category === "art"
-                                ? "bg-pink-100 text-pink-800"
-                                : item.category === "design"
-                                  ? "bg-blue-100 text-blue-800"
-                                  : item.category === "business"
-                                    ? "bg-green-100 text-green-800"
-                                    : "bg-gray-100 text-gray-800"
-                            }`}
-                          >
-                            {item.category}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="p-6">
-                        <div className="flex items-center justify-between text-sm mb-3">
-                          <div className="flex items-center text-gray-500">
-                            <Calendar className="h-4 w-4 mr-1" />
-                            <span>{item.date}</span>
-                          </div>
-                          <span className="text-xs text-gray-500">
-                            By {item.author}
-                          </span>
-                        </div>
-                        <h3 className="text-lg font-semibold mb-2 line-clamp-2">
-                          {item.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                          {item.summary}
-                        </p>
-                        <Link
-                          href={""}
-                          className="inline-flex items-center text-sm font-medium text-black bg-transparent hover:bg-yellow-400 border border-yellow-400 py-2 px-4 rounded-md transition-all duration-300 group"
+      {/* Content Section */}
+      {!isLoading && !hasError && (
+        <div className="container mx-auto px-4 py-12">
+          <Tab.Group>
+            <Tab.List className="flex space-x-4 border-b border-gray-200 mb-8">
+              <Tab
+                className={({ selected }) =>
+                  `px-6 py-3 text-sm font-medium border-b-2 outline-none transition-colors ${
+                    selected
+                      ? "text-black border-yellow-400"
+                      : "text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+                  }`
+                }
+              >
+                All
+              </Tab>
+              <Tab
+                className={({ selected }) =>
+                  `px-6 py-3 text-sm font-medium border-b-2 outline-none transition-colors ${
+                    selected
+                      ? "text-black border-yellow-400"
+                      : "text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+                  }`
+                }
+              >
+                News
+              </Tab>
+              <Tab
+                className={({ selected }) =>
+                  `px-6 py-3 text-sm font-medium border-b-2 outline-none transition-colors ${
+                    selected
+                      ? "text-black border-yellow-400"
+                      : "text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+                  }`
+                }
+              >
+                Events
+              </Tab>
+            </Tab.List>
+
+            <Tab.Panels>
+              {/* All Tab - Combined Events and News */}
+              <Tab.Panel>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {/* Check if both arrays are empty */}
+                  {filteredEvents.length === 0 && filteredNews.length === 0 ? (
+                    <EmptyState type="all" searchTerm={searchTerm} />
+                  ) : (
+                    <>
+                      {/* Events */}
+                      {filteredEvents.length > 0 && filteredEvents.map((event: CampusEvent, index: number) => (
+                        <div
+                          key={event._id || index}
+                          className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
                         >
-                          Read More
-                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </Link>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="col-span-3 py-16 text-center">
-                    <p className="text-gray-500">
-                      No news found matching your criteria.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </Tab.Panel>
-
-            {/* Upcoming Tab - Events only */}
-            <Tab.Panel>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredEvents.length > 0 ? (
-                  filteredEvents.map((event) => (
-                    <div
-                      key={event.id}
-                      className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
-                    >
-                      <div className="relative h-48">
-                        <Image
-                          src={event.image}
-                          alt={event.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                        <div className="absolute top-4 left-4 flex space-x-2">
-                          <span className="bg-yellow-400 text-black text-xs font-medium px-2 py-1 rounded">
-                            EVENT
-                          </span>
-                          <span
-                            className={`text-xs font-medium px-2 py-1 rounded capitalize ${
-                              event.category === "art"
-                                ? "bg-pink-100 text-pink-800"
-                                : event.category === "design"
-                                  ? "bg-blue-100 text-blue-800"
-                                  : event.category === "business"
-                                    ? "bg-green-100 text-green-800"
-                                    : "bg-gray-100 text-gray-800"
-                            }`}
-                          >
-                            {event.category}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="p-6">
-                        <div className="flex flex-wrap gap-y-1 gap-x-4 text-gray-500 text-sm mb-3">
-                          <div className="flex items-center">
-                            <Calendar className="h-4 w-4 mr-1" />
-                            <span>{event.date}</span>
+                          <div className="relative h-48">
+                            <Image
+                              src={event.image || "/images/gallery/1721738128651.jpg"}
+                              alt={event.title}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-500"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div className="absolute top-4 left-4 flex space-x-2">
+                              <span className="bg-yellow-400 text-black text-xs font-medium px-2 py-1 rounded">
+                                EVENT
+                              </span>
+                              <span
+                                className={`text-xs font-medium px-2 py-1 rounded capitalize ${
+                                  event.category === "arts-culture"
+                                    ? "bg-pink-100 text-pink-800"
+                                    : event.category === "sports-recreation"
+                                      ? "bg-blue-100 text-blue-800"
+                                      : "bg-green-100 text-green-800"
+                                }`}
+                              >
+                                {event.category.replace('-', ' ')}
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center">
-                            <Clock className="h-4 w-4 mr-1" />
-                            <span>{event.time}</span>
+                          <div className="p-6">
+                            <h3 className="text-lg font-semibold mb-2 line-clamp-2">
+                              {event.title}
+                            </h3>
+                            <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                              {event.description}
+                            </p>
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs text-gray-500">
+                                Order: {event.order}
+                              </span>
+                              <Link
+                                href={`/news-events/event/${event._id}`}
+                                className="inline-flex items-center text-sm font-medium text-black bg-transparent hover:bg-yellow-400 border border-yellow-400 py-2 px-4 rounded-md transition-all duration-300 group"
+                              >
+                                View Details
+                                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                              </Link>
+                            </div>
                           </div>
                         </div>
-                        <h3 className="text-lg font-semibold mb-2 line-clamp-2">
-                          {event.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                          {event.description}
-                        </p>
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs text-gray-500">
-                            {event.location}
-                          </span>
-                          <Link
-                            href={""}
-                            className="inline-flex items-center text-sm font-medium text-black bg-transparent hover:bg-yellow-400 border border-yellow-400 py-2 px-4 rounded-md transition-all duration-300 group"
-                          >
-                            View Details
-                            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="col-span-3 py-16 text-center">
-                    <p className="text-gray-500">
-                      No events found matching your criteria.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </Tab.Panel>
+                      ))}
 
-            {/* Recent Tab - News only */}
-            <Tab.Panel>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredNews.length > 0 ? (
-                  filteredNews.map((item) => (
-                    <div
-                      key={item.id}
-                      className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
-                    >
-                      <div className="relative h-48">
-                        <Image
-                          src={item.image}
-                          alt={item.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                        <div className="absolute top-4 left-4 flex space-x-2">
-                          <span className="bg-black text-yellow-400 text-xs font-medium px-2 py-1 rounded">
-                            NEWS
-                          </span>
-                          <span
-                            className={`text-xs font-medium px-2 py-1 rounded capitalize ${
-                              item.category === "art"
-                                ? "bg-pink-100 text-pink-800"
-                                : item.category === "design"
-                                  ? "bg-blue-100 text-blue-800"
-                                  : item.category === "business"
-                                    ? "bg-green-100 text-green-800"
-                                    : "bg-gray-100 text-gray-800"
-                            }`}
-                          >
-                            {item.category}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="p-6">
-                        <div className="flex items-center justify-between text-sm mb-3">
-                          <div className="flex items-center text-gray-500">
-                            <Calendar className="h-4 w-4 mr-1" />
-                            <span>{item.date}</span>
+                      {/* News */}
+                      {filteredNews.length > 0 && filteredNews.map((item: NewsItem, index: number) => (
+                        <div
+                          key={item._id || index}
+                          className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
+                        >
+                          <div className="relative h-48">
+                            <Image
+                              src={item.image}
+                              alt={item.title}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-500"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div className="absolute top-4 left-4 flex space-x-2">
+                              <span className="bg-black text-yellow-400 text-xs font-medium px-2 py-1 rounded">
+                                NEWS
+                              </span>
+                              <span className="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-800">
+                                {item.type}
+                              </span>
+                            </div>
                           </div>
-                          <span className="text-xs text-gray-500">
-                            By {item.author}
-                          </span>
+                          <div className="p-6">
+                            <div className="flex flex-wrap gap-y-1 gap-x-4 text-gray-500 text-sm mb-3">
+                              <div className="flex items-center">
+                                <Calendar className="h-4 w-4 mr-1" />
+                                <span>{item.date}</span>
+                              </div>
+                              <div className="flex items-center">
+                                <Clock className="h-4 w-4 mr-1" />
+                                <span>{item.time}</span>
+                              </div>
+                            </div>
+                            <h3 className="text-lg font-semibold mb-2 line-clamp-2">
+                              {item.title}
+                            </h3>
+                            <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                              {item.description}
+                            </p>
+                            <div className="flex justify-between items-center">
+                              <div className="flex flex-wrap gap-1">
+                                {item.tags.slice(0, 2).map((tag, tagIndex) => (
+                                  <span key={tagIndex} className="text-xs bg-yellow-100 text-black px-2 py-1 rounded">
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                              <Link
+                                href={`/news-events/${item._id}`}
+                                className="inline-flex items-center text-sm font-medium text-black bg-transparent hover:bg-yellow-400 border border-yellow-400 py-2 px-4 rounded-md transition-all duration-300 group"
+                              >
+                                Read More
+                                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                              </Link>
+                            </div>
+                          </div>
                         </div>
-                        <h3 className="text-lg font-semibold mb-2 line-clamp-2">
-                          {item.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                          {item.summary}
-                        </p>
-                        <Link
-                          href={""}
-                          className="inline-flex items-center text-sm font-medium text-black bg-transparent hover:bg-yellow-400 border border-yellow-400 py-2 px-4 rounded-md transition-all duration-300 group"
-                        >
-                          Read More
-                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </Link>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="col-span-3 py-16 text-center">
-                    <p className="text-gray-500">
-                      No news found matching your criteria.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </Tab.Panel>
+                      ))}
+                    </>
+                  )}
+                </div>
+              </Tab.Panel>
 
-            {/* Featured Tab - Featured content from both categories */}
-            <Tab.Panel>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredEvents
-                  .filter((event) => event.featured)
-                  .map((event) => (
-                    <div
-                      key={`event-${event.id}`}
-                      className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
-                    >
-                      <div className="relative h-48">
-                        <Image
-                          src={event.image}
-                          alt={event.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                        <div className="absolute top-4 left-4">
-                          <span className="bg-yellow-400 text-black text-xs font-medium px-2 py-1 rounded">
-                            EVENT
-                          </span>
+              {/* News Tab */}
+              <Tab.Panel>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredNews.length > 0 ? (
+                    filteredNews.map((item: NewsItem, index: number) => (
+                      <div
+                        key={item._id || index}
+                        className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
+                      >
+                        <div className="relative h-48">
+                          <Image
+                            src={item.image}
+                            alt={item.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                          <div className="absolute top-4 left-4 flex space-x-2">
+                            <span className="bg-black text-yellow-400 text-xs font-medium px-2 py-1 rounded">
+                              NEWS
+                            </span>
+                            <span className="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-800">
+                              {item.type}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="p-6">
+                          <div className="flex flex-wrap gap-y-1 gap-x-4 text-gray-500 text-sm mb-3">
+                            <div className="flex items-center">
+                              <Calendar className="h-4 w-4 mr-1" />
+                              <span>{item.date}</span>
+                            </div>
+                            <div className="flex items-center">
+                              <Clock className="h-4 w-4 mr-1" />
+                              <span>{item.time}</span>
+                            </div>
+                          </div>
+                          <h3 className="text-lg font-semibold mb-2 line-clamp-2">
+                            {item.title}
+                          </h3>
+                          <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                            {item.description}
+                          </p>
+                          <div className="flex justify-between items-center">
+                            <div className="flex flex-wrap gap-1">
+                              {item.tags.slice(0, 2).map((tag, tagIndex) => (
+                                <span key={tagIndex} className="text-xs bg-yellow-100 text-black px-2 py-1 rounded">
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                            <Link
+                              href={`/news-events/${item._id}`}
+                              className="inline-flex items-center text-sm font-medium text-black bg-transparent hover:bg-yellow-400 border border-yellow-400 py-2 px-4 rounded-md transition-all duration-300 group"
+                            >
+                              Read More
+                              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            </Link>
+                          </div>
                         </div>
                       </div>
-                      <div className="p-6">
-                        <div className="flex items-center text-gray-500 text-sm mb-2">
-                          <Calendar className="h-4 w-4 mr-1" />
-                          <span>{event.date}</span>
-                          <Clock className="h-4 w-4 mx-1 ml-3" />
-                          <span>{event.time}</span>
-                        </div>
-                        <h3 className="text-lg font-semibold mb-2 line-clamp-2">
-                          {event.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                          {event.description}
-                        </p>
-                        <Link
-                          href={""}
-                          className="inline-flex items-center text-sm font-medium text-black bg-transparent hover:bg-yellow-400 border border-yellow-400 py-2 px-4 rounded-md transition-all duration-300 group"
-                        >
-                          View Details
-                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <EmptyState type="news" searchTerm={searchTerm} />
+                  )}
+                </div>
+              </Tab.Panel>
 
-                {filteredNews
-                  .filter((item) => item.featured)
-                  .map((item) => (
-                    <div
-                      key={`news-${item.id}`}
-                      className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
-                    >
-                      <div className="relative h-48">
-                        <Image
-                          src={item.image}
-                          alt={item.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                        <div className="absolute top-4 left-4">
-                          <span className="bg-black text-yellow-400 text-xs font-medium px-2 py-1 rounded">
-                            NEWS
-                          </span>
+              {/* Events Tab */}
+              <Tab.Panel>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredEvents.length > 0 ? (
+                    filteredEvents.map((event: CampusEvent, index: number) => (
+                      <div
+                        key={event._id || index}
+                        className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
+                      >
+                        <div className="relative h-48">
+                          <Image
+                            src={event.image || "/images/gallery/1721738128651.jpg"}
+                            alt={event.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                          <div className="absolute top-4 left-4 flex space-x-2">
+                            <span className="bg-yellow-400 text-black text-xs font-medium px-2 py-1 rounded">
+                              EVENT
+                            </span>
+                            <span
+                              className={`text-xs font-medium px-2 py-1 rounded capitalize ${
+                                event.category === "arts-culture"
+                                  ? "bg-pink-100 text-pink-800"
+                                  : event.category === "sports-recreation"
+                                    ? "bg-blue-100 text-blue-800"
+                                    : "bg-green-100 text-green-800"
+                              }`}
+                            >
+                              {event.category.replace('-', ' ')}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="p-6">
+                          <h3 className="text-lg font-semibold mb-2 line-clamp-2">
+                            {event.title}
+                          </h3>
+                          <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                            {event.description}
+                          </p>
+                          <div className="flex justify-between items-center">
+                            <span className="text-xs text-gray-500">
+                              Order: {event.order}
+                            </span>
+                            <Link
+                              href={`/news-events/event/${event._id}`}
+                              className="inline-flex items-center text-sm font-medium text-black bg-transparent hover:bg-yellow-400 border border-yellow-400 py-2 px-4 rounded-md transition-all duration-300 group"
+                            >
+                              View Details
+                              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            </Link>
+                          </div>
                         </div>
                       </div>
-                      <div className="p-6">
-                        <div className="flex items-center text-gray-500 text-sm mb-2">
-                          <Calendar className="h-4 w-4 mr-1" />
-                          <span>{item.date}</span>
-                        </div>
-                        <h3 className="text-lg font-semibold mb-2 line-clamp-2">
-                          {item.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                          {item.summary}
-                        </p>
-                        <Link
-                          href={""}
-                          className="inline-flex items-center text-sm font-medium text-black bg-transparent hover:bg-yellow-400 border border-yellow-400 py-2 px-4 rounded-md transition-all duration-300 group"
-                        >
-                          Read More
-                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </Tab.Panel>
-          </Tab.Panels>
-        </Tab.Group>
-      </div>
+                    ))
+                  ) : (
+                    <EmptyState type="events" searchTerm={searchTerm} />
+                  )}
+                </div>
+              </Tab.Panel>
+            </Tab.Panels>
+          </Tab.Group>
+        </div>
+      )}
 
-      <div className="w-full  bg-opacity-90 py-16 px-6 md:px-12">
+      {/* CTA Section */}
+      <div className="w-full bg-opacity-90 py-16 px-6 md:px-12">
         <div className="max-w-7xl mx-auto bg-black bg-opacity-90 rounded-2xl shadow-2xl border border-zinc-800 px-6 md:px-12 py-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-10">
             {/* Text Content */}

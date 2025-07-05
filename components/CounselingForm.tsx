@@ -23,7 +23,7 @@ const poppins = Poppins({
 
 const CounselingFormSchema = z.object({
   name: z.string().nonempty("Name is required"),
-  phone: z.string().nonempty("Phone number is required"),
+  phoneNumber: z.string().nonempty("Phone number is required"),
   email: z
     .string()
     .email("Invalid email address")
@@ -36,46 +36,60 @@ const CounselingForm = () => {
   const [submissionMessage, setSubmissionMessage] = useState<string | null>(
     null
   );
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(CounselingFormSchema),
   });
 
   interface FormData {
     name: string;
-    phone: string;
+    phoneNumber: string;
     email: string;
     city: string;
     course: string;
   }
 
   const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
     try {
-      const response = await fetch("https://formspree.io/f/mvgzgpwl", {
+      // Use the Session Login API instead of contact API
+      const response = await fetch("/api/session-login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          name: data.name,
+          phoneNumber: data.phoneNumber,
+          email: data.email,
+          city: data.city,
+          course: data.course,
+        }),
       });
 
       if (response.ok) {
         setSubmissionMessage(
-          "Thanks for submitting! We will contact you soon."
+          "Thanks for submitting! We will contact you soon to schedule your free session."
         );
+        reset(); // Reset form after successful submission
       } else {
+        const errorData = await response.json().catch(() => ({}));
         setSubmissionMessage(
-          "Failed to submit the form. Please try again later."
+          errorData.message || "Failed to submit the form. Please try again later."
         );
       }
     } catch (error) {
       console.error("Error submitting the form:", error);
       setSubmissionMessage("An error occurred. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -121,18 +135,18 @@ const CounselingForm = () => {
                       </div>
 
                       <div className="form-group">
-                        <Label htmlFor="phone">Phone Number *</Label>
+                        <Label htmlFor="phoneNumber">Phone Number *</Label>
                         <Input
-                          id="phone"
+                          id="phoneNumber"
                           type="text"
                           placeholder="Enter your number (+91)"
-                          {...register("phone")}
+                          {...register("phoneNumber")}
                           className="w-full"
                         />
-                        {errors.phone && (
+                        {errors.phoneNumber && (
                           <p className="text-red-500 text-sm mt-1">
-                            {typeof errors.phone?.message === "string" &&
-                              errors.phone.message}
+                            {typeof errors.phoneNumber?.message === "string" &&
+                              errors.phoneNumber.message}
                           </p>
                         )}
                       </div>
@@ -227,9 +241,12 @@ const CounselingForm = () => {
                       <div>
                         <Button
                           type="submit"
-                          className={`w-full text-lg font-extrabold text-black bg-yellow-400 hover:bg-yellow-500 py-4 rounded shadow transition-all ${poppins.className}`}
+                          disabled={isSubmitting}
+                          className={`w-full text-lg font-extrabold text-black bg-yellow-400 hover:bg-yellow-500 py-4 rounded shadow transition-all ${poppins.className} ${
+                            isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                          }`}
                         >
-                          Schedule a Free Session
+                          {isSubmitting ? 'Submitting...' : 'Schedule a Free Session'}
                         </Button>
                       </div>
                     </form>

@@ -93,6 +93,48 @@ export interface CampusEventsResponse {
   data: CampusEvent[];
 }
 
+// News & Events Interfaces
+export interface NewsItem {
+  _id?: string;
+  title: string;
+  type: string;
+  subType: string;
+  description: string;
+  pointdetails: string[];
+  image: string;
+  date: string;
+  time: string;
+  tags: string[];
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface NewsResponse {
+  success: boolean;
+  message: string;
+  data: {
+    news: NewsItem[];
+    pagination: {
+      currentPage: number;
+      totalPages: number;
+      totalNews: number;
+      hasNextPage: boolean;
+      hasPrevPage: boolean;
+    };
+  };
+  statusCode: number;
+  timestamp: string;
+}
+
+export interface SingleNewsResponse {
+  success: boolean;
+  message: string;
+  data: NewsItem;
+  statusCode: number;
+  timestamp: string;
+}
+
 export interface Membership {
   _id: string;
   src: string;
@@ -121,6 +163,44 @@ export interface Advisor {
 export interface AdvisorsResponse {
   success: boolean;
   data: Advisor[];
+}
+
+// Mentor API Interfaces
+export interface Mentor {
+  _id?: string;
+  name: string;
+  role: string;
+  description: string;
+  image: string;
+  tags: string[];
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
+}
+
+export interface MentorResponse {
+  success: boolean;
+  message: string;
+  data: Mentor;
+  statusCode: number;
+  timestamp: string;
+}
+
+export interface MultipleMentorsResponse {
+  success: boolean;
+  message: string;
+  data: {
+    mentors: Mentor[];
+    pagination: {
+      currentPage: number;
+      totalPages: number;
+      totalMentors: number;
+      hasNextPage: boolean;
+      hasPrevPage: boolean;
+    };
+  };
+  statusCode: number;
+  timestamp: string;
 }
 
 export interface Enquiry {
@@ -522,157 +602,192 @@ apiClient.interceptors.response.use(
 // API endpoints
 export const API_ENDPOINTS = {
   // Authentication
-  LOGIN: '/api/v1/auth/login',
-  REGISTER: '/api/v1/auth/register',
-  LOGOUT: '/api/v1/auth/logout',
+  LOGIN: '/auth/login',
+  REGISTER: '/auth/register',
+  LOGOUT: '/auth/logout',
 
   // User management
-  PROFILE: '/api/v1/user/profile',
-  UPDATE_PROFILE: '/api/v1/user/profile',
+  PROFILE: '/user/profile',
+  UPDATE_PROFILE: '/user/profile',
 
   // Admissions
-  SUBMIT_APPLICATION: '/api/v1/admissions/apply',
-  GET_APPLICATION_STATUS: '/api/v1/admissions/status',
+  SUBMIT_APPLICATION: '/admissions/apply',
+  GET_APPLICATION_STATUS: '/admissions/status',
 
   // Courses
-  GET_COURSES: '/api/v1/courses',
-  GET_COURSE_BY_SLUG: '/api/v1/courses/slug',
-  GET_COURSE_BY_ID: '/api/v1/courses',
-  CREATE_COURSE: '/api/v1/courses',
-  UPDATE_COURSE: '/api/v1/courses',
-  DELETE_COURSE: '/api/v1/courses',
-  GET_COURSE_PROGRAMS: '/api/v1/courses/programs',
-  GET_COURSE_PROGRAM_BY_SLUG: '/api/v1/courses',
-  GET_COURSE_FEATURES: '/api/v1/courses/features',
-  GET_COURSE_TESTIMONIALS: '/api/v1/courses/testimonials',
-  GET_COURSE_FAQS: '/api/v1/courses/faqs',
-  GET_COURSE_CURRICULUM: '/api/v1/courses/curriculum',
-  GET_COURSE_SOFTWARE: '/api/v1/courses/software',
-  GET_COURSE_CAREER_PROSPECTS: '/api/v1/courses/career-prospects',
-  GENERATE_SLUG: '/api/v1/courses/generate-slug',
+  GET_COURSES: '/courses',
+  GET_COURSE_BY_SLUG: '/courses/slug',
+  GET_COURSE_BY_ID: '/courses',
+  CREATE_COURSE: '/courses',
+  UPDATE_COURSE: '/courses',
+  DELETE_COURSE: '/courses',
+  GET_COURSE_PROGRAMS: '/courses/programs',
+  GET_COURSE_PROGRAM_BY_SLUG: '/courses',
+  GET_COURSE_FEATURES: '/courses/features',
+  GET_COURSE_TESTIMONIALS: '/courses/testimonials',
+  GET_COURSE_FAQS: '/courses/faqs',
+  GET_COURSE_CURRICULUM: '/courses/curriculum',
+  GET_COURSE_SOFTWARE: '/courses/software',
+  GET_COURSE_CAREER_PROSPECTS: '/courses/career-prospects',
+  GENERATE_SLUG: '/courses/generate-slug',
 
   // Payments
-  CREATE_PAYMENT: '/api/v1/payments/create',
-  VERIFY_PAYMENT: '/api/v1/payments/verify',
+  CREATE_PAYMENT: '/payments/create',
+  VERIFY_PAYMENT: '/payments/verify',
 
   // Contact/Enquiry
-  SUBMIT_ENQUIRY: '/api/v1/enquiries',
-  SUBMIT_COUNSELING_REQUEST: '/api/v1/contact/counseling',
-  ADD_CONTACT: '/api/v1/contact/addcontact',
+  SUBMIT_ENQUIRY: '/enquiries',
+  SUBMIT_COUNSELING_REQUEST: '/contact/counseling',
+  ADD_CONTACT: '/contact/addcontact',
 
   // News/Blog
-  GET_NEWS: '/api/v1/news',
-  GET_BLOG_POSTS: '/api/v1/blog',
+  GET_NEWS: '/news',
+  GET_BLOG_POSTS: '/blog',
 
   // Gallery
-  GET_GALLERY_IMAGES: '/api/v1/gallery',
+  GET_GALLERY_IMAGES: '/gallery',
 
   // Testimonials
-  GET_TESTIMONIALS: '/api/v1/testimonials/gettestimonials',
+  GET_TESTIMONIALS: '/testimonials/gettestimonials',
 
   // Blog
-  GET_BLOGS: '/api/v1/blog/getblogs',
-  GET_ALL_BLOGS: '/api/v1/blog/getallblogs',
-  GET_PUBLISHED_BLOGS: '/api/v1/blog/getpublishedblogs',
-  GET_POPULAR_BLOGS: '/api/v1/blog/getpopularblogs',
-  GET_BLOG_BY_ID: '/api/v1/blog/getblogbyid',
-  GET_BLOG_BY_SLUG: '/api/v1/blog/getblogbyslug',
-  GET_BLOGS_BY_CATEGORY: '/api/v1/blog/getblogsbycategory',
+  GET_BLOGS: '/blog/getblogs',
+  GET_ALL_BLOGS: '/blog/getallblogs',
+  GET_PUBLISHED_BLOGS: '/blog/getpublishedblogs',
+  GET_POPULAR_BLOGS: '/blog/getpopularblogs',
+  GET_BLOG_BY_ID: '/blog/getblogbyid',
+  GET_BLOG_BY_SLUG: '/blog/getblogbyslug',
+  GET_BLOGS_BY_CATEGORY: '/blog/getblogsbycategory',
 
   // Student Clubs
-  GET_STUDENT_CLUBS: '/api/v1/studentclub/getstudentclubs',
+  GET_STUDENT_CLUBS: '/studentclub/getstudentclubs',
 
   // Campus Events
-  GET_CAMPUS_EVENTS: '/api/v1/campusevent/getcampusevents',
+  GET_CAMPUS_EVENTS: '/campusevent/getcampusevents',
 
   // Membership
-  GET_MEMBERSHIP: '/api/v1/membership/getMembership',
+  GET_MEMBERSHIP: '/membership/getMembership',
 
   // Advisors
-  GET_ADVISORS: '/api/v1/advisor/getadvisors',
-  GET_ADVISOR_BY_ID: '/api/v1/advisor/getadvisorsbyid',
-  CREATE_ADVISOR: '/api/v1/advisor/addadvisor',
-  UPDATE_ADVISOR: '/api/v1/advisor/updateadvisor',
-  DELETE_ADVISOR: '/api/v1/advisor/deleteadvisor',
+  GET_ADVISORS: '/advisor/getadvisors',
+  GET_ADVISOR_BY_ID: '/advisor/getadvisorsbyid',
+  CREATE_ADVISOR: '/advisor/addadvisor',
+  UPDATE_ADVISOR: '/advisor/updateadvisor',
+  DELETE_ADVISOR: '/advisor/deleteadvisor',
+
+  // Mentors
+  GET_MENTORS: '/mentor/all',
+  GET_MENTOR_BY_ID: '/mentor',
+  CREATE_MENTOR: '/mentor/create',
+  UPDATE_MENTOR: '/mentor',
+  DELETE_MENTOR: '/mentor',
 
   // Enquiries
-  GET_ENQUIRIES: '/api/v1/enquiries',
-  GET_ENQUIRY_BY_ID: '/api/v1/enquiries',
-  UPDATE_ENQUIRY_STATUS: '/api/v1/enquiries',
-  DELETE_ENQUIRY: '/api/v1/enquiries',
-  GET_ENQUIRY_STATS: '/api/v1/enquiries/stats',
+  GET_ENQUIRIES: '/enquiries',
+  GET_ENQUIRY_BY_ID: '/enquiries',
+  UPDATE_ENQUIRY_STATUS: '/enquiries',
+  DELETE_ENQUIRY: '/enquiries',
+  GET_ENQUIRY_STATS: '/enquiries/stats',
 
   // Industry Partners
-  GET_INDUSTRY_PARTNERS: '/api/v1/logo/getlogo',
-  GET_INDUSTRY_PARTNER_BY_ID: '/api/v1/logo/getlogoById',
-  CREATE_INDUSTRY_PARTNER: '/api/v1/logo/addlogo',
-  UPDATE_INDUSTRY_PARTNER: '/api/v1/logo/updatelogo',
-  DELETE_INDUSTRY_PARTNER: '/api/v1/logo/deletelogo',
+  GET_INDUSTRY_PARTNERS: '/logo/getlogo',
+  GET_INDUSTRY_PARTNER_BY_ID: '/logo/getlogoById',
+  CREATE_INDUSTRY_PARTNER: '/logo/addlogo',
+  UPDATE_INDUSTRY_PARTNER: '/logo/updatelogo',
+  DELETE_INDUSTRY_PARTNER: '/logo/deletelogo',
 
   // Career Applications
-  SUBMIT_JOB_APPLICATION: '/api/v1/career-posts/apply',
+  SUBMIT_JOB_APPLICATION: '/career-posts/apply',
 
   // About Us
   // Hero Gallery
-  GET_HERO_IMAGES: '/api/v1/about-us/hero-images/getheroimages',
-  ADD_HERO_IMAGE: '/api/v1/about-us/hero-images/addheroimage',
-  UPDATE_HERO_IMAGE: '/api/v1/about-us/hero-images/updateheroimage',
-  DELETE_HERO_IMAGE: '/api/v1/about-us/hero-images/deleteheroimage',
+  GET_HERO_IMAGES: '/about-us/hero-images/getheroimages',
+  ADD_HERO_IMAGE: '/about-us/hero-images/addheroimage',
+  UPDATE_HERO_IMAGE: '/about-us/hero-images/updateheroimage',
+  DELETE_HERO_IMAGE: '/about-us/hero-images/deleteheroimage',
   
   // Content Sections
-  GET_CONTENT_BY_TYPE: '/api/v1/about-us/content/getcontentbytype',
-  ADD_OR_UPDATE_CONTENT: '/api/v1/about-us/content/addorupdatecontent',
+  GET_CONTENT_BY_TYPE: '/about-us/content/getcontentbytype',
+  ADD_OR_UPDATE_CONTENT: '/about-us/content/addorupdatecontent',
   
   // Statistics
-  GET_STATISTICS: '/api/v1/about-us/statistics/getstatistics',
-  ADD_STATISTIC: '/api/v1/about-us/statistics/addstatistic',
-  UPDATE_STATISTIC: '/api/v1/about-us/statistics/updatestatistic',
-  DELETE_STATISTIC: '/api/v1/about-us/statistics/deletestatistic',
+  GET_STATISTICS: '/about-us/statistics/getstatistics',
+  ADD_STATISTIC: '/about-us/statistics/addstatistic',
+  UPDATE_STATISTIC: '/about-us/statistics/updatestatistic',
+  DELETE_STATISTIC: '/about-us/statistics/deletestatistic',
   
   // Core Values
-  GET_CORE_VALUES: '/api/v1/about-us/core-values/getcorevalues',
-  ADD_CORE_VALUE: '/api/v1/about-us/core-values/addcorevalue',
-  UPDATE_CORE_VALUE: '/api/v1/about-us/core-values/updatecorevalue',
-  DELETE_CORE_VALUE: '/api/v1/about-us/core-values/deletecorevalue',
+  GET_CORE_VALUES: '/about-us/core-values/getcorevalues',
+  ADD_CORE_VALUE: '/about-us/core-values/addcorevalue',
+  UPDATE_CORE_VALUE: '/about-us/core-values/updatecorevalue',
+  DELETE_CORE_VALUE: '/about-us/core-values/deletecorevalue',
   
   // Campus Images
-  GET_CAMPUS_IMAGES: '/api/v1/about-us/campus-images/getcampusimages',
-  ADD_CAMPUS_IMAGE: '/api/v1/about-us/campus-images/addcampusimage',
-  UPDATE_CAMPUS_IMAGE: '/api/v1/about-us/campus-images/updatecampusimage',
-  DELETE_CAMPUS_IMAGE: '/api/v1/about-us/campus-images/deletecampusimage',
+  GET_CAMPUS_IMAGES: '/about-us/campus-images/getcampusimages',
+  ADD_CAMPUS_IMAGE: '/about-us/campus-images/addcampusimage',
+  UPDATE_CAMPUS_IMAGE: '/about-us/campus-images/updatecampusimage',
+  DELETE_CAMPUS_IMAGE: '/about-us/campus-images/deletecampusimage',
 
   // Life at Inframe Sections
-  GET_LIFE_AT_INFRAME_SECTIONS: '/api/v1/lifeatinframesection/getlifeatinframesections',
-  ADD_LIFE_AT_INFRAME_SECTION: '/api/v1/lifeatinframesection/addlifeatinframesection',
-  UPDATE_LIFE_AT_INFRAME_SECTION: '/api/v1/lifeatinframesection/updatelifeatinframesection',
-  DELETE_LIFE_AT_INFRAME_SECTION: '/api/v1/lifeatinframesection/deletelifeatinframesection',
+  GET_LIFE_AT_INFRAME_SECTIONS: '/lifeatinframesection/getlifeatinframesections',
+  ADD_LIFE_AT_INFRAME_SECTION: '/lifeatinframesection/addlifeatinframesection',
+  UPDATE_LIFE_AT_INFRAME_SECTION: '/lifeatinframesection/updatelifeatinframesection',
+  DELETE_LIFE_AT_INFRAME_SECTION: '/lifeatinframesection/deletelifeatinframesection',
 
   // Student Services
-  GET_STUDENT_SERVICES: '/api/v1/studentservice/getstudentservices',
-  ADD_STUDENT_SERVICE: '/api/v1/studentservice/addstudentservice',
-  UPDATE_STUDENT_SERVICE: '/api/v1/studentservice/updatestudentservice',
-  DELETE_STUDENT_SERVICE: '/api/v1/studentservice/deletestudentservice',
+  GET_STUDENT_SERVICES: '/studentservice/getstudentservices',
+  ADD_STUDENT_SERVICE: '/studentservice/addstudentservice',
+  UPDATE_STUDENT_SERVICE: '/studentservice/updatestudentservice',
+  DELETE_STUDENT_SERVICE: '/studentservice/deletestudentservice',
 
   // Sports Facilities
-  GET_SPORTS_FACILITIES: '/api/v1/sportsfacility/getsportsfacilities',
-  ADD_SPORTS_FACILITY: '/api/v1/sportsfacility/addsportsfacility',
-  UPDATE_SPORTS_FACILITY: '/api/v1/sportsfacility/updatesportsfacility',
-  DELETE_SPORTS_FACILITY: '/api/v1/sportsfacility/deletesportsfacility',
+  GET_SPORTS_FACILITIES: '/sportsfacility/getsportsfacilities',
+  ADD_SPORTS_FACILITY: '/sportsfacility/addsportsfacility',
+  UPDATE_SPORTS_FACILITY: '/sportsfacility/updatesportsfacility',
+  DELETE_SPORTS_FACILITY: '/sportsfacility/deletesportsfacility',
 
   // Life at Inframe Gallery Images
-  GET_LIFE_AT_INFRAME_GALLERY: '/api/v1/galleryimage/getgalleryimages',
+  GET_LIFE_AT_INFRAME_GALLERY: '/galleryimage/getgalleryimages',
   ADD_LIFE_AT_INFRAME_GALLERY_IMAGE: '/galleryimage/addgalleryimage',
   UPDATE_LIFE_AT_INFRAME_GALLERY_IMAGE: '/galleryimage/updategalleryimage',
   DELETE_LIFE_AT_INFRAME_GALLERY_IMAGE: '/galleryimage/deletegalleryimage',
 
   // Downloads
-  GET_DOWNLOADS: '/api/v1/download/getdownloads',
+  GET_DOWNLOADS: '/download/getdownloads',
   GET_DOWNLOAD_BY_ID: '/download/getdownloadbyid',
   CREATE_DOWNLOAD: '/download/adddownload',
   UPDATE_DOWNLOAD: '/download/updatedownload',
   DELETE_DOWNLOAD: '/download/deletedownload',
-  GET_DOWNLOAD_CATEGORIES: '/api/v1/download/getcategories',
+  GET_DOWNLOAD_CATEGORIES: '/download/getcategories',
   DELETE_DOWNLOAD_CATEGORY: '/download/deletecategory',
+
+  // News & Events
+  GET_NEWS_ALL: '/news/all',
+  GET_NEWS_BY_ID: '/news',
+  CREATE_NEWS: '/news/create',
+  UPDATE_NEWS: '/news',
+  DELETE_NEWS: '/news',
+  GET_NEWS_BY_TYPE: '/news/type',
+  GET_NEWS_BY_SUBTYPE: '/news/subtype',
+  SEARCH_NEWS: '/news/search',
+  GET_LATEST_NEWS: '/news/latest',
+  GET_ACTIVE_NEWS: '/news/active',
+  GET_NEWS_TYPES: '/news/types/all',
+  GET_NEWS_SUBTYPES: '/news/subtypes/all',
+  GET_NEWS_TAGS: '/news/tags/all',
+  TOGGLE_NEWS_STATUS: '/news/toggle-status',
+
+  // Campus Events (Additional endpoints)
+  CREATE_CAMPUS_EVENT: '/campusevent/addcampusevent',
+  UPDATE_CAMPUS_EVENT: '/campusevent/updatecampusevent',
+  DELETE_CAMPUS_EVENT: '/campusevent/deletecampusevent',
+
+  // Session Login Details
+  GET_SESSION_LOGINS: '/session/getsessionlogins',
+  GET_SESSION_LOGIN_BY_ID: '/session/getsessionloginbyid',
+  CREATE_SESSION_LOGIN: '/session/addsessionlogin',
+  UPDATE_SESSION_LOGIN: '/session/updatesessionlogin',
+  DELETE_SESSION_LOGIN: '/session/deletesessionlogin',
 
   // General
   HEALTH_CHECK: '/health',
@@ -727,6 +842,60 @@ export const apiHelpers = {
       return response.data;
     } catch (error) {
       console.error('Contact submission failed:', error);
+      throw error;
+    }
+  },
+
+  // Session Login Management
+  getSessionLogins: async (): Promise<SessionLogin[]> => {
+    try {
+      const response = await apiClient.get<SessionLoginsResponse>(API_ENDPOINTS.GET_SESSION_LOGINS);
+      return response.data.data;
+    } catch (error) {
+      console.error('Error fetching session logins:', error);
+      throw error;
+    }
+  },
+
+  getSessionLoginById: async (id: string): Promise<SessionLogin | null> => {
+    try {
+      const response = await apiClient.get<SessionLoginResponse>(`${API_ENDPOINTS.GET_SESSION_LOGIN_BY_ID}/${id}`);
+      return response.data.data;
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        return null;
+      }
+      console.error('Error fetching session login:', error);
+      throw error;
+    }
+  },
+
+  createSessionLogin: async (data: SessionLoginInput): Promise<SessionLogin> => {
+    try {
+      const response = await apiClient.post<SessionLoginResponse>(API_ENDPOINTS.CREATE_SESSION_LOGIN, data);
+      return response.data.data;
+    } catch (error) {
+      console.error('Error creating session login:', error);
+      throw error;
+    }
+  },
+
+  updateSessionLogin: async (id: string, data: SessionLoginInput): Promise<SessionLogin> => {
+    try {
+      const response = await apiClient.put<SessionLoginResponse>(`${API_ENDPOINTS.UPDATE_SESSION_LOGIN}/${id}`, data);
+      return response.data.data;
+    } catch (error) {
+      console.error('Error updating session login:', error);
+      throw error;
+    }
+  },
+
+  deleteSessionLogin: async (id: string): Promise<boolean> => {
+    try {
+      await apiClient.delete(`${API_ENDPOINTS.DELETE_SESSION_LOGIN}/${id}`);
+      return true;
+    } catch (error) {
+      console.error('Error deleting session login:', error);
       throw error;
     }
   },
@@ -2191,7 +2360,7 @@ export const useCourseProgramBySlug = (parentSlug: string, programSlug: string) 
 
 // Free Courses API Functions
 const buildFreeCoursesApiUrl = (endpoint: string): string => {
-  const FREE_COURSES_API_URL = 'https://backend-rakj.onrender.com/api/v1/free-courses';
+  const FREE_COURSES_API_URL = `${API_BASE_URL}/free-courses`;
   return `${FREE_COURSES_API_URL}/${endpoint}`;
 };
 
@@ -2642,6 +2811,38 @@ export interface CareerPostWithApplicants {
   totalApplicants: number;
 }
 
+// Session Login Interfaces
+export interface SessionLogin {
+  _id: string;
+  name: string;
+  phoneNumber: string;
+  email: string;
+  city: string;
+  course: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface SessionLoginInput {
+  name: string;
+  phoneNumber: string;
+  email: string;
+  city: string;
+  course: string;
+}
+
+export interface SessionLoginResponse {
+  success: boolean;
+  data: SessionLogin;
+  message?: string;
+}
+
+export interface SessionLoginsResponse {
+  success: boolean;
+  data: SessionLogin[];
+  message?: string;
+}
+
 // Careers API Functions
 
 
@@ -2681,7 +2882,7 @@ export async function getCareerPostsWithApplicants(): Promise<CareerPost[]> {
 }
 
 export async function getActiveCareerPosts(): Promise<CareerPost[]> {
-  const response = await apiClient.get('/api/v1/career-posts/getactivecareerposts');
+  const response = await apiClient.get('/career-posts/getactivecareerposts');
   if (response.data && Array.isArray(response.data)) {
     return response.data;
   } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
@@ -2753,4 +2954,451 @@ export async function updateApplicantStatus(
     throw new Error('Invalid response structure from update status API');
   }
 }
+
+// Mentor API Functions
+export const useMentors = () => {
+  const [mentors, setMentors] = useState<Mentor[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchMentors = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await apiClient.get(API_ENDPOINTS.GET_MENTORS);
+      
+      if (response.data.success) {
+        setMentors(response.data.data.mentors || response.data.data);
+      } else {
+        setError(response.data.message || 'Failed to fetch mentors');
+      }
+    } catch (error: any) {
+      console.error('Failed to fetch mentors:', error);
+      setError(error.response?.data?.message || 'Failed to fetch mentors');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createMentor = async (mentorData: Omit<Mentor, '_id' | 'createdAt' | 'updatedAt' | '__v'>): Promise<MentorResponse> => {
+    try {
+      const response = await apiClient.post(API_ENDPOINTS.CREATE_MENTOR, mentorData);
+      return response.data;
+    } catch (error: any) {
+      console.error('Failed to create mentor:', error);
+      throw error;
+    }
+  };
+
+  const updateMentor = async (id: string, mentorData: Partial<Mentor>): Promise<MentorResponse> => {
+    try {
+      const response = await apiClient.put(`${API_ENDPOINTS.UPDATE_MENTOR}/${id}`, mentorData);
+      return response.data;
+    } catch (error: any) {
+      console.error('Failed to update mentor:', error);
+      throw error;
+    }
+  };
+
+  const deleteMentor = async (id: string): Promise<MentorResponse> => {
+    try {
+      const response = await apiClient.delete(`${API_ENDPOINTS.DELETE_MENTOR}/${id}`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Failed to delete mentor:', error);
+      throw error;
+    }
+  };
+
+  const getMentorById = async (id: string): Promise<MentorResponse> => {
+    try {
+      const response = await apiClient.get(`${API_ENDPOINTS.GET_MENTOR_BY_ID}/${id}`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Failed to fetch mentor:', error);
+      throw error;
+    }
+  };
+
+  return {
+    mentors,
+    loading,
+    error,
+    fetchMentors,
+    createMentor,
+    updateMentor,
+    deleteMentor,
+    getMentorById
+  };
+};
+
+// Hook for fetching active mentors (for footer display)
+export const useActiveMentors = () => {
+  const [mentors, setMentors] = useState<Mentor[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchActiveMentors = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await apiClient.get(API_ENDPOINTS.GET_MENTORS);
+      
+      if (response.data.success) {
+        // Get all mentors (backend should handle filtering if needed)
+        const allMentors = response.data.data.mentors || response.data.data;
+        setMentors(allMentors);
+      } else {
+        setError(response.data.message || 'Failed to fetch mentors');
+      }
+    } catch (error: any) {
+      console.error('Failed to fetch active mentors:', error);
+      setError(error.response?.data?.message || 'Failed to fetch mentors');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchActiveMentors();
+  }, []);
+
+  return {
+    mentors,
+    loading,
+    error,
+    refetch: fetchActiveMentors
+  };
+};
+
+// News & Events Hooks
+export const useNews = () => {
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalNews: 0,
+    hasNextPage: false,
+    hasPrevPage: false
+  });
+
+  const fetchNews = async (page: number = 1, limit: number = 10) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await apiClient.get(`${API_ENDPOINTS.GET_NEWS_ALL}?page=${page}&limit=${limit}`);
+      
+      if (response.data.success) {
+        setNews(response.data.data.news || response.data.data);
+        setPagination(response.data.data.pagination || {
+          currentPage: page,
+          totalPages: 1,
+          totalNews: response.data.data.news?.length || 0,
+          hasNextPage: false,
+          hasPrevPage: page > 1
+        });
+      } else {
+        setError(response.data.message || 'Failed to fetch news');
+      }
+    } catch (error: any) {
+      console.error('Failed to fetch news:', error);
+      setError(error.response?.data?.message || 'Failed to fetch news');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createNews = async (newsData: Omit<NewsItem, '_id' | 'createdAt' | 'updatedAt'>): Promise<SingleNewsResponse> => {
+    try {
+      const response = await apiClient.post(API_ENDPOINTS.CREATE_NEWS, newsData);
+      return response.data;
+    } catch (error: any) {
+      console.error('Failed to create news:', error);
+      throw error;
+    }
+  };
+
+  const updateNews = async (id: string, newsData: Partial<NewsItem>): Promise<SingleNewsResponse> => {
+    try {
+      const response = await apiClient.put(`${API_ENDPOINTS.UPDATE_NEWS}/${id}`, newsData);
+      return response.data;
+    } catch (error: any) {
+      console.error('Failed to update news:', error);
+      throw error;
+    }
+  };
+
+  const deleteNews = async (id: string): Promise<void> => {
+    try {
+      await apiClient.delete(`${API_ENDPOINTS.DELETE_NEWS}/${id}`);
+    } catch (error: any) {
+      console.error('Failed to delete news:', error);
+      throw error;
+    }
+  };
+
+  const getNewsById = async (id: string): Promise<SingleNewsResponse> => {
+    try {
+      const response = await apiClient.get(`${API_ENDPOINTS.GET_NEWS_BY_ID}/${id}`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Failed to fetch news item:', error);
+      throw error;
+    }
+  };
+
+  const searchNews = async (query: string, page: number = 1, limit: number = 10) => {
+    try {
+      const response = await apiClient.get(`${API_ENDPOINTS.SEARCH_NEWS}?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Failed to search news:', error);
+      throw error;
+    }
+  };
+
+  const getLatestNews = async (limit: number = 5) => {
+    try {
+      const response = await apiClient.get(`${API_ENDPOINTS.GET_LATEST_NEWS}?limit=${limit}`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Failed to fetch latest news:', error);
+      throw error;
+    }
+  };
+
+  const getActiveNews = async (page: number = 1, limit: number = 10) => {
+    try {
+      const response = await apiClient.get(`${API_ENDPOINTS.GET_ACTIVE_NEWS}?page=${page}&limit=${limit}`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Failed to fetch active news:', error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    fetchNews();
+  }, []);
+
+  return {
+    news,
+    loading,
+    error,
+    pagination,
+    fetchNews,
+    createNews,
+    updateNews,
+    deleteNews,
+    getNewsById,
+    searchNews,
+    getLatestNews,
+    getActiveNews
+  };
+};
+
+export const useLatestNews = () => {
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchLatestNews = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await apiClient.get(`${API_ENDPOINTS.GET_LATEST_NEWS}?limit=5`);
+      
+      if (response.data.success) {
+        setNews(response.data.data.news || response.data.data);
+      } else {
+        setError(response.data.message || 'Failed to fetch latest news');
+      }
+    } catch (error: any) {
+      console.error('Failed to fetch latest news:', error);
+      setError(error.response?.data?.message || 'Failed to fetch latest news');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLatestNews();
+  }, []);
+
+  return {
+    news,
+    loading,
+    error,
+    refetch: fetchLatestNews
+  };
+};
+
+export const useCampusEvents = () => {
+  const [events, setEvents] = useState<CampusEvent[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await apiClient.get(API_ENDPOINTS.GET_CAMPUS_EVENTS);
+      
+      if (response.data.success) {
+        setEvents(response.data.data);
+      } else {
+        setError(response.data.message || 'Failed to fetch campus events');
+      }
+    } catch (error: any) {
+      console.error('Failed to fetch campus events:', error);
+      setError(error.response?.data?.message || 'Failed to fetch campus events');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createEvent = async (eventData: Omit<CampusEvent, '_id' | 'createdAt' | 'updatedAt'>) => {
+    try {
+      const response = await apiClient.post(API_ENDPOINTS.CREATE_CAMPUS_EVENT, eventData);
+      return response.data;
+    } catch (error: any) {
+      console.error('Failed to create campus event:', error);
+      throw error;
+    }
+  };
+
+  const updateEvent = async (id: string, eventData: Partial<CampusEvent>) => {
+    try {
+      const response = await apiClient.put(`${API_ENDPOINTS.UPDATE_CAMPUS_EVENT}/${id}`, eventData);
+      return response.data;
+    } catch (error: any) {
+      console.error('Failed to update campus event:', error);
+      throw error;
+    }
+  };
+
+  const deleteEvent = async (id: string) => {
+    try {
+      await apiClient.delete(`${API_ENDPOINTS.DELETE_CAMPUS_EVENT}/${id}`);
+    } catch (error: any) {
+      console.error('Failed to delete campus event:', error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  return {
+    events,
+    loading,
+    error,
+    fetchEvents,
+    createEvent,
+    updateEvent,
+    deleteEvent,
+    refetch: fetchEvents
+  };
+};
+
+// Session Login Hooks
+export const useSessionLogins = () => {
+  const [sessionLogins, setSessionLogins] = useState<SessionLogin[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchSessionLogins = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await apiHelpers.getSessionLogins();
+      setSessionLogins(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load session logins');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSessionLogins();
+  }, []);
+
+  const createSessionLogin = async (sessionLoginData: SessionLoginInput) => {
+    try {
+      const newSessionLogin = await apiHelpers.createSessionLogin(sessionLoginData);
+      setSessionLogins(prev => [...prev, newSessionLogin]);
+      return newSessionLogin;
+    } catch (err) {
+      console.error('Failed to create session login:', err);
+      throw err;
+    }
+  };
+
+  const updateSessionLogin = async (id: string, sessionLoginData: SessionLoginInput) => {
+    try {
+      const updatedSessionLogin = await apiHelpers.updateSessionLogin(id, sessionLoginData);
+      setSessionLogins(prev => prev.map(login => login._id === id ? updatedSessionLogin : login));
+      return updatedSessionLogin;
+    } catch (err) {
+      console.error('Failed to update session login:', err);
+      throw err;
+    }
+  };
+
+  const deleteSessionLogin = async (id: string) => {
+    try {
+      await apiHelpers.deleteSessionLogin(id);
+      setSessionLogins(prev => prev.filter(login => login._id !== id));
+    } catch (err) {
+      console.error('Failed to delete session login:', err);
+      throw err;
+    }
+  };
+
+  return {
+    sessionLogins,
+    loading,
+    error,
+    createSessionLogin,
+    updateSessionLogin,
+    deleteSessionLogin,
+    refetch: fetchSessionLogins,
+  };
+};
+
+export const useSessionLogin = (id: string) => {
+  const [sessionLogin, setSessionLogin] = useState<SessionLogin | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchSessionLogin = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await apiHelpers.getSessionLoginById(id);
+      setSessionLogin(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load session login');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      fetchSessionLogin();
+    }
+  }, [id]);
+
+  return {
+    sessionLogin,
+    loading,
+    error,
+    refetch: fetchSessionLogin,
+  };
+};
 
