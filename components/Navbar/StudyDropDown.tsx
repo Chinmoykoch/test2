@@ -5,10 +5,28 @@ import { Search, ChevronDown } from "lucide-react"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import Link from "next/link"
-import { categories } from "../../utils/constant"
+
 import { Poppins } from "next/font/google"
 import {FaArrowRight } from "react-icons/fa"
 import Image from "next/image"
+import { program, programLevels } from "../../utils/constant"
+
+// TypeScript interfaces
+interface Link {
+  text: string
+}
+
+interface CategoryItem {
+  title: string
+  category: string
+  image: string
+  links: Link[]
+}
+
+interface Category {
+  title: string
+  items: CategoryItem[]
+}
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -16,6 +34,32 @@ const poppins = Poppins({
 })
 
 const allCategories = ["All", "Art", "Design", "Business"]
+
+// Create categories structure from program data
+const categories: Category[] = program.map((programName) => {
+  const levels = programLevels[programName] || {}
+  const links = Object.entries(levels).map(([level, value]) => ({
+    text: typeof value === 'string' ? value : Array.isArray(value) ? value.join(', ') : level
+  }))
+
+  // Determine category based on program name
+  let category = "Design"
+  if (["Fine Arts", "Animation and VFX"].includes(programName)) {
+    category = "Art"
+  } else if (["Digital Marketing", "Entrepreneurship Skill", "Advertising and Marketing"].includes(programName)) {
+    category = "Business"
+  }
+
+  return {
+    title: programName,
+    items: [{
+      title: programName,
+      category: category,
+      image: `/images/gallery/${programName.toLowerCase().replace(/\s+/g, '-')}.jpg`,
+      links: links
+    }]
+  }
+})
 
 const StudyDropDown = () => {
   const [selectedCategory, setSelectedCategory] = useState("All")
@@ -37,17 +81,17 @@ const StudyDropDown = () => {
 
   const handleLinkClick = () => setIsDropdownOpen(false)
 
-  const filteredCategories = useMemo(() => {
+  const filteredCategories = useMemo((): Category[] => {
     return categories
-      .map((category) => ({
+      .map((category: Category) => ({
         ...category,
-        items: category.items.filter((item) => {
+        items: category.items.filter((item: CategoryItem) => {
           const matchesCategory = selectedCategory === "All" || item.category === selectedCategory
           const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase())
           return matchesCategory && matchesSearch
         }),
       }))
-      .filter((category) => category.items.length > 0)
+      .filter((category: Category) => category.items.length > 0)
   }, [selectedCategory, searchQuery])
 
   return (
@@ -92,11 +136,11 @@ const StudyDropDown = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredCategories.map((category) => (
+            {filteredCategories.map((category: Category) => (
               <div key={category.title} className="space-y-4">
                 <h3 className="text-lg font-semibold">{category.title}</h3>
                 <div className="space-y-4">
-                  {category.items.map((item) => {
+                  {category.items.map((item: CategoryItem) => {
                     const mainLink = `/${item.title.replace(/\s+/g, "-").toLowerCase()}`
 
                     return (
@@ -106,7 +150,7 @@ const StudyDropDown = () => {
                       >
                         <div className="flex flex-col sm:flex-row gap-4">
                           <Image
-                            src={item.image || "/placeholder.svg"}
+                            src={item.image || "/images/gallery/1719304885452_1.jpg"}
                             alt={item.title}
                             width={96}
                             height={96}
@@ -119,7 +163,7 @@ const StudyDropDown = () => {
                               </h4>
                             </Link>
                             <div className="text-sm text-muted-foreground mb-2">
-                              {item.links.map((link, idx) => (
+                              {item.links.map((link: Link, idx: number) => (
                                 <p key={idx} className="mb-1">
                                   <Link
                                     className="hover:text-blue-500 hover:underline flex items-center"

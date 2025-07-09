@@ -370,6 +370,26 @@ export interface CourseProgram {
   slug?: string;
   parentCourseSlug?: string;
   parentCourseTitle?: string;
+  
+  // Additional fields from API documentation
+  courseOverview?: string;
+  admissionSteps?: any[];
+  curriculum?: any[];
+  softwareTools?: any[];
+  careerPaths?: any[];
+  testimonials?: any[];
+  faqs?: any[];
+  feeBenefits?: any[];
+  eligibility?: any[];
+  scheduleOptions?: any[];
+  ctaTitle?: string;
+  ctaDescription?: string;
+  ctaButtonText?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface CourseFeature {
@@ -1046,31 +1066,23 @@ export const apiHelpers = {
   // Course-specific API helpers
   getCourseBySlug: async (slug: string): Promise<Course> => {
     try {
+      console.log(`Fetching course by slug: ${slug}`);
+      console.log(`API URL: ${API_ENDPOINTS.GET_COURSE_BY_SLUG}/${slug}`);
+      
       const response = await apiClient.get<CourseResponse>(`${API_ENDPOINTS.GET_COURSE_BY_SLUG}/${slug}`);
+      console.log('Course API response:', response.data);
+      
       if (response.data.success && response.data.data) {
+        console.log('Course data found:', response.data.data);
         return response.data.data;
       } else {
-        throw new Error('Invalid course response format');
+        console.error('Invalid course response format:', response.data);
+        throw new Error(`Invalid course response format: ${JSON.stringify(response.data)}`);
       }
     } catch (error) {
       console.error('Failed to fetch course by slug:', error);
-      // Return a fallback course structure if API fails
-      return {
-        slug: slug,
-        title: slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-        description: `Explore our ${slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} programs`,
-        heroImage: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        programs: [],
-        features: [],
-        testimonials: [],
-        faqs: [],
-        curriculum: [],
-        software: [],
-        careerProspects: [],
-        ctaTitle: "Start Your Journey",
-        ctaDescription: "Join our programs today",
-        isActive: true
-      };
+      // Don't return fallback data - throw the error so we can see what's wrong
+      throw error;
     }
   },
 
@@ -1118,69 +1130,23 @@ export const apiHelpers = {
 
   getCourseProgramBySlug: async (parentSlug: string, programSlug: string): Promise<CourseProgram> => {
     try {
-      // First get the course by slug to find the program
+      // Fetch the parent course by slug
       const courseResponse = await apiClient.get<CourseResponse>(`${API_ENDPOINTS.GET_COURSE_BY_SLUG}/${parentSlug}`);
-      console.log('Course API response:', courseResponse.data);
       if (courseResponse.data.success && courseResponse.data.data) {
         const course = courseResponse.data.data;
-        console.log('Course data:', course);
-        console.log('Course programs:', course.programs);
-        // Find the program within the course
-        const program = course.programs?.find(p => {
-          const programTitleSlug = p.title?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, "");
-          const programSlugClean = p.slug?.toLowerCase().replace(/[^a-z0-9-]/g, "");
-          const requestedSlugClean = programSlug.toLowerCase().replace(/[^a-z0-9-]/g, "");
-          
-          // Create frontend slug format from backend slug
-          const frontendSlug = programSlugClean?.replace(/bachelor-of-design-in-/g, "bdes-in-")
-            ?.replace(/bachelor-of-vocation-in-/g, "bvoc-in-")
-            ?.replace(/bachelor-of-science-in-/g, "bsc-in-");
-          
-          console.log('Program matching:', {
-            programTitle: p.title,
-            programTitleSlug,
-            programSlug: p.slug,
-            programSlugClean,
-            frontendSlug,
-            requestedSlug: programSlug,
-            requestedSlugClean,
-            matches: programTitleSlug === requestedSlugClean || 
-                     programSlugClean === requestedSlugClean || 
-                     frontendSlug === requestedSlugClean
-          });
-          
-          return programTitleSlug === requestedSlugClean || 
-                 programSlugClean === requestedSlugClean || 
-                 frontendSlug === requestedSlugClean;
-        });
-        
+        // Only consider active programs
+        const program = course.programs.find(p => p.slug === programSlug && p.isActive);
         if (program) {
           return program;
+        } else {
+          throw new Error(`Program not found: ${programSlug} in course: ${parentSlug}`);
         }
+      } else {
+        throw new Error(`Course not found: ${parentSlug}`);
       }
-      
-      // If not found, return fallback
-      return {
-        title: programSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-        duration: "4 Years Full-Time",
-        description: `Comprehensive ${programSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} program`,
-        imageUrl: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        detailsUrl: `/${parentSlug}/${programSlug}`,
-        order: 1,
-        isActive: true
-      };
     } catch (error) {
       console.error('Failed to fetch course program by slug:', error);
-      // Return a fallback program structure if API fails
-      return {
-        title: programSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-        duration: "4 Years Full-Time",
-        description: `Comprehensive ${programSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} program`,
-        imageUrl: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        detailsUrl: `/${parentSlug}/${programSlug}`,
-        order: 1,
-        isActive: true
-      };
+      throw error;
     }
   },
 
@@ -3359,5 +3325,76 @@ export const useSessionLogin = (id: string) => {
     error,
     refetch: fetchSessionLogin,
   };
+};
+
+// Utility function to generate consistent slugs
+export const generateConsistentSlug = (title: string): string => {
+  if (!title) return '';
+  
+  let slug = title.toLowerCase()
+    // Handle number conversions
+    .replace(/three\s+year/g, '3-year')
+    .replace(/two\s+year/g, '2-year')
+    .replace(/one\s+year/g, '1-year')
+    .replace(/four\s+year/g, '4-year')
+    .replace(/five\s+year/g, '5-year')
+    .replace(/six\s+year/g, '6-year')
+    .replace(/seven\s+year/g, '7-year')
+    .replace(/eight\s+year/g, '8-year')
+    .replace(/nine\s+year/g, '9-year')
+    .replace(/ten\s+year/g, '10-year')
+    // Handle degree abbreviations
+    .replace(/bachelor\s+of\s+design\s+in\s+/g, 'bdes-in-')
+    .replace(/bachelor\s+of\s+vocation\s+in\s+/g, 'bvoc-in-')
+    .replace(/bachelor\s+of\s+science\s+in\s+/g, 'bsc-in-')
+    .replace(/bachelor\s+of\s+arts\s+in\s+/g, 'ba-in-')
+    .replace(/bachelor\s+of\s+commerce\s+in\s+/g, 'bcom-in-')
+    .replace(/bachelor\s+of\s+business\s+administration\s+in\s+/g, 'bba-in-')
+    // Handle common variations
+    .replace(/diploma\s+in\s+/g, 'diploma-in-')
+    .replace(/certificate\s+course\s+in\s+/g, 'certificate-course-in-')
+    .replace(/certificate\s+in\s+/g, 'certificate-in-')
+    // Clean up spaces and special characters
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    // Remove multiple consecutive hyphens
+    .replace(/-+/g, '-')
+    // Remove leading/trailing hyphens
+    .replace(/^-+|-+$/g, '');
+  
+  return slug;
+};
+
+// Utility function to transform curriculum data for frontend
+export const transformCurriculumData = (curriculumArray: any[]): any => {
+  if (!curriculumArray || !Array.isArray(curriculumArray) || curriculumArray.length === 0) {
+    return undefined;
+  }
+
+  const curriculumObj: any = {};
+
+  curriculumArray.forEach((yearItem) => {
+    if (yearItem.year) {
+      const yearKey = yearItem.year;
+      if (!curriculumObj[yearKey]) {
+        curriculumObj[yearKey] = {
+          image: yearItem.imageUrl || 'https://images.unsplash.com/photo-1617103996702-96ff29b1c467?w=800&q=80',
+          imageAlt: `${yearKey} Curriculum`,
+          description: yearItem.description || ''
+        };
+      }
+      // Loop through semesters
+      if (Array.isArray(yearItem.semesters)) {
+        yearItem.semesters.forEach((sem: any) => {
+          const semesterKey = sem.semester
+            ? sem.semester.replace(/(^[a-z])/, (m: string) => m.toUpperCase())
+            : 'Semester 1';
+          curriculumObj[yearKey][semesterKey] = Array.isArray(sem.subjects) ? sem.subjects : [];
+        });
+      }
+    }
+  });
+
+  return curriculumObj;
 };
 

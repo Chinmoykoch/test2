@@ -136,7 +136,7 @@ const Footer = () => {
               </Link></li>
               <li>
               <Link
-                href="/interior-design/three-year-diploma-in-interior-design"
+                href="/interior-design/3-year-diploma-in-interior-design"
                 className="hover:text-blue-500 transition duration-300"
               >
                 3-Year Diploma in Interior Design
@@ -174,7 +174,7 @@ const Footer = () => {
               </Link></li>
               <li>
               <Link
-                href="/fashion-design/three-year-diploma-in-fashion-design"
+                href="/fashion-design/3-year-diploma-in-fashion-design"
                 className="hover:text-blue-500 transition duration-300"
               >
                 3-Year Diploma in Fashion Design
@@ -213,7 +213,7 @@ const Footer = () => {
               </Link></li>
               <li>
               <Link
-                href="/graphic-design/three-year-diploma-in-graphic-design"
+                href="/graphic-design/3-year-diploma-in-graphic-design"
                 className="hover:text-blue-500 transition duration-300"
               >
                 3-Year Diploma in Graphic Design

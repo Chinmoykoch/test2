@@ -15,7 +15,7 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import ApplyNowForm from "../ApplyNowForm";
 import { useState } from "react";
-import { CourseCurriculum, CourseSoftware, CourseFeature } from "@/utils/api";
+import { CourseSoftware, CourseFeature } from "@/utils/api";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -55,7 +55,7 @@ interface CourseContentProps {
   heroImage?: string;
   ctaTitle?: string;
   ctaDescription?: string;
-  curriculum?: CourseCurriculum[];
+  curriculum?: unknown; // Changed from CourseCurriculum[] to any to handle transformed object
   software?: CourseSoftware[];
   whatYouWillLearn?: CourseFeature[];
   videos?: { url: string }[];
@@ -93,17 +93,22 @@ const CourseContent = ({
     setIsFormOpen(true);
   };
 
-  // Transform curriculum array to object for CurriculumSection
-  const curriculumObj = curriculum
+  // Use curriculum directly if it's already transformed, otherwise transform it
+  const curriculumObj = curriculum && typeof curriculum === 'object' && !Array.isArray(curriculum)
+    ? curriculum // Already transformed
+    : curriculum && Array.isArray(curriculum)
     ? curriculum.reduce((acc, cur) => {
-        acc[cur.year] = {
-          image: cur.imageUrl || '',
-          imageAlt: `${title} ${cur.year}`,
-          ...cur,
-        };
+        if (cur.year) {
+          acc[cur.year] = {
+            image: cur.imageUrl || '',
+            imageAlt: `${title} ${cur.year}`,
+            [`Semester ${cur.semester || '1'}`]: cur.subjects || [],
+            ...cur,
+          };
+        }
         return acc;
       }, {} as Curriculum)
-    : undefined;
+    : undefined; // No curriculum data
 
   // Transform software for SoftwareLogos
   const softwareArr = software?.map((s) => ({

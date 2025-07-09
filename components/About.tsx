@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { Card, CardContent } from "../components/ui/card";
-import { studentImages } from "../utils/constant";
+// import { studentImages } from "../utils/constant";
 import { Poppins } from "next/font/google";
 import Image from "next/image";
 import "aos/dist/aos.css";
@@ -40,7 +40,14 @@ const AboutPage = () => {
   }, []);
 
   // Fallback data for when API data is not available
-  const fallbackHeroImages = studentImages;
+  const fallbackHeroImages = [
+    "/images/gallery/1719304885452_1.jpg",
+    "/images/gallery/IMG_20240605_124215.jpg",
+    "/images/gallery/1721366668571.jpg",
+    "/images/gallery/1719575193328.jpg",
+    "/images/gallery/1719748180116.jpg",
+    "/images/gallery/1719304885452_1.jpg"
+  ];
   const fallbackStatistics = [
     {
       number: "15+",
@@ -105,10 +112,10 @@ const AboutPage = () => {
       <section className="bg-yellow-400 text-white py-32">
         <div className="container mx-auto px-4">
           <div
-            className="grid grid-cols-3 md:grid-cols-6 gap-2 mb-8"
+            className="grid grid-cols-2 md:grid-cols-6 gap-2 mb-8"
             data-aos="fade-up"
           >
-            {displayHeroImages.slice(0, 6).map((img, i) => (
+            {displayHeroImages.slice(0, 12).map((img, i) => (
               <div key={i} className="aspect-square">
                 <Image
                   src={img.imageUrl}

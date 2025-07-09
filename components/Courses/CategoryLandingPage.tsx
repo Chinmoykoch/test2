@@ -279,7 +279,7 @@ const DegreeCard: React.FC<{ course: any; category: string }> = ({ course, categ
       <div className="p-6">
         <h3 className={`text-xl font-bold mb-2 ${poppins.className}`}>{course.title}</h3>
         <p className="text-gray-600 text-sm mb-4 line-clamp-2">{course.description}</p>
-        <Link href={`/${category}/${course.value}`}>
+        <Link href={`/${category}/${course.title?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, "")}`}>
           <Button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black">View Details</Button>
         </Link>
       </div>

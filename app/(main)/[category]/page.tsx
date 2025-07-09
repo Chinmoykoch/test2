@@ -1,19 +1,26 @@
 "use client";
 import React from "react";
 import CategoryLandingPage from "../../../components/Courses/CategoryLandingPage";
-import { useCourseBySlug } from "../../../utils/api";
+import { useCourseBySlug, transformCurriculumData } from "../../../utils/api";
 
 interface CategoryPageProps {
   params: Promise<{ category: string }>;
 }
 
-// Metadata generation removed - using client-side rendering
+interface Program {
+  slug?: string;
+  title: string;
+  duration: string;
+  description: string;
+  curriculum?: unknown[];
+  imageUrl: string;
+  brochurePdfUrl?: string;
+  isActive: boolean;
+}
 
-// ✅ Category Page Component
 export default function CategoryPage({ params }: CategoryPageProps) {
   const [category, setCategory] = React.useState<string>("");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [categoryData, setCategoryData] = React.useState<any>(null);
+  const [categoryData, setCategoryData] = React.useState<unknown[]>([]);
 
   React.useEffect(() => {
     const getParams = async () => {
@@ -25,44 +32,18 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
   const { course, loading, error } = useCourseBySlug(category);
 
-  // Debug logging
-  React.useEffect(() => {
-    console.log('CategoryPage Debug:', {
-      category,
-      course,
-      loading,
-      error,
-      categoryData
-    });
-  }, [category, course, loading, error, categoryData]);
-
   React.useEffect(() => {
     if (course && course.programs && course.programs.length > 0) {
-      console.log('Course found with programs, transforming data:', course);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const transformedData = course.programs.map((program: any) => {
-         
-        let value = program.value;
-        if (!value && program.slug) {
-          value = program.slug
-            .replace("bachelor-of-design-in-", "bdes-in-")
-            .replace("bachelor-of-vocation-in-", "bvoc-in-")
-            .replace("bachelor-of-science-in-", "bsc-in-")
-            .replace(/[^a-z0-9-]/g, "");
-        }
-        if (!value && program.title) {
-          value = program.title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
-        }
-        const programSlug = program.slug || value;
-         
-        console.log('Creating program link:', { title: program.title, slug: programSlug, backendSlug: program.slug, value });
-        
+      // Only show active programs with a defined slug
+      const activePrograms = course.programs.filter((program: Program) => program.isActive && !!program.slug);
+      const transformedData = activePrograms.map((program: Program) => {
+        const programSlug = program.slug!;
         return {
           redirectUrl: `/${category}/${programSlug}`,
           mainTitle: category,
           metaTitle: program.title,
           metaDescription: program.description,
-          value,
+          value: programSlug,
           label: program.title,
           title: program.title,
           duration: program.duration,
@@ -70,14 +51,12 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           content: program.description,
           software: course.software || [],
           whatYouWillLearn: [],
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          videos: course.testimonials?.filter((t: any) => t.youtubeUrl)?.map((t: any) => ({ url: t.youtubeUrl })) || [],
-          curriculum: course.curriculum || {},
+          videos: course.testimonials?.filter((t: { youtubeUrl?: string }) => t.youtubeUrl)?.map((t: { youtubeUrl?: string }) => ({ url: t.youtubeUrl })) || [],
+          curriculum: transformCurriculumData(program.curriculum || []),
           imageUrl: program.imageUrl,
           brochurePdfUrl: program.brochurePdfUrl || course.brochurePdfUrl,
         };
       });
-
       setCategoryData(transformedData);
     }
   }, [course, category, loading, error]);
@@ -93,8 +72,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     );
   }
 
-  if (!categoryData) {
-    // Show loading or error state if needed
+  if (!categoryData.length) {
     return (
       <div className="min-h-screen pt-20 font-sans bg-white text-black flex items-center justify-center">
         <div className="text-center">
@@ -109,11 +87,8 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     <CategoryLandingPage 
       category={category} 
       courses={categoryData} 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      videos={course?.testimonials?.filter((t: any) => t.youtubeUrl)?.map((t: any) => ({ url: t.youtubeUrl })) || []} 
+      videos={course?.testimonials?.filter((t: { youtubeUrl?: string }) => t.youtubeUrl)?.map((t: { youtubeUrl?: string }) => ({ url: t.youtubeUrl })) || []} 
       backendCourse={course}
     />
   );
 }
-
-// Static params generation removed - using dynamic rendering

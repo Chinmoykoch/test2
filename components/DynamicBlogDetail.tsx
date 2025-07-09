@@ -7,7 +7,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { ChevronLeft, Loader2 } from 'lucide-react';
 import { apiHelpers } from "@/utils/api";
-import { blogPostsData } from '../utils/constant';
+// import { blogPostsData } from '../utils/constant';
 
 // Category colors mapping
 const categoryColors: Record<string, string> = {
@@ -64,14 +64,14 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
         setLoading(true);
         setError(null);
 
-        // First try to get from static data
-        const staticPost = blogPostsData[slug as keyof typeof blogPostsData];
-        if (staticPost) {
-          setPost(staticPost);
-          setIsFromAPI(false);
-          setLoading(false);
-          return;
-        }
+        // Static data has been removed, only try API
+        // const staticPost = blogPostsData[slug as keyof typeof blogPostsData];
+        // if (staticPost) {
+        //   setPost(staticPost);
+        //   setIsFromAPI(false);
+        //   setLoading(false);
+        //   return;
+        // }
 
         // If not found in static data, try to fetch from API
         // First try by slug

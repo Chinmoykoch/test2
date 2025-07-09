@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import CoursePage from "../../../../components/Courses/CoursePage";
-import { useCourseProgramBySlug, useCourseBySlug } from "../../../../utils/api";
+import { useCourseProgramBySlug, useCourseBySlug,  transformCurriculumData } from "../../../../utils/api";
 
 type ParamsType = { 
   category: string; 
@@ -49,34 +49,41 @@ export default function DegreePage({ params }: DegreePageProps) {
     if (program && course) {
       console.log('Program and course found, transforming data:', { program, course });
       
+      // Transform curriculum data from array to object format
+      const curriculumData = transformCurriculumData(program.curriculum || course.curriculum || []);
+      console.log('Transformed curriculum data:', curriculumData);
+      
       // Transform backend data to match the expected format
-      // Use course data for hero image, CTA, etc. and program data for specific details
+      // Prefer program fields, fallback to course fields if missing
       const transformedData = [{
         redirectUrl: `/${category}/${degree}`,
         mainTitle: category,
-        metaTitle: program.title,
-        metaDescription: program.description,
+        metaTitle: program.metaTitle || program.title || course.metaTitle || course.title,
+        metaDescription: program.metaDescription || program.description || course.metaDescription || course.description,
         value: degree,
         label: program.title,
         title: program.title,
-        duration: program.duration,
-        description: program.description,
-        content: program.description,
-        // Use course data for hero image, CTA, etc.
-        heroImage: course.heroImage,
-        ctaTitle: course.ctaTitle,
-        ctaDescription: course.ctaDescription,
+        duration: ("duration" in program ? program.duration : undefined) || ("duration" in course ? course.duration : undefined),
+        description: program.description || course.description,
+        content: program.courseOverview || program.description || course.description,
+        heroImage: ("heroImage" in program ? program.heroImage : undefined) || course.heroImage,
+        ctaTitle: program.ctaTitle || course.ctaTitle,
+        ctaDescription: program.ctaDescription || course.ctaDescription,
+        ctaButtonText: program.ctaButtonText,
         brochurePdfUrl: course.brochurePdfUrl,
-        // Use course data for additional sections
-        software: course.software || [],
-        whatYouWillLearn: course.features || [],
-        videos: [], // Will be populated if available
-        curriculum: course.curriculum || {},
-        testimonials: course.testimonials || [],
-        faqs: course.faqs || [],
-        careerProspects: course.careerProspects || [],
+        software: program.softwareTools || course.software || [],
+        whatYouWillLearn: ("programHighlights" in program ? program.programHighlights : undefined) || course.features || [],
+        videos: [], // Add if available
+        curriculum: curriculumData, // Pass the transformed curriculum data
+        testimonials: program.testimonials || course.testimonials || [],
+        faqs: program.faqs || course.faqs || [],
+        careerProspects: program.careerPaths || course.careerProspects || [],
+        feeBenefits: program.feeBenefits || [],
+        eligibility: program.eligibility || [],
+        scheduleOptions: program.scheduleOptions || [],
       }];
 
+      console.log('Final transformed data for CoursePage:', transformedData);
       setCourseData(transformedData);
     }
   }, [program, course, category, degree, programLoading, courseLoading, programError, courseError]);

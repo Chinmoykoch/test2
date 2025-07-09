@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
-import { useCourses, Course, CourseProgram } from "@/utils/api";
+import { useCourses, Course, CourseProgram, generateConsistentSlug } from "@/utils/api";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -47,20 +47,31 @@ const CourseSection: React.FC<CourseSectionProps> = ({ courses }) => (
             {course.title}
           </h3>
           <ul className="space-y-2">
-            {course.programs?.map((program: CourseProgram, idx: number) => (
-              <li
-                key={program._id ?? idx}
-                className="text-sm text-gray-600 hover:text-yellow-600 transition-colors flex items-start"
-              >
-                <Link
-                  className="hover:text-blue-500 hover:underline flex items-center"
-                  href={`/${course.slug}/${program.slug}`}
+            {course.programs?.map((program: CourseProgram, idx: number) => {
+              const programSlug = generateConsistentSlug(program.title || '');
+              console.log('CourseCarousel - Program link:', {
+                courseSlug: course.slug,
+                programTitle: program.title,
+                programSlug: program.slug,
+                generatedSlug: programSlug,
+                fullUrl: `/${course.slug}/${programSlug}`
+              });
+              
+              return (
+                <li
+                  key={program._id ?? idx}
+                  className="text-sm text-gray-600 hover:text-yellow-600 transition-colors flex items-start"
                 >
+                  <Link
+                    className="hover:text-blue-500 hover:underline flex items-center"
+                    href={`/${course.slug}/${programSlug}`}
+                  >
                   <span className="text-yellow-400 mr-2 text-lg leading-none">•</span>
                   {program.title ?? ''}
                 </Link>
               </li>
-            ))}
+              );
+            })}
           </ul>
 
           <Link

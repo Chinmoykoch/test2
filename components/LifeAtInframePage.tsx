@@ -6,7 +6,7 @@ import { ChevronRight, ArrowRight } from "lucide-react";
 import { Suspense, lazy, useState, useEffect } from "react";
 import { Poppins } from "next/font/google";
 import "../components/style.css";
-import { experienceCamputLife2 } from "../utils/constant";
+// import { experienceCamputLife2 } from "../utils/constant";
 import ApplyNowForm from "./ApplyNowForm";
 import { 
   apiHelpers, 
@@ -320,7 +320,7 @@ export const LifeAtCampus = () => {
         {/* Lazy Loaded Components */}
         <div className="relative z-10 bg-white">
           <Suspense fallback={<LoadingSpinner />}>
-            <CampusLife experienceCamputLife={experienceCamputLife2} />
+            <CampusLife experienceCamputLife={[]} />
             <StudentClubs />
             <div className="bg bg2" />
             <SportsArena />
