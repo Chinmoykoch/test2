@@ -13,9 +13,9 @@ import {
 
 import { Poppins } from "next/font/google";
 import Image from "next/image";
-import ApplyNow from "./ApplyNow";
+// import ApplyNow from "./ApplyNow";
 import DreamsSection from "./DreamSection";
-import FreeResourcesCTABanner from "./FreeResourcesCTABanner";
+// import FreeResourcesCTABanner from "./FreeResourcesCTABanner";
 import { useDownloads, useDownloadCategories } from "../utils/api";
 import {
   Accordion,
@@ -230,8 +230,8 @@ const DownloadsSection = () => {
       </div>
 
       {/* Navigation Icons */}
-      <div className="container mx-auto -mt-16 relative z-20 px-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-12">
+      <div className="container mx-auto -mt-16 relative z-20 px-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mb-12">
           {Object.keys(groupedDownloads).map((category: string) => {
             const Icon = iconMap[category] || FileDown;
             return (
@@ -316,8 +316,8 @@ const DownloadsSection = () => {
           </Accordion>
         </div>
       </div>
-      <FreeResourcesCTABanner />
-      <ApplyNow />
+      {/* <FreeResourcesCTABanner /> */}
+      {/* <ApplyNow /> */}
     </div>
   );
 };
