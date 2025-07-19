@@ -54,6 +54,7 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
         setError(null);
 
         console.log('Fetching blog post for slug:', slug);
+        console.log('Environment:', process.env.NODE_ENV);
 
         // Static data has been removed, only try API
         // const staticPost = blogPostsData[slug as keyof typeof blogPostsData];
