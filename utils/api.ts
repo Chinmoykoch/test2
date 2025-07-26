@@ -376,7 +376,7 @@ export interface CourseProgram {
   admissionSteps?: any[];
   curriculum?: any[];
   softwareTools?: any[];
-  careerPaths?: any[];
+  careerPaths?: CourseCareerProspect[];
   testimonials?: any[];
   faqs?: any[];
   feeBenefits?: any[];

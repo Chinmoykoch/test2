@@ -15,7 +15,7 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import ApplyNowForm from "../ApplyNowForm";
 import { useState } from "react";
-import { CourseSoftware, CourseFeature } from "@/utils/api";
+import { CourseSoftware, CourseFeature, CourseCareerProspect } from "@/utils/api";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -59,6 +59,7 @@ interface CourseContentProps {
   software?: CourseSoftware[];
   whatYouWillLearn?: CourseFeature[];
   videos?: { url: string }[];
+  careerProspects?: CourseCareerProspect[];
 }
 
 // Add CurriculumData and Curriculum interfaces for type safety
@@ -83,6 +84,7 @@ const CourseContent = ({
   software,
   whatYouWillLearn,
   videos = [],
+  careerProspects = [],
 }: CourseContentProps) => {
   const fallbackHeroImage =
     "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?w=1600&q=80";
@@ -155,7 +157,7 @@ const CourseContent = ({
             <h2 className={`text-3xl font-bold mb-6 ${poppins.className}`}>
               Course Overview
             </h2>
-            <p className="text-lg leading-relaxed text-gray-700">{content}</p>
+            <p className="text-lg leading-relaxed text-justify text-gray-700">{content}</p>
           </div>
           <div className="sm:w-[413px] p-14 sm:h-[300px] rounded-lg border bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600">
             <h3
@@ -202,7 +204,7 @@ const CourseContent = ({
         </div>
 
         <div id="career">
-          <CareerProspects />
+          <CareerProspects careerProspects={careerProspects} />
         </div>
 
         {curriculumObj && (

@@ -83,6 +83,13 @@ export default function DegreePage({ params }: DegreePageProps) {
         scheduleOptions: program.scheduleOptions || [],
       }];
 
+      // Debug career prospects data
+      console.log('Career Prospects Debug:', {
+        programCareerPaths: program.careerPaths,
+        courseCareerProspects: course.careerProspects,
+        finalCareerProspects: transformedData[0].careerProspects
+      });
+
       console.log('Final transformed data for CoursePage:', transformedData);
       setCourseData(transformedData);
     }

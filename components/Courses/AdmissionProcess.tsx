@@ -20,7 +20,7 @@ const carouselImages = [
     alt: "Students in classroom",
   },
   {
-    src: "/images/gallery/1721642783350.jpg",
+    src: "/images/gallery/1717485479751.jpg",
     alt: "Library interior",
   },
   {

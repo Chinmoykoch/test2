@@ -210,7 +210,7 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
               <Badge className={`${categoryColors[formattedPost.category] || 'bg-yellow-300 text-white'} px-3 py-1 text-xs md:text-sm font-semibold mb-4`}>
                 {formattedPost.category}
               </Badge>
-              <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold leading-tight break-words text-center md:text-left mb-4 max-w-4xl">
+              <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight break-words text-center md:text-left mb-4 max-w-4xl">
                 {formattedPost.title}
               </h1>
               <p className="text-base md:text-xl text-white/90 mb-6 max-w-3xl">
@@ -242,7 +242,7 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
                   <li>
                     <Link
                       href="#intro"
-                      className="block text-yellow-300 hover:text-yellow-400 hover:bg-yellow-50 text-sm py-2 px-3 rounded-md transition-colors duration-200"
+                      className="block text-black hover:text-yellow-400 hover:bg-yellow-50 text-sm py-2 px-3 rounded-md transition-colors duration-200"
                     >
                       Introduction
                     </Link>
@@ -251,7 +251,7 @@ const DynamicBlogDetail: React.FC<DynamicBlogDetailProps> = ({ slug }) => {
                     <li key={section.id}>
                       <Link
                         href={`#${section.id}`}
-                        className="block text-yellow-300 hover:text-yellow-400 hover:bg-yellow-50 text-sm py-2 px-3 rounded-md transition-colors duration-200"
+                        className="block text-black hover:text-yellow-400 hover:bg-yellow-50 text-sm py-2 px-3 rounded-md transition-colors duration-200"
                       >
                         {index + 1}. {section.title}
                       </Link>
