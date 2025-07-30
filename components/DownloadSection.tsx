@@ -62,17 +62,7 @@ const DownloadsSection = () => {
     "Scholarship and Discount": Award,
   };
 
-  // Color mapping for categories
-  // const colorMap: { [key: string]: string } = {
-  //   "Entrance Exam Schedule": "bg-blue-50 border-blue-200 text-blue-700",
-  //   "Previous Year Sample Papers": "bg-green-50 border-green-200 text-green-700",
-  //   "Newsletters": "bg-purple-50 border-purple-200 text-purple-700",
-  //   "Brochure/Prospectus": "bg-yellow-50 border-yellow-200 text-yellow-700",
-  //   "Placement Partner Documents": "bg-indigo-50 border-indigo-200 text-indigo-700",
-  //   "Club Documents": "bg-pink-50 border-pink-200 text-pink-700",
-  //   "Scholarship and Discount": "bg-orange-50 border-orange-200 text-orange-700",
-  // };
-
+ 
   // Group downloads by category
   const groupedDownloads = React.useMemo(() => {
     const grouped: { [category: string]: DownloadItemLocal[] } = {};

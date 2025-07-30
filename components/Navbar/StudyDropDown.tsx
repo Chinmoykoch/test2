@@ -34,7 +34,7 @@ const poppins = Poppins({
   weight: ["400", "500", "700"],
 })
 
-const allCategories = ["All", "Art", "Design", "Business"]
+const allCategories = ["All",  "Art", "Design", "Business"]
 
 const StudyDropDown = () => {
   const [selectedCategory, setSelectedCategory] = useState("All")
